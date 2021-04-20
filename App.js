@@ -6,9 +6,11 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  View
+  View,
+  Text,
+  Button
 } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,13 +20,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import LoginNavigation from './src/navigations/LoginNavigation';
 
 const App = () => {
-
+  
   return (
     <NavigationContainer>
       <LoginNavigation></LoginNavigation>
     </NavigationContainer>
   );
 };
+
+
 
 
 
