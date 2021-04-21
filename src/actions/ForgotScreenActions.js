@@ -36,7 +36,8 @@ export const forgot_mail = (forgot_email) => {
         } else {
             auth().sendPasswordResetEmail(forgot_email)
                 .then(() => {
-                    dispatch({ type: FORGOT_MAIL_SUCCESS_SEND })
+                    dispatch({ type: FORGOT_MAIL })
+                    dispatch({ type : FORGOT_MAIL_SUCCESS_SEND})
                 })
                 .catch( (err) => {
                     console.log(err);

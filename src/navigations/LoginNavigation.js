@@ -11,10 +11,10 @@ const Stack = createStackNavigator();
 
 const LoginNavigaton = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName = {"Login"}>
             <Stack.Screen name = "Login" component = {LoginPage} options={{ headerShown: false }}></Stack.Screen>
-            <Stack.Screen name = "Register" component = {RegisterPage}></Stack.Screen>
-            <Stack.Screen name = "Forgot" component = {ForgotPage}></Stack.Screen>
+            <Stack.Screen name = "Register" component = {RegisterPage} options = {{headerShown : false}}></Stack.Screen>
+            <Stack.Screen name = "Forgot" component = {ForgotPage} options = {{headerShown : false}}></Stack.Screen>
         </Stack.Navigator>
     );
 }
