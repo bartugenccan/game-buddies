@@ -1,6 +1,6 @@
 // React Imports
 import React from 'react';
-import { View, Text, TextInput, ScrollView , Alert} from 'react-native';
+import { View, Text, TextInput, ScrollView, Alert } from 'react-native';
 
 // Style Imports
 import style from "./RegisterPage.component.style";
@@ -8,6 +8,13 @@ import { Icon, CheckBox } from 'react-native-elements'
 import SwitchSelector from "react-native-switch-selector";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import {
+    register_email_changed,
+    register_password_changed,
+    register_user
+} from '../../../actions';
+
+import { connect } from 'react-redux';
 
 class RegisterPage extends React.Component {
     state = {
@@ -21,26 +28,35 @@ class RegisterPage extends React.Component {
     }
 
     onPress = () => {
-        if (!this.state.checked){
+        if (!this.state.checked) {
             Alert.alert(
                 "Hata",
                 "Kullanıcı sözleşmesini kabul etmeniz gerekmektedir.",
                 [{
-                    text : "Tamam" , onPress : () => null
+                    text: "Tamam", onPress: () => null
                 }]
             )
-        } if (this.state.realPassword != this.state.repeatPassword){
+            return null;
+        } if (this.state.realPassword != this.state.repeatPassword) {
             Alert.alert(
                 "Hata",
                 "Şifreler aynı olmalıdır.",
                 [{
-                    text : "Tamam" , onPress : () => null
+                    text: "Tamam", onPress: () => null
                 }]
             );
-            this.setState({repeatPassword : ""});
-            this.setState({realPassword : ""});
+            this.setState({ repeatPassword: "" });
+            this.setState({ realPassword: "" });
+            return null;
+        };
 
-        }
+        const registerEmail = this.props.register_email;
+        const registerPassword = this.props.register_pasword;
+
+        this.props.register_user(registerEmail, registerPassword);
+
+
+
     }
 
     renderChoice = (g) => {
@@ -75,6 +91,7 @@ class RegisterPage extends React.Component {
     }
 
     render() {
+        console.log(this.props.register_email)
         return (
             <ScrollView>
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#ffffff" }}>
@@ -93,8 +110,11 @@ class RegisterPage extends React.Component {
                             <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                 <TextInput
                                     style={style.inputText}
-                                    placeholder = {"Kullanıcı Adı"}
-                                    onChangeText={(value) => this.setState({ username: value })}
+                                    placeholder={"Kullanıcı Adı"}
+                                    onChangeText={(value) => {
+                                        this.setState({ username: value })
+
+                                    }}
                                 />
                             </View>
                         </View>
@@ -109,13 +129,15 @@ class RegisterPage extends React.Component {
                             <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                 <TextInput
                                     style={style.inputText}
-                                    placeholder = {"Şifre"}
-                                    value = {this.state.realPassword}
-                                    onChangeText={(value) => this.setState({ realPassword: value })}
+                                    placeholder={"Şifre"}
+                                    value={this.state.realPassword}
+                                    onChangeText={(value) => {
+                                        this.setState({ realPassword: value })
+                                        this.props.register_password_changed(value)
+                                    }}
                                 />
                             </View>
                         </View>
-
                         <View style={{ flex: 0.2, flexDirection: "row" }}>
                             <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
                                 <Icon
@@ -127,8 +149,8 @@ class RegisterPage extends React.Component {
                             <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                 <TextInput
                                     style={style.inputText}
-                                    placeholder = {"Şifre Tekrar"}
-                                    value = {this.state.repeatPassword}
+                                    placeholder={"Şifre Tekrar"}
+                                    value={this.state.repeatPassword}
                                     onChangeText={(value) => this.setState({ repeatPassword: value })}
                                 />
                             </View>
@@ -144,8 +166,11 @@ class RegisterPage extends React.Component {
                             <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                 <TextInput
                                     style={style.inputText}
-                                    placeholder = {"E-Mail Adresiniz"}
-                                    onChangeText={(value) => this.setState({ mail: value })}
+                                    placeholder={"E-Mail Adresiniz"}
+                                    onChangeText={(value) => {
+                                        this.setState({ mail: value })
+                                        this.props.register_email_changed(value)
+                                    }}
                                 />
                             </View>
                         </View>
@@ -187,7 +212,8 @@ class RegisterPage extends React.Component {
                         accessibilityLabel="gender-switch-selector"
                     />
                     {this.renderChoice(this.state.gender)}
-                    <TouchableOpacity style={style.registerBTN} onPress = {this.onPress}>
+
+                    <TouchableOpacity style={style.registerBTN} onPress={this.onPress.bind(this)}>
                         <Text style={style.registerBTNTXT}>
                             KAYIT OL
                         </Text>
@@ -197,7 +223,16 @@ class RegisterPage extends React.Component {
 
         )
     }
-
 }
 
-export default RegisterPage;
+const mapStateToProps = ({ RegisterScreenResponse }) => {
+    const { register_email, register_pasword, loading } = RegisterScreenResponse;
+
+    return {
+        register_email,
+        register_pasword,
+        loading
+    }
+}
+
+export default connect(mapStateToProps, { register_email_changed, register_password_changed, register_user })(RegisterPage);
