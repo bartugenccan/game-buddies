@@ -1,0 +1,50 @@
+import React from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import HomePage from '../scenes/mainscenes/homescreen/HomePage.component';
+import ProfileScreen from '../scenes/mainscenes/profilescreen/ProfileScreen.component';
+import MesssageScreen from '../scenes/mainscenes/messagesscreen/MessageScreen.component';
+
+import { Icon } from 'react-native-elements';
+const Tab = createBottomTabNavigator();
+
+
+const MainNavigation = () => {
+
+    return (
+        <Tab.Navigator
+            tabBarOptions={{
+                tabStyle: {
+                    backgroundColor: "#892cdc"
+                },
+                showLabel: false
+            }}>
+            <Tab.Screen name="Messages" component={MesssageScreen} options={{
+                tabBarIcon: () => <Icon
+                    name="comment"
+                    type="font-awesome"
+                    color='white' 
+                    size={30} />
+            }}></Tab.Screen>
+
+            <Tab.Screen name="Home" component={HomePage} options={{
+                tabBarIcon: () =>
+                    <Icon
+                        name="gamepad"
+                        type="font-awesome"
+                        color='white'
+                        size={35} />
+            }}></Tab.Screen>
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{
+                tabBarIcon: () =>
+                    <Icon
+                        name="user"
+                        type="font-awesome"
+                        color='white'
+                        size={30} />
+            }}></Tab.Screen>
+        </Tab.Navigator>
+    )
+}
+export default MainNavigation;

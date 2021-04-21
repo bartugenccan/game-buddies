@@ -17,6 +17,7 @@ import reducers from './src/reducers';
 
 // Navigations
 import LoginNavigation from './src/navigations/LoginNavigation';
+import MainNavigation from './src/navigations/MainNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -46,7 +47,7 @@ const App = () => {
   const renderContent = () => {
     switch (loggedIn) {
       case true:
-        return <Text>İçerde</Text>
+        return <MainNavigation></MainNavigation>
       case false:
         return <LoginNavigation></LoginNavigation>
     }
