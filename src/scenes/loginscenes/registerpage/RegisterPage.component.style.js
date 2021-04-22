@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
+
 export default StyleSheet.create({
     registerTxt: {
         fontSize: 35,
         marginBottom: 25,
-        marginTop: 10
+        marginTop: 100,
     },
     inputText: {
         backgroundColor: "white",
@@ -65,7 +66,8 @@ export default StyleSheet.create({
     },
     registerBTNTXT: {
         fontSize: 30,
-        color: "white"
+        color: "white",
+        
     }
 
 

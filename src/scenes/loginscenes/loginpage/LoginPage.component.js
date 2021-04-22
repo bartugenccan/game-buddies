@@ -46,7 +46,7 @@ class LoginPage extends React.Component {
         }
         return (
             <TouchableOpacity style={style.loginBTN} activeOpacity={1}>
-                <Spinner></Spinner>
+                <Spinner color = {"white"} size = {30}></Spinner>
             </TouchableOpacity>
         )
     };

@@ -4,7 +4,8 @@ import {
     REGISTER_USER,
     REGISTER_PASSWORD_CHANGED,
     REGISTER_USER_SUCCESS,
-    REGISTER_USER_FAIL
+    REGISTER_USER_FAIL,
+    SET_LOADING
 } from './types';
 
 // Firebase Import
@@ -32,6 +33,15 @@ export const register_password_changed = (password) => {
     }
 };
 
+export const set_loading = (value) => {
+    return (dispatch) => {
+        dispatch({
+            type: SET_LOADING,
+            payload: value
+        })
+    }
+}
+
 
 export const register_user = (register_email, register_password) => {
     return (dispatch) => {
@@ -43,7 +53,6 @@ export const register_user = (register_email, register_password) => {
                 dispatch({
                     type: REGISTER_USER_SUCCESS
                 })
-                console.log("Creation is successful"); // Register Pagede then function ile navigate to main scenes navigator
             })
             .catch((err) => {
                 if (err.code == "auth/email-already-in-use") {

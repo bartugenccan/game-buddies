@@ -1144,6 +1144,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-11.3.2.tgz"
   "version" "11.3.2"
 
+"@react-native-firebase/firestore@^11.3.2":
+  "integrity" "sha512-ThwjyQOWrrER2QNQ8hb0GvayQXDffBwsv7oMcjeA4dI1QbwmsH9x9Tg5aXQL4olMIP+il2BjHyPZSFBK5/F4Hw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-11.3.2.tgz"
+  "version" "11.3.2"
+
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
   "resolved" "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz"

@@ -6,7 +6,7 @@ import {
 class Spinner extends Component {
   render() {
     return (
-      <PacmanIndicator color='white' size = {70} />
+      <PacmanIndicator color={this.props.color} size = {this.props.size} />
     );
   }
 }

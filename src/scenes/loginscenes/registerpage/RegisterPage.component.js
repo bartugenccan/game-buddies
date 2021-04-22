@@ -1,33 +1,42 @@
 // React Imports
 import React from 'react';
-import { View, Text, TextInput, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, ScrollView, Alert, Modal } from 'react-native';
 
 // Style Imports
 import style from "./RegisterPage.component.style";
 import { Icon, CheckBox } from 'react-native-elements'
 import SwitchSelector from "react-native-switch-selector";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import Spinner from '../../../components/Spinner/Spinner.component';
 import {
     register_email_changed,
     register_password_changed,
-    register_user
+    register_user,
+    set_gender
 } from '../../../actions';
 
+// Redux Import
 import { connect } from 'react-redux';
+
+// Firebase Class Import
+import fire from '../../../../firebase/fire';
 
 class RegisterPage extends React.Component {
     state = {
         username: "",
         gender: "M",
-        preferred: 2,
+        preferredgender: 0,
         realPassword: "",
         repeatPassword: "",
         mail: "",
-        checked: false
+        checked: false,
     }
 
+
+
     onPress = () => {
+
+
         if (!this.state.checked) {
             Alert.alert(
                 "Hata",
@@ -53,10 +62,15 @@ class RegisterPage extends React.Component {
         const registerEmail = this.props.register_email;
         const registerPassword = this.props.register_pasword;
 
+
         this.props.register_user(registerEmail, registerPassword);
 
+        if (this.state.gender == "M" || this.state.gender == "N") {
+            fire.addUserToData(this.state.username, registerEmail, this.state.gender);
+        } else {
+            fire.addUserToData(this.state.username, registerEmail, this.state.gender, this.state.preferredgender);
 
-
+        }
     }
 
     renderChoice = (g) => {
@@ -70,8 +84,9 @@ class RegisterPage extends React.Component {
                     </Text>
                     <SwitchSelector
                         style={style.switchSelector}
-                        initial={0}
-                        onPress={value => this.setState({ gender: value })}
+                        initial={2}
+                        value={this.state.preferredgender}
+                        onPress={value => this.setState({ preferredgender: value })}
                         textColor='#7a44cf'
                         selectedColor="white"
                         buttonColor='#7a44cf'
@@ -91,13 +106,22 @@ class RegisterPage extends React.Component {
     }
 
     render() {
-        console.log(this.props.register_email)
         return (
-            <ScrollView>
+            <ScrollView style = {{backgroundColor : "#ffffff"}}>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={this.props.loading}>
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                        <View style={{ height: 100, width: 200, backgroundColor: "white", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                            <Spinner color={"#892cdc"} size={100}></Spinner>
+                        </View>
+                    </View>
+                </Modal>
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#ffffff" }}>
                     <Text style={style.registerTxt}>
                         Kayıt Ol
-                </Text>
+                    </Text>
                     <View style={style.inputBackground}>
                         <View style={{ flex: 0.2, flexDirection: "row" }}>
                             <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
@@ -235,4 +259,4 @@ const mapStateToProps = ({ RegisterScreenResponse }) => {
     }
 }
 
-export default connect(mapStateToProps, { register_email_changed, register_password_changed, register_user })(RegisterPage);
+export default connect(mapStateToProps, { register_email_changed, register_password_changed, register_user, set_gender })(RegisterPage);

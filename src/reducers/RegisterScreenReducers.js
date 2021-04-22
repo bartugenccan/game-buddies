@@ -4,14 +4,16 @@ import {
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
     REGISTER_USER_FAIL,
-    REGISTER_PASSWORD_CHANGED
+    REGISTER_PASSWORD_CHANGED,
+    SET_LOADING
 } from "../actions/types";
 
 // Initialize INITIAL_STATE
 const INITIAL_STATE = {
     register_email: "",
     register_pasword: "",
-    loading: false
+    loading: false,
+    gender: "M"
 }
 
 // Switch case for action and paylaod
@@ -27,6 +29,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: false }
         case REGISTER_USER_SUCCESS:
             return { ...state, loading: false }
+        case SET_LOADING:
+            return { ...state, loading: action.payload }
         default:
             return { ...state }
     }
