@@ -9,6 +9,7 @@ import { Icon } from 'react-native-elements';
 const Tab = createBottomTabNavigator();
 
 
+
 const MainNavigation = () => {
 
     return (
@@ -34,10 +35,7 @@ const MainNavigation = () => {
 
             <Tab.Screen name="Home" component={HomePageNavigation}
                 options={{
-                    tabBarIcon: () => <Icon name="gamepad" type="font-awesome" color='white' size={35} /> , 
-                    headerStyle : {
-                        backgroundColor : "red"
-                    }
+                    tabBarIcon: () => <Icon name="gamepad" type="font-awesome" color='white' size={35} />
                 }}
                 ></Tab.Screen>
             <Tab.Screen name="Profile" component={ProfileScreen} options={{

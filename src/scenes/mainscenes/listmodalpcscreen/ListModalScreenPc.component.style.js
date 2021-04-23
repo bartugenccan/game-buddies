@@ -3,16 +3,16 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "flex-end",
         alignItems: 'center',
+        justifyContent: 'center',
     },
     closeView: {
-        flex : 0.5,
-        backgroundColor : "red"
+        flex: 0.5,
+        width: "100%",
     },
     bigView: {
         backgroundColor: "#892cdc",
-        flex : 0.5,
+        flex: 0.5,
         width: "100%",
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15
@@ -26,7 +26,7 @@ export default StyleSheet.create({
         color: "white",
         fontSize: 20,
         textAlign: 'left',
-        fontWeight : "bold"
+        fontWeight: "bold"
     },
     lineView: {
         height: 1,

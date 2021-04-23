@@ -1,13 +1,16 @@
 // Firebase Class For All App
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import { useDispatch } from 'react-redux';
 
 const db = firestore();
 
 class Fire {
 
     constructor() { }
+
+    getUid = async () => {
+        return firebase().currentUser.uid;
+    }
 
     addUserToData = async (username, useremail, gender) => {
         let userRef = firestore().collection("users");
@@ -40,13 +43,20 @@ class Fire {
             })
     }
 
-    createLolAccount = async (uid,lolnickname) => {
-        let checkSnapShot = await db.collection("lolaccounts").where("LolNickName", "==", lolnickname).get();
+    checkForLolAccount = async (uid) => {
+        let checkSnapShot = await db.collection("users").doc(uid).get();
 
-        if (checkSnapShot.empty) {
+        let res = await checkSnapShot.docs.forEach( field => {
+            if (field.data == "LolAccount"){
+                return false
+            }
+        })
+
+        if (res == false){
             return false;
+        } else {
+            return true
         }
-
     }
 
 }

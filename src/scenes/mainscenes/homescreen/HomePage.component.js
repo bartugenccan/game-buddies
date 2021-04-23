@@ -1,12 +1,16 @@
+// React Imports
 import React from 'react';
 import { Text, View, TouchableOpacity, Modal, ScrollView, FlatList } from 'react-native';
+
+// Style Imports
 import style from './HomePage.component.style';
 import { Icon } from 'react-native-elements';
-import ListModalView from '../../../components/ListModalView/ListModalView.component';
 import GameView from "../../../components/HomeScreenGameView/GameView.component";
 
+// Firebase Imports
 import auth from '@react-native-firebase/auth';
 
+// Example Data For Render
 const gameData = [
     {
         id: '0',
@@ -20,9 +24,12 @@ const gameData = [
 
 ];
 
+
+
 class HomePage extends React.Component {
 
-    renderGameView = ({ item, id }) => {
+    // Function for render game view depends on game id.
+    renderGameView = ({ item }) => {
         if (item.id == "0") {
             return (
                 <View style={{ width: "100%", height: 200, marginTop: 20, overflow: "hidden" }}>
@@ -30,33 +37,22 @@ class HomePage extends React.Component {
                 </View>
             )
         } else if (item.id == "1") {
-            return (<View style={{ width: "100%", height: 200, marginTop: 10, overflow: "hidden" }}>
-                <GameView gameName={item.gameName} gameImage={"https://www.gaziemir.com.tr/wp-content/uploads/2020/12/brawl-stars.jpg"} />
-            </View>)
+            return (
+                <View style={{ width: "100%", height: 200, marginTop: 10, overflow: "hidden" }}>
+                    <GameView gameName={item.gameName} gameImage={"https://www.gaziemir.com.tr/wp-content/uploads/2020/12/brawl-stars.jpg"} />
+                </View>
+            )
         }
     };
 
+    // Initial State for Modal Visible state.
     state = {
         visible: false
     }
 
     render() {
         return (
-            <View style = {{flex : 1 , backgroundColor : "#ffffff"}}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.visible}
-                    onRequestClose={() => {
-                        this.setState({ visible: !visible });
-                    }}
-                >
-                    <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={{ flex: 0.5 }} onPress={() => this.setState({ visible: false })}></TouchableOpacity>
-                        <ListModalView></ListModalView>
-
-                    </View>
-                </Modal>
+            <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
                 <View style={style.firstView}>
                     <View style={style.bigTextView}>
                         <Text style={style.textStyle} onPress={() => auth().signOut()}>
@@ -68,7 +64,7 @@ class HomePage extends React.Component {
                 </View>
                 <View style={style.iconView}>
                     <View style={style.pcIconView}>
-                        <TouchableOpacity style={style.pcIcon} onPress={() => this.setState({ visible: true })}>
+                        <TouchableOpacity style={style.pcIcon} onPress={() => this.props.navigation.navigate("Modal" , { screen : "PCModal"})}>
                             <Icon
                                 name="laptop"
                                 type="font-awesome"
@@ -77,7 +73,7 @@ class HomePage extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <View style={style.mobileIconView}>
-                        <TouchableOpacity style={style.mobileIcon}>
+                        <TouchableOpacity style={style.mobileIcon} onPress={ () => this.props.navigation.navigate("Modal" , { screen : "MobileModal"})}>
                             <Icon
                                 name="mobile"
                                 type="font-awesome"
@@ -90,9 +86,9 @@ class HomePage extends React.Component {
                     data={gameData}
                     renderItem={this.renderGameView}
                     keyExtractor={item => item.id}
-                    showsVerticalScrollIndicator = {false}
-                    showsHorizontalScrollIndicator = {false}
-                    style = {{marginTop : 0 , marginBottom : 20}}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    style={{ marginTop: 0, marginBottom: 20 }}
                 />
             </View>
         )
