@@ -5,9 +5,11 @@ import { combineReducers } from 'redux';
 import LoginScreenReducers from './LoginScreenReducers';
 import RegisterScreenReducers from './RegisterScreenReducers';
 import ForgotScreenReducers from './ForgotScreenReducers';
+import HomeScreenReducers from "./HomeScreenReducers";
 
 export default combineReducers({
     LoginScreenResponse : LoginScreenReducers,
     RegisterScreenResponse : RegisterScreenReducers,
-    ForgotScreenResponse : ForgotScreenReducers
+    ForgotScreenResponse : ForgotScreenReducers,
+    HomeScreenResponse : HomeScreenReducers
 });

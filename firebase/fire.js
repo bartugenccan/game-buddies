@@ -1,6 +1,7 @@
 // Firebase Class For All App
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const db = firestore();
 
@@ -9,7 +10,7 @@ class Fire {
     constructor() { }
 
     getUid = async () => {
-        return firebase().currentUser.uid;
+        return auth().currentUser.uid;
     }
 
     addUserToData = async (username, useremail, gender) => {
@@ -23,8 +24,12 @@ class Fire {
                 Review: {},
                 StarsMean: 0,
                 Dislikes: { Count: 0, Users: [] },
-                Likes: { Count: 0, Users: [] }
+                Likes: { Count: 0, Users: [] },
+                Games: [],
+                uid: null,
+                LolAccount: null
             })
+
     }
 
     addUserToData = async (username, useremail, gender, preferredGender) => {
@@ -39,26 +44,22 @@ class Fire {
                 StarsMean: 0,
                 Dislikes: { Count: 0, Users: [] },
                 Likes: { Count: 0, Users: [] },
-                PrefferedGender: preferredGender
+                PrefferedGender: preferredGender,
+                Games: [],
+                uid: null,
+                LolAccount: null
             })
+
     }
 
     checkForLolAccount = async (uid) => {
-        let checkSnapShot = await db.collection("users").doc(uid).get();
-
-        let res = await checkSnapShot.docs.forEach( field => {
-            if (field.data == "LolAccount"){
-                return false
-            }
-        })
-
-        if (res == false){
+        let checkSnapShot = await db.collection("users").doc(uid).get()
+        if (checkSnapShot.data().LolAccount) {
             return false;
         } else {
-            return true
+            return true;
         }
     }
-
 }
 
 

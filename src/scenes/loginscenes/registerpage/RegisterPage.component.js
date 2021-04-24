@@ -36,7 +36,6 @@ class RegisterPage extends React.Component {
 
     onPress = () => {
 
-
         if (!this.state.checked) {
             Alert.alert(
                 "Hata",
@@ -107,14 +106,14 @@ class RegisterPage extends React.Component {
 
     render() {
         return (
-            <ScrollView style = {{backgroundColor : "#ffffff"}}>
+            <ScrollView style={{ backgroundColor: "#ffffff" }}>
                 <Modal
                     animationType="fade"
                     transparent={true}
                     visible={this.props.loading}>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-                        <View style={{ height: 100, width: 200, backgroundColor: "white", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
-                            <Spinner color={"#892cdc"} size={100}></Spinner>
+                        <View style={{ height: 100, width: 200, backgroundColor: "#892cdc", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                            <Spinner color={"yellow"} size={100}></Spinner>
                         </View>
                     </View>
                 </Modal>

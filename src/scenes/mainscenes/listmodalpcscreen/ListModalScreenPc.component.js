@@ -1,15 +1,13 @@
 // React Imports
-import React, { useState } from 'react';
-import { View, Modal, StyleSheet, TouchableOpacity, Text, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Modal, StyleSheet, TouchableOpacity, Text, FlatList   } from 'react-native';
 
 // Style Imports
 import style from './ListModalScreenPc.component.style';
 import { ListItem, Avatar } from 'react-native-elements'
-import { log } from 'react-native-reanimated';
 
 
-
-// Example Datat For PC Platform
+// Data For PC Platform
 const list = [
     {
         name: 'League Of Legends',
@@ -36,18 +34,21 @@ const list = [
 
 const keyExtractor = (item, index) => index.toString()
 
-const ListModalScreenPc = ({ navigation  }) => {
+const ListModalScreenPc = ({ navigation }) => {
 
     // Initial State For Modal Visibility
     const [pcModalVisible, setPcModalVisible] = useState(true);
 
+
+
     // Cusstom Component For FlatLists Item
     const PlatformList = (props) => {
+        
         function renderChoice(name, avatar_url, subtitle) {
             if (subtitle != "Çok yakında.") {
                 return (
                     <ListItem bottomDivider containerStyle={{ backgroundColor: "transparent" }} onPress={() => {
-                        navigation.navigate("AddScreen" , { type : name});
+                        navigation.navigate("AddScreen", { type: name });
                     }}
                         activeOpacity={1}
                         underlayColor={"rgba(0,0,0,0.5)"}>
@@ -60,7 +61,7 @@ const ListModalScreenPc = ({ navigation  }) => {
                 )
             } else if (subtitle == "Çok yakında.") {
                 return (
-                    <ListItem bottomDivider containerStyle={{ backgroundColor: "transparent" }}  >
+                    <ListItem bottomDivider containerStyle={{ backgroundColor: "transparent" }} >
                         <Avatar source={avatar_url} rounded size={44} />
                         <ListItem.Content>
                             <ListItem.Title style={{ color: "white" }}>{name}</ListItem.Title>
@@ -103,7 +104,7 @@ const ListModalScreenPc = ({ navigation  }) => {
                         }}></TouchableOpacity>
                     <View style={style.bigView}>
                         <View style={style.textView}>
-                            <Text style={style.textStyle}>PC PlatformlarI</Text>
+                            <Text style={style.textStyle}>PC Platformları</Text>
                         </View>
                         <View style={style.lineView}></View>
                         <View>

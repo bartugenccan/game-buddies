@@ -13,7 +13,7 @@ const ModalStack = createStackNavigator();
 
 function ModalNavigation() {
     return (
-        <ModalStack.Navigator screenOptions={{ headerShown: false }} mode = "modal" >
+        <ModalStack.Navigator screenOptions={{ headerShown: false }} mode = "modal" initialRouteName = {"AddScreen"}>
             <ModalStack.Screen name="PCModal" component={ListModalScreenPc} options={{headerShown : false , cardStyle : {backgroundColor : "transparent"}}} />
             <ModalStack.Screen name = "MobileModal" component = {ListModalMobileScreen} options={{headerShown : false , cardStyle : {backgroundColor : "transparent"}}}></ModalStack.Screen>
             <ModalStack.Screen name="AddScreen" component={AddScreen} options = {{headerShown : false , cardStyle : {backgroundColor : "transparent"}}}/>

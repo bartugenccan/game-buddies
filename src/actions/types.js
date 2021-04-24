@@ -20,3 +20,7 @@ export const FORGOT_MAIL_SUCCESS_SEND = "forgot_mail_success_send";
 export const FORGOT_MAIL_FAILED_SEND = "forgot_mail_failed_send";
 
 
+// Home Page Actions
+export const SET_LOADING_HOME = "set_loading_home";
+export const GAMES_SET = "games_set";
+
