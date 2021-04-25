@@ -12,7 +12,13 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 // API Functions
-import { checkVerificationCode } from '../../../utils/RiotApiFunc';
+import {
+    checkVerificationCode,
+    getLevel,
+    getID,
+    fetchStats,
+    getProfileIconId
+} from '../../../utils/RiotApiFunc';
 
 // Redux Imports
 import { connect, useDispatch } from 'react-redux';
@@ -29,7 +35,8 @@ const AddScreen = ({ navigation, route }) => {
     const [canAdd, setCanAdd] = useState(true);
     const [summonerName, setSummonerName] = useState("");
     const [code, setCode] = useState("");
-    const [errMessage, setErrMessage] = useState("")
+    const [errMessage, setErrMessage] = useState("");
+
     // Route Params
     const { type } = route.params;
 
@@ -39,12 +46,62 @@ const AddScreen = ({ navigation, route }) => {
 
     // Success Callback
     const _success_callback = async () => {
-        // LOL ACCOUNT OLUŞTURUP API YARDIMIYLA DOLDURMA , GAME_ARR SET ETMECE REDUXTAN , LOL ACC İLE FİREBASE BAĞLAMA
+        let level = await getLevel("BerattoBB");
+        let id = await getID("BerattoBB");
+        let stats = await fetchStats("BerattoBB");
+        let profileIconId = await getProfileIconId("BerattoBB");
+
         await firestore()
-            .collection("lolaccounts").get().then(() => {
+            .collection("users")
+            .where("UserEmail", "==", auth().currentUser.email)
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    firestore()
+                        .collection("lolaccounts")
+                        .doc(doc.id)
+                        .set({
+                            Nickname: "BerattoBB", // summonername
+                            SummonerLevel: level,
+                            SoloQueueRanked: stats[0],
+                            SoloQueueLP: stats[1],
+                            SoloQueueWins: stats[2],
+                            SoloQueueLosses: stats[3],
+                            FlexRanked: stats[4],
+                            FlexRankedLP: stats[5],
+                            FlexWins: stats[6],
+                            FlexLosses: stats[7],
+                            ID: id,
+                            ProfileIconId : profileIconId
+                        })
+                        .then(() => {
+                            let tempList = doc.data().Games;
+
+                            tempList.push({
+                                id: "0",
+                                gameName: "League of Legends"
+                            });
+
+                            dispatch(games_set(tempList));
+                            doc.ref
+                                .update({
+                                    Games: tempList
+                                });
+                        })
+                        .then(() => {
+                            firestore()
+                                .collection("users")
+                                .doc(doc.id)
+                                .update({
+                                    LolAccount: firestore().collection("lolaccounts").doc(doc.id)
+                                })
+                        })
+                })
+            })
+            .then(() => {
                 navigation.navigate("HomePage")
                 setLoading(false);
-            });
+            })
 
     }
 
@@ -66,10 +123,8 @@ const AddScreen = ({ navigation, route }) => {
                     .then(resp => {
                         resp.forEach(doc => {
                             if (doc.data().LolAccount == null) {
-                                console.log("Yok");
                                 setCanAdd(true);
                             } else if (doc.data().LolAccount != null) {
-                                console.log("Var");
                                 setLoading(false);
                                 setCanAdd(false);
                             }
@@ -178,6 +233,7 @@ const AddScreen = ({ navigation, route }) => {
                                                 try {
                                                     setLoading(true);
                                                     checkVerificationCode("BerattoBB", "zaxd31", _success_callback, _failed_callback);
+                                                    //flexStats("asd");
                                                 }
                                                 catch (err) {
                                                     console.error(err);
@@ -198,7 +254,7 @@ const AddScreen = ({ navigation, route }) => {
                     </View>
                 );
             } else if (!canAdd) {
-                return <DeleteScreen></DeleteScreen>
+                return <DeleteScreen gameName={type} ></DeleteScreen>
             }
         default:
             return <Text>Error</Text>;

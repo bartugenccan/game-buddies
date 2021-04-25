@@ -29,7 +29,6 @@ class Fire {
                 uid: null,
                 LolAccount: null
             })
-
     }
 
     addUserToData = async (username, useremail, gender, preferredGender) => {

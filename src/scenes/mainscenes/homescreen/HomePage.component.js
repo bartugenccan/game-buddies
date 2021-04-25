@@ -1,6 +1,6 @@
 // React Imports
-import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, Modal, ScrollView, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View, TouchableOpacity, Modal, FlatList } from 'react-native';
 
 // Style Imports
 import style from './HomePage.component.style';
