@@ -16,7 +16,7 @@ const list = [
     }
 ]
 
-const MessageScreen = () => {
+const ChatScreen = () => {
     return (
         <ScrollView>
             <View>
@@ -37,4 +37,4 @@ const MessageScreen = () => {
 
 }
 
-export default MessageScreen;
+export default ChatScreen;

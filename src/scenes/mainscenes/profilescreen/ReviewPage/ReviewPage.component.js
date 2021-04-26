@@ -1,24 +1,23 @@
 import React from "react";
-import { Text, View, Image, ScrollView } from "react-native";
-import style from "./StatsPage.components.style";
-import { ListItem, Avatar } from 'react-native-elements'
+import {Text, View} from "react-native";
+import { ListItem, Avatar } from 'react-native-elements';
+import style from "./ReviewPage.component.style";
+
 
 const list = [
     {
-        name: 'Solo Queue League',
+        name: 'Blackmamba97',
         avatar_url: 'https://i1.sndcdn.com/artworks-000065334969-gmnp3t-t500x500.jpg',
         subtitle: 'Silver 3'
     },
     {
-        name: 'Flex League',
+        name: 'BerattoBB',
         avatar_url: 'https://i1.sndcdn.com/artworks-000065334969-gmnp3t-t500x500.jpg',
         subtitle: 'Flex'
     },]
 
-
-const StatsPage = () => {
+const ReviewPage = () => {
     return (
-
         <View style={{ flex: 1 }}>
             <View>
                 {
@@ -32,13 +31,11 @@ const StatsPage = () => {
                             </ListItem.Content>
                             <ListItem.Content>
                                 <ListItem.Title>
-                                    <Avatar  
-                                    source= {require("../../../../assets/images/LOLLeagueEmblems/Emblem_Silver.png")
-                                    }
-                                    size = {70}
-                                    avatarStyle={{marginLeft: 25}}/>
-                                    </ListItem.Title>
-                                <ListItem.Subtitle style = {style.lp}>LP=35</ListItem.Subtitle>
+                                    <Text>
+                                        Çok eğlenceliydi!
+                                    </Text>
+                                </ListItem.Title>
+                                <ListItem.Subtitle>5 STARS</ListItem.Subtitle>
                             </ListItem.Content>
                         </ListItem>
                     ))
@@ -47,8 +44,8 @@ const StatsPage = () => {
 
 
         </View>
-
     )
 }
 
-export default StatsPage;
+
+export default ReviewPage;

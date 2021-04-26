@@ -16,31 +16,46 @@ export default StyleSheet.create({
         width: "100%",
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
-        overflow : "hidden",
-        flexGrow : 0.6
+        overflow: "hidden",
+        flexGrow: 0.6
     },
-    iconView : {
-        flex : 0.3 ,
-        width : "100%",
-        flexDirection : "column",
-        justifyContent : 'center',
-        alignItems :'center'
+    iconView: {
+        flex: 0.4,
+        width: "100%",
+        flexDirection: "column",
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    textStyle : {
-        fontSize : 23,
-        color : "white",
+    textStyle: {
+        fontSize: 23,
+        color: "white",
     },
-    inputView : {
-        flex : 0.4,
-        width : "100%",
-        justifyContent : 'center',
-        alignItems :'center'
+    textStyleValorant : {
+        fontSize : 30,
+        color : "white"
+    },  
+    inputView: {
+        flex: 0.4,
+        width: "100%",
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    inputViewValorant: {
+        flex: 0.2,
+        width: "100%",
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: "row"
+    },
+    rankView: {
+        flex: 0.18,
+        width: "100%",
+    },
 
-    },
-    buttonView : {
-        flex : 0.2,
-        width : "100%",
-        justifyContent : 'flex-start',
-        alignItems : 'center'
+    buttonView: {
+        flex: 0.2,
+        width: "100%",
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     }
 });

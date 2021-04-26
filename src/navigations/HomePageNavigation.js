@@ -10,6 +10,7 @@ import ModalNavigation from './ModalNavigation';
 
 // Style Import 
 import { Icon } from "react-native-elements";
+import DuoFinderScreen from '../scenes/mainscenes/duofinderscreen/DuoFinderScreen.component';
 
 // Creating stack navigator
 const Stack = createStackNavigator();
@@ -22,7 +23,7 @@ const HomePageNavigation = (props) => {
     return (
         <Stack.Navigator initialRouteName={"HomePage"}
             screenOptions={{
-                gestureEnabled : true,
+                gestureEnabled: true,
                 headerShown: false,
                 cardStyle: { backgroundColor: 'transparent' },
                 cardOverlayEnabled: false,
@@ -60,9 +61,8 @@ const HomePageNavigation = (props) => {
                 component={FriendsScreen}
                 options={{
                     headerShown: true,
-                    cardStyle : {backgroundColor : "#ffffff"}
+                    cardStyle: { backgroundColor: "#ffffff" }
                 }}
-
             ></Stack.Screen>
 
             <Stack.Screen
@@ -70,6 +70,15 @@ const HomePageNavigation = (props) => {
                 component={ModalNavigation}
                 options={{ headerShown: false }}
             ></Stack.Screen>
+
+            <Stack.Screen
+                name="DuoFinder"
+                component={DuoFinderScreen}
+                options={{
+                    headerShown: false,
+                    cardStyle: { backgroundColor: "#ffffff" },
+                }}>
+            </Stack.Screen>
         </Stack.Navigator>
     );
 }

@@ -14,7 +14,6 @@ import auth from '@react-native-firebase/auth';
 // API Functions
 import {
     checkVerificationCode,
-    getLevel,
     getID,
     fetchStats,
     getProfileIconId
@@ -27,80 +26,152 @@ import {
     games_set
 } from '../../../actions';
 
+
+
+
 const AddScreen = ({ navigation, route }) => {
 
-    // Initial States
+    // Common States
     const [addModalVisible, setAddModalVisible] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [canAdd, setCanAdd] = useState(true);
-    const [summonerName, setSummonerName] = useState("");
-    const [code, setCode] = useState("");
+    const [canAddValorant, setCanAddValorant] = useState(true);
+    const [canAddLol, setCanAddLol] = useState(true);
     const [errMessage, setErrMessage] = useState("");
+
+    // League Of Legends && Valorant
+    const [summonerName, setSummonerName] = useState("BerattoBB"); // ""
+
+    // League Of Legends
+    const [code, setCode] = useState("");
+
+    // Valorant 
+    const [tag, setTag] = useState("");
 
     // Route Params
     const { type } = route.params;
+    console.log("Type is " + type);
 
     // Dispath
     const dispatch = useDispatch();
 
 
-    // Success Callback
-    const _success_callback = async () => {
-        let level = await getLevel("BerattoBB");
-        let id = await getID("BerattoBB");
-        let stats = await fetchStats("BerattoBB");
-        let profileIconId = await getProfileIconId("BerattoBB");
+    // Success Callback 
+    const _success_callback = async (g) => {
 
+        switch (g) {
+            case "League Of Legends":
+
+                let id = await getID("BerattoBB");
+                let stats = await fetchStats("BerattoBB");
+                let profileIconId = await getProfileIconId("BerattoBB");
+                
+                await firestore()
+                    .collection("lolaccounts")
+                    .get()
+                    .then(resp => {
+                        resp.forEach(doc => {
+                            if (doc.data().Nickname == summonerName) {
+                                setLoading(false);
+                                Alert.alert(
+                                    "Hatalı Giriş",
+                                    "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                                )
+                                return;
+                            }
+
+
+
+                            firestore()
+                                .collection("users")
+                                .where("UserEmail", "==", auth().currentUser.email)
+                                .get()
+                                .then(resp => {
+                                    resp.forEach(doc => {
+                                        firestore()
+                                            .collection("lolaccounts")
+                                            .doc(doc.id)
+                                            .set({
+                                                Nickname: "BerattoBB", // summonername
+                                                SoloQueueRanked: stats[0],
+                                                FlexRanked: stats[1],
+                                                ID: id,
+                                                ProfileIconId: profileIconId
+                                            })
+                                            .then(() => {
+                                                let tempList = doc.data().Games;
+                                                tempList.push({ id: "0", gameName: "League Of Legends" });
+
+                                                dispatch(games_set(tempList));
+                                                doc.ref.update({ Games: tempList });
+
+                                            })
+                                            .then(() => {
+                                                doc.ref.update({ LolAccount: firestore().collection("lolaccounts").doc(doc.id) });
+                                            })
+                                    })
+                                })
+
+                                .then(() => {
+                                    navigation.navigate("HomePage")
+                                    setLoading(false);
+                                })
+
+
+                        })
+
+                    })
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    const _onPressValorant = async () => {
         await firestore()
-            .collection("users")
-            .where("UserEmail", "==", auth().currentUser.email)
+            .collection("valorantaccounts")
             .get()
             .then(resp => {
                 resp.forEach(doc => {
+                    if (doc.data().Nickname == summonerName && doc.data().Tag == tag) {
+                        setLoading(false);
+                        Alert.alert(
+                            "Hatalı Giriş",
+                            "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                        )
+                        return;
+                    }
                     firestore()
-                        .collection("lolaccounts")
-                        .doc(doc.id)
-                        .set({
-                            Nickname: "BerattoBB", // summonername
-                            SummonerLevel: level,
-                            SoloQueueRanked: stats[0],
-                            SoloQueueLP: stats[1],
-                            SoloQueueWins: stats[2],
-                            SoloQueueLosses: stats[3],
-                            FlexRanked: stats[4],
-                            FlexRankedLP: stats[5],
-                            FlexWins: stats[6],
-                            FlexLosses: stats[7],
-                            ID: id,
-                            ProfileIconId : profileIconId
+                        .collection("users")
+                        .where("UserEmail", "==", auth().currentUser.email)
+                        .get()
+                        .then(resp => {
+                            resp.forEach(doc => {
+                                firestore()
+                                    .collection("valorantaccounts")
+                                    .doc(doc.id)
+                                    .set({
+                                        Nickname: "BerattoBB", //summonername
+                                        Tag: tag
+                                    })
+                                    .then(() => {
+                                        let tempList = doc.data().Games;
+                                        tempList.push({ id: "1", gameName: "Valorant" });
+
+                                        dispatch(games_set(tempList));
+                                        doc.ref.update({ Games: tempList });
+
+                                    }).then(() => {
+                                        doc.ref.update({ ValorantAccount: firestore().collection("valorantaccounts").doc(doc.id) })
+                                    })
+                            })
                         })
                         .then(() => {
-                            let tempList = doc.data().Games;
-
-                            tempList.push({
-                                id: "0",
-                                gameName: "League of Legends"
-                            });
-
-                            dispatch(games_set(tempList));
-                            doc.ref
-                                .update({
-                                    Games: tempList
-                                });
-                        })
-                        .then(() => {
-                            firestore()
-                                .collection("users")
-                                .doc(doc.id)
-                                .update({
-                                    LolAccount: firestore().collection("lolaccounts").doc(doc.id)
-                                })
+                            setLoading(false);
+                            navigation.navigate("HomePage");
                         })
                 })
-            })
-            .then(() => {
-                navigation.navigate("HomePage")
-                setLoading(false);
             })
 
     }
@@ -109,6 +180,26 @@ const AddScreen = ({ navigation, route }) => {
         setErrMessage("* Sihirdar adı veya doğrulama kodu hatalı.");
         setSummonerName("");
         setCode("");
+        setTag("");
+    }
+
+    const useEffectLeagueOfLegends = () => {
+        console.log("Beratto");
+        firestore()
+            .collection("users")
+            .where("UserEmail", "==", auth().currentUser.email)
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    if (doc.data().LolAccount != null) {
+                        setCanAddLol(false);
+                    } else if (doc.data().LolAccount == null) {
+                        setCanAddLol(true)
+                    }
+                })
+            }).then(() => {
+                setLoading(false)
+            })
     }
 
     useEffect(() => {
@@ -116,19 +207,21 @@ const AddScreen = ({ navigation, route }) => {
 
         switch (type) {
             case "League Of Legends":
+                useEffectLeagueOfLegends();
+
+            case "Valorant":
                 firestore()
                     .collection("users")
                     .where("UserEmail", "==", auth().currentUser.email)
                     .get()
                     .then(resp => {
                         resp.forEach(doc => {
-                            if (doc.data().LolAccount == null) {
-                                setCanAdd(true);
-                            } else if (doc.data().LolAccount != null) {
+                            if (doc.data().ValorantAccount == null) {
+                                setCanAddValorant(true);
+                            } else if (doc.data().ValorantAccount != null) {
                                 setLoading(false);
-                                setCanAdd(false);
+                                setCanAddValorant(false);
                             }
-
                         })
                     }).then(() => setLoading(false))
 
@@ -139,7 +232,8 @@ const AddScreen = ({ navigation, route }) => {
 
     switch (type) {
         case "League Of Legends":
-            if (canAdd) {
+            if (canAddLol) {
+
                 return (
                     <View style={{ flex: 1 }}>
                         <Modal
@@ -232,8 +326,7 @@ const AddScreen = ({ navigation, route }) => {
                                             onPress={async () => {
                                                 try {
                                                     setLoading(true);
-                                                    checkVerificationCode("BerattoBB", "zaxd31", _success_callback, _failed_callback);
-                                                    //flexStats("asd");
+                                                    checkVerificationCode("BerattoBB", "zaxd31", _success_callback(type), _failed_callback);
                                                 }
                                                 catch (err) {
                                                     console.error(err);
@@ -253,7 +346,122 @@ const AddScreen = ({ navigation, route }) => {
                         </Modal>
                     </View>
                 );
-            } else if (!canAdd) {
+            } else if (!canAddLol) {
+                return <DeleteScreen gameName={type} ></DeleteScreen>
+            }
+        case "Valorant":
+            if (canAddValorant) {
+                return (
+                    <View style={{ flex: 1 }}>
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            visible={loading}>
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                                <View style={{ height: 100, width: 200, backgroundColor: "#892cdc", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Spinner color={"yellow"} size={100}></Spinner>
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={addModalVisible}
+                            onRequestClose={() => {
+                                setAddModalVisible(false)
+                                navigation.navigate("MobileModal");
+                            }}
+                        >
+                            <View style={style.container}>
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    style={style.closeView}
+                                    onPress={() => {
+                                        console.log(addModalVisible);
+                                        setAddModalVisible(!addModalVisible);
+                                        console.log(addModalVisible);
+                                        navigation.navigate("PCModal");
+
+                                    }}></TouchableOpacity>
+                                <KeyboardAvoidingView
+                                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                                    style={style.bigView}
+                                >
+                                    <View style={style.iconView}>
+                                        <View>
+                                            <Avatar
+                                                rounded
+                                                source={require("../../../assets/images/Valorant_icon.png")}
+                                                size={70}></Avatar>
+                                        </View>
+                                        <View style={{ marginTop: 10 }}>
+                                            <Text style={style.textStyleValorant}>{type}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={style.inputViewValorant}>
+                                        <Input
+                                            placeholder='Kullanıcı Adınız'
+                                            leftIcon={
+                                                <Icon
+                                                    name='user'
+                                                    size={24}
+                                                    type={"font-awesome"}
+                                                    color='white'
+                                                />
+                                            }
+                                            inputStyle={{ color: "white" }}
+                                            onChangeText={val => setSummonerName(val)}
+                                            containerStyle={{ width: "40%" }}
+                                            value={summonerName}
+                                        />
+                                        <Input
+                                            placeholder='Tag'
+                                            leftIcon={
+                                                <Icon
+                                                    name='tag'
+                                                    size={24}
+                                                    type={"material-icons"}
+                                                    color='white'
+                                                />
+                                            }
+                                            inputStyle={{ color: "white" }}
+                                            onChangeText={val => setTag(val)}
+                                            containerStyle={{ width: "40%" }}
+                                            value={code}
+                                            errorMessage={errMessage}
+                                            errorStyle={{ color: "#dcedc1" }}
+                                            autoCorrect={false}
+                                        />
+                                    </View>
+
+                                    <View style={style.buttonView}>
+                                        <Button
+                                            title="Hesabını Bağla"
+                                            type="outline"
+                                            raised
+                                            containerStyle={{ backgroundColor: "white", width: "70%", marginTop: 20 }}
+                                            titleStyle={{ color: "#892cdc" }}
+                                            onPress={async () => {
+                                                try {
+                                                    setLoading(true);
+                                                    _onPressValorant();
+                                                }
+                                                catch (err) {
+                                                    console.error(err);
+                                                }
+                                            }}
+                                        />
+                                        <Text
+                                            style={{ color: "rgba(255,255,255,0.5)", marginTop: 5, textDecorationLine: "underline" }}
+                                            onPress={() => Linking.openURL("https://stackoverflow.com/questions/43804032/open-url-in-default-web-browser")}
+                                        >Yardıma mı ihtiyacın var?</Text>
+                                    </View>
+                                </KeyboardAvoidingView>
+                            </View>
+                        </Modal>
+                    </View>
+                );
+            } else if (!canAddValorant) {
                 return <DeleteScreen gameName={type} ></DeleteScreen>
             }
         default:

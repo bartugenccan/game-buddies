@@ -15,9 +15,9 @@ const list = [
         subtitle: 'Online'
     },
     {
-        name: 'PUBG',
-        avatar_url: require("../../../assets/images/PUBG_icon.png"),
-        subtitle: 'Çok yakında.'
+        name: 'Valorant',
+        avatar_url: require("../../../assets/images/Valorant_icon.png"),
+        subtitle: 'Online'
     },
     {
         name: "Apex Legends",

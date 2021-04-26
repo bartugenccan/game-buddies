@@ -59,28 +59,6 @@ function HomePage(props) {
             })
             .then(() => dispatch(set_loading_home(false)))
 
-
-        /*
-    firestore()
-        .collection("users")
-        .where("UserEmail", "==", auth().currentUser.email)
-        .get()
-        .then(resp => {
-            resp.forEach(doc => {
-                let tempList = doc.data().Games;
-                
-                tempList.push({
-                    id : "0",
-                    gameName : "League of Legends"
-                })
-
-                console.log(tempList);
-                //dispatch(games_set(tempList))
-            })
-        })
-        .then(() => dispatch(set_loading_home(false)))
-        */
-
     }, [dispatch])
 
 
@@ -91,13 +69,13 @@ function HomePage(props) {
         if (item.id == "0") {
             return (
                 <View style={{ width: "100%", height: 200, marginTop: 20, overflow: "hidden" }}>
-                    <GameView gameName={item.gameName} gameImage={"https://wallpaperaccess.com/full/217097.jpg"} />
+                    <GameView gameName={item.gameName} gameImage={"https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/bltcfa4652c8d383f56/5e21837f63d1b6503160d39b/Home-page.jpg"} />
                 </View>
             )
         } else if (item.id == "1") {
             return (
                 <View style={{ width: "100%", height: 200, marginTop: 10, overflow: "hidden" }}>
-                    <GameView gameName={item.gameName} gameImage={"https://www.gaziemir.com.tr/wp-content/uploads/2020/12/brawl-stars.jpg"} />
+                    <GameView gameName={item.gameName} gameImage={"https://www.tvovermind.com/wp-content/uploads/2021/03/valorant-update.png"} />
                 </View>
             )
         }

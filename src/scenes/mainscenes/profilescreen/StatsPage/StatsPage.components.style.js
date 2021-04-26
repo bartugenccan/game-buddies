@@ -14,6 +14,10 @@ export default StyleSheet.create({
     },
     redStyle : {
         color : "red"
+    },
+    lp:{
+        marginLeft:27
     }
+    
     
 })

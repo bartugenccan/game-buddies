@@ -54,6 +54,11 @@ export default StyleSheet.create({
         flexDirection: "row",
         overflow: "scroll",
     },
+    justTextView: {
+        flex: 0.65,
+        width: "100%",
+        overflow: "scroll",
+    },
     profileIconView: {
         flex: 0.4,
         justifyContent: "center",
@@ -68,19 +73,14 @@ export default StyleSheet.create({
         marginLeft: 10,
         color: "#892cdc",
         fontSize: 24,
-        marginLeft : 15
+        marginLeft: 15
     },
-    buttonView : {
-        flex : 0.3,
-        width : "100%",
-        justifyContent : 'center',
-        alignItems : 'center'
+    buttonView: {
+        flex: 0.3,
+        width: "100%",
+        justifyContent: 'center',
+        alignItems: 'center',
+
     },
-    buttonStyle : {
-        height : 50,
-        backgroundColor : "red",
-        width : "80%",
-        justifyContent : 'center',
-        alignItems : 'center'
-    }
+
 });

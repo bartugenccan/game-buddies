@@ -27,7 +27,8 @@ class Fire {
                 Likes: { Count: 0, Users: [] },
                 Games: [],
                 uid: null,
-                LolAccount: null
+                LolAccount: null,
+                ValorantAccount : null
             })
     }
 
@@ -46,7 +47,8 @@ class Fire {
                 PrefferedGender: preferredGender,
                 Games: [],
                 uid: null,
-                LolAccount: null
+                LolAccount: null,
+                ValorantAccount : null
             })
 
     }

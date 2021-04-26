@@ -6,6 +6,7 @@ import ProfileScreen from '../scenes/mainscenes/profilescreen/ProfileScreen.comp
 import MesssageScreen from '../scenes/mainscenes/messagesscreen/MessageScreen.component';
 
 import { Icon } from 'react-native-elements';
+import ChatStack from './ChatStack';
 const Tab = createBottomTabNavigator();
 
 
@@ -22,22 +23,21 @@ const MainNavigation = () => {
                 style: {
                     height: 60
                 },
-                keyboardHidesTabBar : true
+                keyboardHidesTabBar: true
             }}
+            
             initialRouteName={"Home"}>
-            <Tab.Screen name="Messages" component={MesssageScreen} options={{
-                tabBarIcon: () => <Icon
-                    name="comment"
-                    type="font-awesome"
-                    color='white'
-                    size={30} />,
+            <Tab.Screen name="Messages" component={ChatStack} options={{
+                tabBarIcon: () => <Icon name="comment" type="font-awesome" color='white' size={30} />,
+                tabBarLabel: "Mesajlar",
+
             }}></Tab.Screen>
 
             <Tab.Screen name="Home" component={HomePageNavigation}
                 options={{
                     tabBarIcon: () => <Icon name="gamepad" type="font-awesome" color='white' size={35} />
                 }}
-                ></Tab.Screen>
+            ></Tab.Screen>
             <Tab.Screen name="Profile" component={ProfileScreen} options={{
                 tabBarIcon: () =>
                     <Icon

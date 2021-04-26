@@ -1,4 +1,4 @@
-const API_KEY = "RGAPI-c4f6a63e-2723-47cd-a8bf-1a1c4035bd3b";
+const API_KEY = "RGAPI-bd85da88-8d9f-4faf-9e87-019aee8be42d";
 
 export async function getID(summonername) {
     try {
@@ -10,6 +10,7 @@ export async function getID(summonername) {
     }
 }
 
+/*
 export async function getLevel(summonerName) {
     try {
         let response = await fetch("https://tr1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summonerName + "?api_key=" + API_KEY);
@@ -20,6 +21,7 @@ export async function getLevel(summonerName) {
     }
 
 }
+*/
 
 async function getVerificationCode(id) {
     try {
@@ -32,48 +34,37 @@ async function getVerificationCode(id) {
 
 }
 
-export async function fetchStats(summonername) {
-    try {
 
+export async function fetchStats(summonername) {
+
+    try {
         let idResponse = await getID(summonername);
         let response = await fetch("https://tr1.api.riotgames.com/lol/league/v4/entries/by-summoner/" + idResponse + "?api_key=" + API_KEY);
         let respJson = await response.json();
 
         if (respJson[0]["queueType"] == "RANKED_FLEX_SR") {
 
-            console.log("Flex wins" + respJson[0]["wins"]);
-
             // Solo Stats
             let SoloQueueRanked = respJson[1]["tier"] + " " + respJson[1]["rank"];
-            let SoloQueueLP = respJson[1]["leaguePoints"];
-            let SoloQueueWins = respJson[1]["wins"];
-            let SoloQueueLosses = respJson[1]["losses"];
+
 
             // Flex Stats
             let FlexRanked = respJson[0]["tier"] + " " + respJson[0]["rank"];
-            let FlexRankedLP = respJson[0]["leaguePoints"];
-            let FlexWins = respJson[0]["wins"];
-            let FlexLosses = respJson[0]["losses"];
 
-            return [SoloQueueRanked, SoloQueueLP, SoloQueueWins, SoloQueueLosses, FlexRanked, FlexRankedLP, FlexWins, FlexLosses];
+
+            return [SoloQueueRanked, FlexRanked];
 
         } else if (respJson[0]["queueType"] == "RANKED_SOLO_5x5") {
 
-            console.log("Solo wins" + respJson[0]["wins"]);
-
             // Solo Stats
             let SoloQueueRanked = respJson[0]["tier"] + " " + respJson[0]["rank"];
-            let SoloQueueLP = respJson[0]["leaguePoints"];
-            let SoloQueueWins = respJson[0]["wins"];
-            let SoloQueueLosses = respJson[0]["losses"];
+
 
             // Flex Stats
             let FlexRanked = respJson[1]["tier"] + " " + respJson[1]["rank"];
-            let FlexRankedLP = respJson[1]["leaguePoints"];
-            let FlexWins = respJson[1]["wins"];
-            let FlexLosses = respJson[1]["losses"];
 
-            return [SoloQueueRanked, SoloQueueLP, SoloQueueWins, SoloQueueLosses, FlexRanked, FlexRankedLP, FlexWins, FlexLosses];
+
+            return [SoloQueueRanked, FlexRanked];
 
         }
 
@@ -85,6 +76,7 @@ export async function fetchStats(summonername) {
     }
 }
 
+
 export async function getProfileIconId(summonername) {
     try {
         let response = await fetch("https://tr1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summonername + "?api_key=" + API_KEY);
@@ -94,6 +86,7 @@ export async function getProfileIconId(summonername) {
         console.error(err);
     }
 }
+
 
 export async function checkVerificationCode(summonername, inputCode, success_callback, failed_callback) {
     try {

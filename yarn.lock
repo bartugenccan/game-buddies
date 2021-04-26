@@ -1456,6 +1456,11 @@
   dependencies:
     "eslint-visitor-keys" "^1.1.0"
 
+"@vseslav/react-native-horizontal-picker@^0.1.0":
+  "integrity" "sha512-IDj3UFZcakpSDQBZGEAgAegRO5jwdetrGViyTZxU40fJdoVzy6qkfbEKmP+GSbs+d0MdnmTg18aQtEs+8gP0iQ=="
+  "resolved" "https://registry.npmjs.org/@vseslav/react-native-horizontal-picker/-/react-native-horizontal-picker-0.1.0.tgz"
+  "version" "0.1.0"
+
 "abab@^2.0.3", "abab@^2.0.5":
   "integrity" "sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q=="
   "resolved" "https://registry.yarnpkg.com/abab/-/abab-2.0.5.tgz"
@@ -5792,6 +5797,11 @@
   "integrity" "sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw=="
   "resolved" "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz"
   "version" "0.3.1"
+
+"react-native-smooth-picker@^1.1.4":
+  "integrity" "sha512-758/Pcu9ZIyJiQ3R+usTlspvLzlOt15w4Ay2OoOPF5gxafYUaKO+ZLsz+hqTjYmJYWxHG3IHlYot/MBMYq+qqw=="
+  "resolved" "https://registry.npmjs.org/react-native-smooth-picker/-/react-native-smooth-picker-1.1.4.tgz"
+  "version" "1.1.4"
 
 "react-native-spinkit@>= 1.5.1":
   "integrity" "sha512-XkTgP4e+/MZpbI1GdZTIEQ+6WeMWQT4duWnSiXaaVW7py0rtaBLswtAEA6uXQGUhnxMnPWZhbLz7QponpH3ciQ=="
