@@ -1,5 +1,5 @@
 // React Imports
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { Text, View, TouchableOpacity, Modal, FlatList } from 'react-native';
 
 // Style Imports
@@ -43,7 +43,7 @@ function HomePage(props) {
                     batch.update(docRef, { uid: auth().currentUser.uid })
                 }))
                 batch.commit().then(() => {
-                    console.log("Re");
+                    console.log(auth().currentUser.uid);
                 })
             });
 
@@ -59,8 +59,34 @@ function HomePage(props) {
             })
             .then(() => dispatch(set_loading_home(false)))
 
-    }, [dispatch])
+        firestore()
+            .collection("users")
+            .where("UserEmail", "==", auth().currentUser.email)
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    doc.ref.update({ IsOnline: true })
+                })
+            })
+        
+        
+    }, [dispatch]);
 
+
+    // When app is close set IsOnline to false.
+    useLayoutEffect(() => {
+        return () => {
+            firestore()
+                .collection("users")
+                .where("UserEmail", "==", auth().currentUser.email)
+                .get()
+                .then(resp => {
+                    resp.forEach(doc => {
+                        doc.ref.update({ IsOnline: false });
+                    })
+                })
+        }
+    }, []);
 
 
     // Function for render game view depends on game id.

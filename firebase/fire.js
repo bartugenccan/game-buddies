@@ -21,6 +21,10 @@ class Fire {
                 UserEmail: useremail,
                 Gender: gender,
                 IsOnline: true,
+                IsOnlineForLol: false,
+                IsOnlineForValorant: false,
+                IsOnlineForApex: false,
+                IsOnlineForPUBGMobile: false,
                 Review: {},
                 StarsMean: 0,
                 Dislikes: { Count: 0, Users: [] },
@@ -30,7 +34,8 @@ class Fire {
                 LolAccount: null,
                 ValorantAccount: null,
                 ApexAccount: null,
-                PUBGMobileAccount: null
+                PUBGMobileAccount: null,
+                iconID: 1
             })
     }
 
@@ -42,6 +47,10 @@ class Fire {
                 UserEmail: useremail,
                 Gender: gender,
                 IsOnline: true,
+                IsOnlineForLol: false,
+                IsOnlineForValorant: false,
+                IsOnlineForApex: false,
+                IsOnlineForPUBGMobile: false,
                 Review: {},
                 StarsMean: 0,
                 Dislikes: { Count: 0, Users: [] },
@@ -52,7 +61,8 @@ class Fire {
                 LolAccount: null,
                 ValorantAccount: null,
                 ApexAccount: null,
-                PUBGMobileAccount: null
+                PUBGMobileAccount: null,
+                iconID: 1
             })
 
     }

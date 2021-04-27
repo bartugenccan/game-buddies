@@ -1,40 +1,97 @@
-import React from 'react';
-import { Text, ScrollView, View } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements'
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View, Modal, FlatList } from 'react-native';
+import { ListItem, Avatar } from 'react-native-elements';
+import Spinner from '../../../components/Spinner/Spinner.component';
 
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
-const list = [
-    {
-        name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
-    },
-    {
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-    }
-]
+import { useNavigation } from '@react-navigation/native';
+
 
 const MessageScreen = () => {
+
+    const navigation = useNavigation();
+
+    const [list, setList] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const keyExtractor = (item, index) => index.toString()
+
+    useEffect(() => {
+
+        const users = [];
+
+        const subscriber = firestore()
+            .collection("messages")
+            .where("members", "array-contains", auth().currentUser.uid)
+            .onSnapshot(resp => {
+                resp.forEach(doc => {
+                    let memberArray = doc.data().members;
+
+                    for (var i = 0; i < memberArray.length; i++) {
+                        if (memberArray[i] === auth().currentUser.uid) {
+                            memberArray.splice(i, 1);
+                        }
+                    };
+
+                    let otherMember = memberArray[0]
+                    users.push({
+                        name: doc.data()[otherMember][1],
+                        avatar_url: doc.data()[otherMember][0],
+                        uid: memberArray[0],
+                        recentMessage: doc.data().recentMessage
+                    })
+
+                })
+
+                setList(users);
+            })
+        setLoading(false);
+
+        return () => subscriber();
+    }, []);
+
+    const renderItem = ({ item }) => (
+        <ListItem bottomDivider onPress={() => {
+            console.log("Basıldı");
+            navigation.navigate("Chat" , {uid : item.uid , avatar_url : item.avatar_url})
+        }}>
+            <Avatar source={{ uri: item.avatar_url }} rounded size={50} />
+            <ListItem.Content>
+                <ListItem.Title>{item.name}</ListItem.Title>
+                <ListItem.Subtitle>{item.recentMessage}</ListItem.Subtitle>
+            </ListItem.Content>
+            <ListItem.Chevron />
+        </ListItem>
+    )
+
+
     return (
-        <ScrollView>
+        <View>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={loading}>
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                    <View style={{ height: 100, width: 200, backgroundColor: "#892cdc", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                        <Spinner color={"yellow"} size={100}></Spinner>
+                    </View>
+                </View>
+            </Modal>
             <View>
-                {
-                    list.map((l, i) => (
-                        <ListItem key={i} bottomDivider>
-                            <Avatar source={{ uri: l.avatar_url }} />
-                            <ListItem.Content>
-                                <ListItem.Title>{l.name}</ListItem.Title>
-                                <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-                    ))
-                }
+                <FlatList
+                    keyExtractor={keyExtractor}
+                    data={list}
+                    renderItem={renderItem}
+                />
             </View>
-        </ScrollView>
+        </View>
+
     )
 
 }
+
+
 
 export default MessageScreen;

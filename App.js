@@ -41,6 +41,8 @@ const App = () => {
         setLoggedIn(newLoggedInState);
       }
     });
+
+    
   }, []);
 
   // Function for conditional rendering 

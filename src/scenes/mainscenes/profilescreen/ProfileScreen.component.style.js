@@ -6,12 +6,13 @@ export default StyleSheet.create({
         height : 250,
         alignItems:"center",
         justifyContent:"center",
+        backgroundColor : "black"
 
     },
     nickname:{
         marginTop:25,
         fontSize:25,
-        color:"#892cdc"
+        color:"white"
     },
     addedGames:{
         

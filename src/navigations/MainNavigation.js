@@ -17,7 +17,7 @@ const MainNavigation = () => {
         <Tab.Navigator
             tabBarOptions={{
                 tabStyle: {
-                    backgroundColor: "#892cdc",
+                    backgroundColor: "black",
                 },
                 showLabel: false,
                 style: {
