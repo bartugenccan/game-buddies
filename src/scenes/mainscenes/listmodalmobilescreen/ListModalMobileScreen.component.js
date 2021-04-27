@@ -10,15 +10,11 @@ import { ListItem, Avatar } from 'react-native-elements';
 
 // Example Data For Mobile Platform
 const list = [
-    {
-        name: 'Brawl Stars',
-        avatar_url: require("../../../assets/images/Brawl_Stars_icon.png"),
-        subtitle: 'Online'
-    },
+
     {
         name: 'PUBG Mobile',
         avatar_url: require("../../../assets/images/PUBG_Mobile_icon.png"),
-        subtitle: 'Çok yakında.'
+        subtitle: 'Online'
     }
 ]
 
@@ -26,8 +22,6 @@ const list = [
 const keyExtractor = (item, index) => index.toString()
 
 const ListModalMobileScreen = ({ navigation  , route}) => {
-
-
 
     // Initial State For Modal Visibility
     const [modalVisible, setModalVisible] = useState(true);
@@ -38,8 +32,7 @@ const ListModalMobileScreen = ({ navigation  , route}) => {
             if (subtitle != "Çok yakında.") {
                 return (
                     <ListItem bottomDivider containerStyle={{ backgroundColor: "transparent" }} onPress={() => {
-                        navigation.goBack();
-                        setModalVisible(false);
+                        navigation.navigate("AddScreen", { type: name });
                     }}
                         activeOpacity={1}
                         underlayColor={"rgba(0,0,0,0.5)"}>

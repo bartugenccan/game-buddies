@@ -32,7 +32,8 @@ export default StyleSheet.create({
     },
     textStyleValorant : {
         fontSize : 30,
-        color : "white"
+        color : "white",
+        fontFamily: "Valorant Font"
     },  
     inputView: {
         flex: 0.4,

@@ -28,7 +28,9 @@ class Fire {
                 Games: [],
                 uid: null,
                 LolAccount: null,
-                ValorantAccount : null
+                ValorantAccount: null,
+                ApexAccount: null,
+                PUBGMobileAccount: null
             })
     }
 
@@ -48,7 +50,9 @@ class Fire {
                 Games: [],
                 uid: null,
                 LolAccount: null,
-                ValorantAccount : null
+                ValorantAccount: null,
+                ApexAccount: null,
+                PUBGMobileAccount: null
             })
 
     }

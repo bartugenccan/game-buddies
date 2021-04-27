@@ -24,7 +24,8 @@ export default StyleSheet.create({
     textStyle: {
         color: "#ffffff",
         fontSize: 14,
-        width : "85%"
+        width : "85%",
+        fontFamily:"segoe-ui-light-2"
     },
     iconView: {
         height: 70,

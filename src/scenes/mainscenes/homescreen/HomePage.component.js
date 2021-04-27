@@ -78,6 +78,18 @@ function HomePage(props) {
                     <GameView gameName={item.gameName} gameImage={"https://www.tvovermind.com/wp-content/uploads/2021/03/valorant-update.png"} />
                 </View>
             )
+        } else if (item.id == "2") {
+            return (
+                <View style={{ width: "100%", height: 200, marginTop: 10, overflow: "hidden" }}>
+                    <GameView gameName={item.gameName} gameImage={"https://images2.alphacoders.com/995/thumb-1920-995140.jpg"} />
+                </View>
+            )
+        } else if (item.id == "3") {
+            return (
+                <View style={{ width: "100%", height: 200, marginTop: 10, overflow: "hidden" }}>
+                    <GameView gameName={item.gameName} gameImage={"https://playerbros.com/wp-content/uploads/2020/12/12.jpg"} />
+                </View>
+            )
         }
     };
 
@@ -131,11 +143,11 @@ function HomePage(props) {
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                style={{ marginTop: 0, marginBottom: 20 }}
+                style={{ marginTop: 0, marginBottom: 0 }}
             />
         </View>
     )
-}
+};
 
 const mapStateToProps = ({ HomeScreenResponse }) => {
     const { games_arr, loading } = HomeScreenResponse;

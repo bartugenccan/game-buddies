@@ -22,7 +22,7 @@ const list = [
     {
         name: "Apex Legends",
         avatar_url: require("../../../assets/images/Apex_Legends_icon.png"),
-        subtitle: "Çok yakında."
+        subtitle: "Online"
     },
     {
         name: "Rust",
@@ -38,7 +38,6 @@ const ListModalScreenPc = ({ navigation }) => {
 
     // Initial State For Modal Visibility
     const [pcModalVisible, setPcModalVisible] = useState(true);
-
 
 
     // Cusstom Component For FlatLists Item

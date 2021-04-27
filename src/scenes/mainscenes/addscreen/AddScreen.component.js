@@ -28,32 +28,39 @@ import {
 
 
 
+function BreakSignal() { }
+
+BreakSignal.prototype = new Error();
 
 const AddScreen = ({ navigation, route }) => {
 
     // Common States
     const [addModalVisible, setAddModalVisible] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [canAddValorant, setCanAddValorant] = useState(true);
-    const [canAddLol, setCanAddLol] = useState(true);
     const [errMessage, setErrMessage] = useState("");
 
-    // League Of Legends && Valorant
+    // League Of Legends && Valorant && Apex Legends 
     const [summonerName, setSummonerName] = useState("BerattoBB"); // ""
 
     // League Of Legends
     const [code, setCode] = useState("");
+    const [canAddLol, setCanAddLol] = useState(true);
 
     // Valorant 
-    const [tag, setTag] = useState("");
+    const [tag, setTag] = useState("TR1");
+    const [canAddValorant, setCanAddValorant] = useState(true);
+
+    // Apex 
+    const [canAddApex, setCanAddApex] = useState(true);
 
     // Route Params
     const { type } = route.params;
-    console.log("Type is " + type);
+
+    // PUBG Mobile
+    const [canAddPUBGMobile, setCanAddPUBGMobile] = useState(true);
 
     // Dispath
     const dispatch = useDispatch();
-
 
     // Success Callback 
     const _success_callback = async (g) => {
@@ -61,121 +68,75 @@ const AddScreen = ({ navigation, route }) => {
         switch (g) {
             case "League Of Legends":
 
+                const tempDoc = [];
+
                 let id = await getID("BerattoBB");
                 let stats = await fetchStats("BerattoBB");
                 let profileIconId = await getProfileIconId("BerattoBB");
-                
+
                 await firestore()
                     .collection("lolaccounts")
                     .get()
                     .then(resp => {
                         resp.forEach(doc => {
-                            if (doc.data().Nickname == summonerName) {
-                                setLoading(false);
-                                Alert.alert(
-                                    "Hatalı Giriş",
-                                    "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
-                                )
-                                return;
-                            }
-
-
-
-                            firestore()
-                                .collection("users")
-                                .where("UserEmail", "==", auth().currentUser.email)
-                                .get()
-                                .then(resp => {
-                                    resp.forEach(doc => {
-                                        firestore()
-                                            .collection("lolaccounts")
-                                            .doc(doc.id)
-                                            .set({
-                                                Nickname: "BerattoBB", // summonername
-                                                SoloQueueRanked: stats[0],
-                                                FlexRanked: stats[1],
-                                                ID: id,
-                                                ProfileIconId: profileIconId
-                                            })
-                                            .then(() => {
-                                                let tempList = doc.data().Games;
-                                                tempList.push({ id: "0", gameName: "League Of Legends" });
-
-                                                dispatch(games_set(tempList));
-                                                doc.ref.update({ Games: tempList });
-
-                                            })
-                                            .then(() => {
-                                                doc.ref.update({ LolAccount: firestore().collection("lolaccounts").doc(doc.id) });
-                                            })
-                                    })
-                                })
-
-                                .then(() => {
-                                    navigation.navigate("HomePage")
-                                    setLoading(false);
-                                })
-
-
+                            tempDoc.push(doc.data().Nickname)
                         })
-
                     })
-                break;
+                    .then(() => {
+                        if (tempDoc.includes(summonerName)) {
+                            throw new BreakSignal;
+                        }
+                    })
+                    .then(() => {
+                        firestore()
+                            .collection("users")
+                            .where("UserEmail", "==", auth().currentUser.email)
+                            .get()
+                            .then(resp => {
+                                resp.forEach(doc => {
+                                    firestore()
+                                        .collection("lolaccounts")
+                                        .doc(doc.id)
+                                        .set({
+                                            Nickname: summonerName, // summonername
+                                            SoloQueueRanked: stats[0],
+                                            FlexRanked: stats[1],
+                                            ID: id,
+                                            ProfileIconId: profileIconId
+                                        })
+                                        .then(() => {
+                                            let tempList = doc.data().Games;
+                                            tempList.push({ id: "0", gameName: "League Of Legends" });
 
-            default:
-                break;
+                                            dispatch(games_set(tempList));
+                                            doc.ref.update({ Games: tempList });
+
+                                        })
+                                        .then(() => {
+                                            doc.ref.update({ LolAccount: firestore().collection("lolaccounts").doc(doc.id) });
+                                        })
+                                })
+                            })
+                            .then(() => {
+                                navigation.navigate("HomePage")
+                                setLoading(false);
+                            })
+                    })
+                    .catch(e => {
+                        if (e instanceof BreakSignal) {
+                            setLoading(false);
+                            Alert.alert(
+                                "Hatalı Giriş",
+                                "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                            );
+                        }
+                    })
+
         }
 
     }
 
-    const _onPressValorant = async () => {
-        await firestore()
-            .collection("valorantaccounts")
-            .get()
-            .then(resp => {
-                resp.forEach(doc => {
-                    if (doc.data().Nickname == summonerName && doc.data().Tag == tag) {
-                        setLoading(false);
-                        Alert.alert(
-                            "Hatalı Giriş",
-                            "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
-                        )
-                        return;
-                    }
-                    firestore()
-                        .collection("users")
-                        .where("UserEmail", "==", auth().currentUser.email)
-                        .get()
-                        .then(resp => {
-                            resp.forEach(doc => {
-                                firestore()
-                                    .collection("valorantaccounts")
-                                    .doc(doc.id)
-                                    .set({
-                                        Nickname: "BerattoBB", //summonername
-                                        Tag: tag
-                                    })
-                                    .then(() => {
-                                        let tempList = doc.data().Games;
-                                        tempList.push({ id: "1", gameName: "Valorant" });
-
-                                        dispatch(games_set(tempList));
-                                        doc.ref.update({ Games: tempList });
-
-                                    }).then(() => {
-                                        doc.ref.update({ ValorantAccount: firestore().collection("valorantaccounts").doc(doc.id) })
-                                    })
-                            })
-                        })
-                        .then(() => {
-                            setLoading(false);
-                            navigation.navigate("HomePage");
-                        })
-                })
-            })
-
-    }
-
+    // League Of Legends failed_callback
     const _failed_callback = () => {
         setErrMessage("* Sihirdar adı veya doğrulama kodu hatalı.");
         setSummonerName("");
@@ -183,9 +144,188 @@ const AddScreen = ({ navigation, route }) => {
         setTag("");
     }
 
-    const useEffectLeagueOfLegends = () => {
-        console.log("Beratto");
-        firestore()
+    // Valorant onPress event 
+    const _onPressValorant = async () => {
+        const tempDoc = [];
+
+        await firestore()
+            .collection("valorantaccounts")
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    tempDoc.push(doc.data().Nickname)
+                })
+            })
+            .then(() => {
+                if (tempDoc.includes(summonerName + " #" + tag)) {
+                    throw new BreakSignal;
+                }
+            })
+            .then(() => {
+                firestore()
+                    .collection("users")
+                    .where("UserEmail", "==", auth().currentUser.email)
+                    .get()
+                    .then(resp => {
+                        resp.forEach(doc => {
+                            firestore()
+                                .collection("valorantaccounts")
+                                .doc(doc.id)
+                                .set({
+                                    Nickname: summonerName + " #" + tag, // summonername + # + tag
+                                })
+                                .then(() => {
+                                    let tempList = doc.data().Games;
+                                    tempList.push({ id: "1", gameName: "Valorant" });
+
+                                    dispatch(games_set(tempList));
+                                    doc.ref.update({ Games: tempList });
+
+                                })
+                                .then(() => {
+                                    doc.ref.update({ ValorantAccount: firestore().collection("valorantaccounts").doc(doc.id) });
+                                })
+                        })
+                    })
+                    .then(() => {
+                        setLoading(false);
+                        navigation.navigate("HomePage");
+                    })
+
+            }).catch(e => {
+                if (e instanceof BreakSignal) {
+                    setLoading(false);
+                    Alert.alert(
+                        "Hatalı Giriş",
+                        "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                    );
+                }
+            })
+    }
+
+    // Apex Legends onPress event
+    const _onPressApex = async () => {
+        const tempDoc = [];
+
+        await firestore()
+            .collection("apexaccounts")
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    tempDoc.push(doc.data().Nickname)
+                })
+            })
+            .then(() => {
+                if (tempDoc.includes(summonerName)) {
+                    throw new BreakSignal;
+                }
+            })
+            .then(() => {
+                firestore()
+                    .collection("users")
+                    .where("UserEmail", "==", auth().currentUser.email)
+                    .get()
+                    .then(resp => {
+                        resp.forEach(doc => {
+                            firestore()
+                                .collection("apexaccounts")
+                                .doc(doc.id)
+                                .set({
+                                    Nickname: summonerName // summonername
+                                })
+                                .then(() => {
+                                    let tempList = doc.data().Games;
+                                    tempList.push({ id: "2", gameName: "Apex Legends" });
+
+                                    dispatch(games_set(tempList));
+                                    doc.ref.update({ Games: tempList });
+
+                                })
+                                .then(() => {
+                                    doc.ref.update({ ApexAccount: firestore().collection("apexaccounts").doc(doc.id) });
+                                })
+                        })
+                    })
+                    .then(() => {
+                        navigation.navigate("HomePage")
+                        setLoading(false);
+                    })
+            })
+            .catch(e => {
+                if (e instanceof BreakSignal) {
+                    setLoading(false);
+                    Alert.alert(
+                        "Hatalı Giriş",
+                        "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                    );
+                }
+            })
+    };
+
+    // PUBG Mobile onPress event
+    const _onPressPUBGMobile = async () => {
+        const tempDoc = [];
+
+        await firestore()
+            .collection("pubgmobileaccounts")
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    tempDoc.push(doc.data().Nickname);
+                })
+            })
+            .then(() => {
+                if (tempDoc.includes(summonerName)) {
+                    throw new BreakSignal;
+                }
+            })
+            .then(() => {
+                firestore()
+                    .collection("users")
+                    .where("UserEmail", "==", auth().currentUser.email)
+                    .get()
+                    .then((resp) => {
+                        resp.forEach(doc => {
+                            firestore()
+                                .collection("pubgmobileaccounts")
+                                .doc(doc.id)
+                                .set({
+                                    Nickname: summonerName
+                                })
+                                .then(() => {
+                                    let tempList = doc.data().Games;
+
+                                    tempList.push({ id: "3", gameName: "PUBG Mobile" })
+                                    dispatch(games_set(tempList));
+                                    doc.ref.update({ Games: tempList });
+                                })
+                                .then(() => {
+                                    doc.ref.update({ PUBGMobileAccount: firestore().collection("pubgmobileaccounts").doc(doc.id) })
+                                })
+                        })
+                    })
+                    .then(() => {
+                        navigation.navigate("HomePage")
+                        setLoading(false);
+                    })
+            })
+            .catch(e => {
+                if (e instanceof BreakSignal) {
+                    setLoading(false);
+                    Alert.alert(
+                        "Hatalı Giriş",
+                        "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                    );
+                }
+            })
+
+    };
+
+
+
+    // Useeffect function for League of Legends
+    const useEffectLeagueOfLegends = async () => {
+        await firestore()
             .collection("users")
             .where("UserEmail", "==", auth().currentUser.email)
             .get()
@@ -202,38 +342,79 @@ const AddScreen = ({ navigation, route }) => {
             })
     }
 
+    // Useeffect function for Valorant
+    const useEffectValorant = async () => {
+        await firestore()
+            .collection("users")
+            .where("UserEmail", "==", auth().currentUser.email)
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    if (doc.data().ValorantAccount != null) {
+                        setCanAddValorant(false);
+                    } else if (doc.data().ValorantAccount == null) {
+                        setCanAddValorant(true);
+                    }
+                })
+            }).then(() => setLoading(false))
+    }
+
+    // Useeffect function for Apex Legends
+    const useEffectApex = async () => {
+        await firestore()
+            .collection("users")
+            .where("UserEmail", "==", auth().currentUser.email)
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    if (doc.data().ApexAccount != null) {
+                        setCanAddApex(false);
+                    } else if (doc.data().ApexAccount == null) {
+                        setCanAddApex(true);
+                    }
+                })
+            })
+            .then(() => setLoading(false))
+    }
+
+    // Useeffect function for PUBG Mobile
+    const useEffectPUBGMobile = async () => {
+        await firestore()
+            .collection("users")
+            .where("UserEmail", "==", auth().currentUser.email)
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    if (doc.data().PUBGMobileAccount != null) {
+                        setCanAddPUBGMobile(false);
+                    } else if (doc.data().PUBGMobileAccount == null) {
+                        setCanAddPUBGMobile(true)
+                    }
+                })
+            })
+            .then(() => setLoading(false));
+    }
+
+
     useEffect(() => {
+
         setLoading(true);
 
-        switch (type) {
-            case "League Of Legends":
-                useEffectLeagueOfLegends();
-
-            case "Valorant":
-                firestore()
-                    .collection("users")
-                    .where("UserEmail", "==", auth().currentUser.email)
-                    .get()
-                    .then(resp => {
-                        resp.forEach(doc => {
-                            if (doc.data().ValorantAccount == null) {
-                                setCanAddValorant(true);
-                            } else if (doc.data().ValorantAccount != null) {
-                                setLoading(false);
-                                setCanAddValorant(false);
-                            }
-                        })
-                    }).then(() => setLoading(false))
-
-            default:
-                break;
+        if (type == "League Of Legends") {
+            useEffectLeagueOfLegends();
+        } else if (type == "Valorant") {
+            useEffectValorant();
+        } else if (type == "Apex Legends") {
+            console.log("Ber312313atto");
+            useEffectApex();
+        } else if (type == "PUBG Mobile") {
+            useEffectPUBGMobile();
         }
     }, []);
 
     switch (type) {
         case "League Of Legends":
             if (canAddLol) {
-
                 return (
                     <View style={{ flex: 1 }}>
                         <Modal
@@ -252,7 +433,7 @@ const AddScreen = ({ navigation, route }) => {
                             visible={addModalVisible}
                             onRequestClose={() => {
                                 setAddModalVisible(false)
-                                navigation.navigate("MobileModal");
+                                navigation.navigate("PCModal");
                             }}
                         >
                             <View style={style.container}>
@@ -278,7 +459,7 @@ const AddScreen = ({ navigation, route }) => {
                                                 size={55}></Avatar>
                                         </View>
                                         <View style={{ marginTop: 10 }}>
-                                            <Text style={style.textStyle}>League Of Legends</Text>
+                                            <Text style={[style.textStyle, { fontFamily: "friz-quadrata-std-medium-5870338ec7ef8" }]}>League Of Legends</Text>
                                         </View>
                                     </View>
                                     <View style={style.inputView}>
@@ -369,7 +550,7 @@ const AddScreen = ({ navigation, route }) => {
                             visible={addModalVisible}
                             onRequestClose={() => {
                                 setAddModalVisible(false)
-                                navigation.navigate("MobileModal");
+                                navigation.navigate("PCModal");
                             }}
                         >
                             <View style={style.container}>
@@ -427,7 +608,7 @@ const AddScreen = ({ navigation, route }) => {
                                             inputStyle={{ color: "white" }}
                                             onChangeText={val => setTag(val)}
                                             containerStyle={{ width: "40%" }}
-                                            value={code}
+                                            value={tag}
                                             errorMessage={errMessage}
                                             errorStyle={{ color: "#dcedc1" }}
                                             autoCorrect={false}
@@ -462,6 +643,202 @@ const AddScreen = ({ navigation, route }) => {
                     </View>
                 );
             } else if (!canAddValorant) {
+                return <DeleteScreen gameName={type} ></DeleteScreen>
+            }
+
+        case "Apex Legends":
+            if (canAddApex) {
+                return (
+                    <View style={{ flex: 1 }}>
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            visible={loading}>
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                                <View style={{ height: 100, width: 200, backgroundColor: "#892cdc", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Spinner color={"yellow"} size={100}></Spinner>
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={addModalVisible}
+                            onRequestClose={() => {
+                                setAddModalVisible(false)
+                                navigation.navigate("PCModal");
+                            }}
+                        >
+                            <View style={style.container}>
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    style={style.closeView}
+                                    onPress={() => {
+                                        console.log(addModalVisible);
+                                        setAddModalVisible(!addModalVisible);
+                                        console.log(addModalVisible);
+                                        navigation.navigate("PCModal");
+
+                                    }}></TouchableOpacity>
+                                <KeyboardAvoidingView
+                                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                                    style={style.bigView}
+                                >
+                                    <View style={style.iconView}>
+                                        <View>
+                                            <Avatar
+                                                containerStyle={{ backgroundColor: "#6c3427" }}
+                                                rounded
+                                                source={require("../../../assets/images/Apex_Legends_icon.png")}
+                                                size={70}></Avatar>
+                                        </View>
+                                        <View style={{ marginTop: 10 }}>
+                                            <Text style={[style.textStyleValorant, { fontFamily: "AgencyFB-Bold" }]}>{type}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={style.inputViewValorant}>
+                                        <Input
+                                            placeholder='Kullanıcı Adınız'
+                                            leftIcon={
+                                                <Icon
+                                                    name='user'
+                                                    size={24}
+                                                    type={"font-awesome"}
+                                                    color='white'
+                                                />
+                                            }
+                                            inputStyle={{ color: "white" }}
+                                            onChangeText={val => setSummonerName(val)}
+                                            containerStyle={{ width: "80%" }}
+                                            value={summonerName}
+                                        />
+                                    </View>
+                                    <View style={style.buttonView}>
+                                        <Button
+                                            title="Hesabını Bağla"
+                                            type="outline"
+                                            raised
+                                            containerStyle={{ backgroundColor: "white", width: "70%", marginTop: 20 }}
+                                            titleStyle={{ color: "#892cdc" }}
+                                            onPress={async () => {
+                                                try {
+                                                    setLoading(true);
+                                                    _onPressApex();
+                                                }
+                                                catch (err) {
+                                                    console.error(err);
+                                                }
+                                            }}
+                                        />
+                                        <Text
+                                            style={{ color: "rgba(255,255,255,0.5)", marginTop: 5, textDecorationLine: "underline" }}
+                                            onPress={() => Linking.openURL("https://stackoverflow.com/questions/43804032/open-url-in-default-web-browser")}
+                                        >Yardıma mı ihtiyacın var?</Text>
+                                    </View>
+                                </KeyboardAvoidingView>
+                            </View>
+                        </Modal>
+                    </View>
+                );
+            } else if (!canAddApex) {
+                return <DeleteScreen gameName={type} ></DeleteScreen>
+            }
+        case "PUBG Mobile":
+            if (canAddPUBGMobile) {
+                return (
+                    <View style={{ flex: 1 }}>
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            visible={loading}>
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+                                <View style={{ height: 100, width: 200, backgroundColor: "#892cdc", borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Spinner color={"yellow"} size={100}></Spinner>
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={addModalVisible}
+                            onRequestClose={() => {
+                                setAddModalVisible(false)
+                                navigation.navigate("PCModal");
+                            }}
+                        >
+                            <View style={style.container}>
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    style={style.closeView}
+                                    onPress={() => {
+                                        console.log(addModalVisible);
+                                        setAddModalVisible(!addModalVisible);
+                                        console.log(addModalVisible);
+                                        navigation.navigate("PCModal");
+
+                                    }}></TouchableOpacity>
+                                <KeyboardAvoidingView
+                                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                                    style={style.bigView}
+                                >
+                                    <View style={style.iconView}>
+                                        <View>
+                                            <Avatar
+                                                containerStyle={{ backgroundColor: "#6c3427" }}
+                                                rounded
+                                                source={require("../../../assets/images/PUBG_Mobile_icon.png")}
+                                                size={70}></Avatar>
+                                        </View>
+                                        <View style={{ marginTop: 10 }}>
+                                            <Text style={[style.textStyleValorant , { fontFamily : "HeadlinerNo.45 DEMO",fontSize:40}]}>{type}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={style.inputViewValorant}>
+                                        <Input
+                                            placeholder='Kullanıcı Adınız'
+                                            leftIcon={
+                                                <Icon
+                                                    name='user'
+                                                    size={24}
+                                                    type={"font-awesome"}
+                                                    color='white'
+                                                />
+                                            }
+                                            inputStyle={{ color: "white" }}
+                                            onChangeText={val => setSummonerName(val)}
+                                            containerStyle={{ width: "80%" }}
+                                            value={summonerName}
+                                        />
+                                    </View>
+                                    <View style={style.buttonView}>
+                                        <Button
+                                            title="Hesabını Bağla"
+                                            type="outline"
+                                            raised
+                                            containerStyle={{ backgroundColor: "white", width: "70%", marginTop: 20 }}
+                                            titleStyle={{ color: "#892cdc" }}
+                                            onPress={async () => {
+                                                try {
+                                                    setLoading(true);
+                                                    _onPressPUBGMobile();
+                                                }
+                                                catch (err) {
+                                                    console.error(err);
+                                                }
+                                            }}
+                                        />
+                                        <Text
+                                            style={{ color: "rgba(255,255,255,0.5)", marginTop: 5, textDecorationLine: "underline" }}
+                                            onPress={() => Linking.openURL("https://stackoverflow.com/questions/43804032/open-url-in-default-web-browser")}
+                                        >Yardıma mı ihtiyacın var?</Text>
+                                    </View>
+                                </KeyboardAvoidingView>
+                            </View>
+                        </Modal>
+                    </View>
+                );
+
+            } else if (!canAddPUBGMobile) {
                 return <DeleteScreen gameName={type} ></DeleteScreen>
             }
         default:

@@ -16,9 +16,6 @@ import DuoFinderScreen from '../scenes/mainscenes/duofinderscreen/DuoFinderScree
 const Stack = createStackNavigator();
 
 
-
-
-
 const HomePageNavigation = (props) => {
     return (
         <Stack.Navigator initialRouteName={"HomePage"}
@@ -50,7 +47,7 @@ const HomePageNavigation = (props) => {
                 options={{
                     headerShown: true,
                     headerTitle: "Oyunlar",
-                    headerTitleStyle: { marginLeft: 10 },
+                    headerTitleStyle: { marginLeft: 10 , fontFamily : "Roboto-Medium"},
                     headerRight: () => <Icon name="users" type="font-awesome" size={27} onPress={() => props.navigation.navigate("Friends")} />,
                     headerRightContainerStyle: { marginRight: 20 },
                 }}
