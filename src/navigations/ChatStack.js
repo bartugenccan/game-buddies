@@ -8,9 +8,9 @@ const Stack = createStackNavigator();
 
 function ChatStack() {
     return (
-        <Stack.Navigator initialRouteName = {"Mesajlar"}>
-            <Stack.Screen name = "Mesajlar" component = {MessageScreen} options = {{headerShown : true}}></Stack.Screen>
-            <Stack.Screen name = "Chat" component = {ChatScreen} options = {{headerShown : false}}></Stack.Screen>
+        <Stack.Navigator initialRouteName={"Mesajlar"} >
+            <Stack.Screen name="Mesajlar" component={MessageScreen} options={{ headerShown: true }}></Stack.Screen>
+            <Stack.Screen name="Chat" component={ChatScreen} options={({ route }) => ({ title : route.params.nickname})} ></Stack.Screen>
         </Stack.Navigator>
     )
 }

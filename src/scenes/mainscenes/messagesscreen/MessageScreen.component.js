@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Modal, FlatList } from 'react-native';
+import { Text, View, Modal, FlatList } from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements';
 import Spinner from '../../../components/Spinner/Spinner.component';
 
@@ -18,15 +18,18 @@ const MessageScreen = () => {
 
     const keyExtractor = (item, index) => index.toString()
 
+
     useEffect(() => {
 
         const users = [];
+        const tempDocId = "";
 
         const subscriber = firestore()
             .collection("messages")
             .where("members", "array-contains", auth().currentUser.uid)
             .onSnapshot(resp => {
                 resp.forEach(doc => {
+
                     let memberArray = doc.data().members;
 
                     for (var i = 0; i < memberArray.length; i++) {
@@ -40,9 +43,9 @@ const MessageScreen = () => {
                         name: doc.data()[otherMember][1],
                         avatar_url: doc.data()[otherMember][0],
                         uid: memberArray[0],
-                        recentMessage: doc.data().recentMessage
+                        recentMessage: doc.data().recentMessage,
+                        docId: doc.id
                     })
-
                 })
 
                 setList(users);
@@ -54,8 +57,7 @@ const MessageScreen = () => {
 
     const renderItem = ({ item }) => (
         <ListItem bottomDivider onPress={() => {
-            console.log("Basıldı");
-            navigation.navigate("Chat" , {uid : item.uid , avatar_url : item.avatar_url})
+            navigation.navigate("Chat", { uid: item.uid, avatar_url: item.avatar_url, docid: item.docId, nickname: item.name })
         }}>
             <Avatar source={{ uri: item.avatar_url }} rounded size={50} />
             <ListItem.Content>
@@ -83,9 +85,9 @@ const MessageScreen = () => {
                 <FlatList
                     keyExtractor={keyExtractor}
                     data={list}
-                    renderItem={renderItem}
-                />
+                    renderItem={renderItem} />
             </View>
+
         </View>
 
     )
