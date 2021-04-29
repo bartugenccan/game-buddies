@@ -6,12 +6,11 @@ import {
     GiftedChat,
     Bubble,
     Send,
-    InputToolbar
+    InputToolbar,
 } from 'react-native-gifted-chat';
 
 import firestore from '@react-native-firebase/firestore';
 import auth from "@react-native-firebase/auth";
-import { useNavigation } from '@react-navigation/native';
 
 import style from './ChatScreen.component.style';
 
@@ -58,7 +57,6 @@ const ChatScreen = ({ navigation, route }) => {
                 wrapperStyle={{
                     right: {
                         backgroundColor: 'rgb(123,134,170)',
-                        marginBottom: 10
                     },
                     left: {
                         borderRadius: 20,
@@ -87,13 +85,14 @@ const ChatScreen = ({ navigation, route }) => {
                 }}
             />
         );
-    }
+    };
+
 
     const renderSend = (props) => {
         return (
             <Send {...props}>
                 <View style={style.sendingContainer}>
-                    <Icon name="paper-plane" type={"font-awesome"} size={25} containerStyle={{ marginRight: 10 }} iconStyle={{ color: "#892cdc" }} />
+                    <Icon name="paper-plane" type={"font-awesome"} size={25} containerStyle={{ marginRight: 20 }} iconStyle={{ color: "#892cdc" }} />
                 </View>
             </Send>
         )
@@ -113,6 +112,11 @@ const ChatScreen = ({ navigation, route }) => {
                 }
             });
 
+        db
+            .doc(docID)
+            .update({
+                recentMessage: text
+            });
 
     }
 
@@ -122,6 +126,8 @@ const ChatScreen = ({ navigation, route }) => {
         );
     }
 
+
+
     return (
         <View style={{ backgroundColor: "#ffffff", flex: 1 }}>
             <GiftedChat
@@ -129,11 +135,13 @@ const ChatScreen = ({ navigation, route }) => {
                 onSend={onSend}
                 user={{
                     _id: auth().currentUser.uid,
+                    avatar: avatar_url
                 }}
                 renderSend={renderSend}
                 renderBubble={renderBubble}
                 alwaysShowSend
                 renderInputToolbar={(props) => renderInputToolbar(props)}
+                renderUsernameOnMessage
             />
         </View>
     )

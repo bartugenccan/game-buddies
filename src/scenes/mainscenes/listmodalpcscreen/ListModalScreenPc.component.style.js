@@ -26,7 +26,7 @@ export default StyleSheet.create({
         color: "white",
         fontSize: 20,
         textAlign: 'left',
-        fontWeight: "bold"
+        fontFamily : "Roboto-Medium"
     },
     lineView: {
         height: 1,

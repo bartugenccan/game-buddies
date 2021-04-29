@@ -1,4 +1,4 @@
-const API_KEY = "RGAPI-f86a7e80-ee02-475a-8b61-854162a15491";
+const API_KEY = "RGAPI-b263800e-5153-468c-ad27-a3a414389017";
 
 export async function getID(summonername) {
     try {
@@ -10,18 +10,6 @@ export async function getID(summonername) {
     }
 }
 
-/*
-export async function getLevel(summonerName) {
-    try {
-        let response = await fetch("https://tr1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summonerName + "?api_key=" + API_KEY);
-        let json = await response.json();
-        return json.summonerLevel;
-    } catch (err) {
-        console.log(err)
-    }
-
-}
-*/
 
 async function getVerificationCode(id) {
     try {

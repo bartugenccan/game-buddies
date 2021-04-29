@@ -12,7 +12,7 @@ const list = [
     {
         name: 'League Of Legends',
         avatar_url: require("../../../assets/images/League_of_Legends_icon.png"),
-        subtitle: 'Online'
+        subtitle: 'Online',
     },
     {
         name: 'Valorant',
@@ -43,7 +43,7 @@ const ListModalScreenPc = ({ navigation }) => {
     // Cusstom Component For FlatLists Item
     const PlatformList = (props) => {
         
-        function renderChoice(name, avatar_url, subtitle) {
+        function renderChoice(name, avatar_url, subtitle , fontFamily) {
             if (subtitle != "Çok yakında.") {
                 return (
                     <ListItem bottomDivider containerStyle={{ backgroundColor: "transparent" }} onPress={() => {
@@ -53,7 +53,7 @@ const ListModalScreenPc = ({ navigation }) => {
                         underlayColor={"rgba(0,0,0,0.5)"}>
                         <Avatar source={avatar_url} rounded size={44} />
                         <ListItem.Content>
-                            <ListItem.Title style={{ color: "white" }}>{name}</ListItem.Title>
+                            <ListItem.Title style={{ color: "white" , fontFamily : "Valorant Font" }}>{name}</ListItem.Title>
                             <ListItem.Subtitle style={{ color: "rgba(169,169,169,0.5)" }}>{subtitle}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
@@ -63,7 +63,7 @@ const ListModalScreenPc = ({ navigation }) => {
                     <ListItem bottomDivider containerStyle={{ backgroundColor: "transparent" }} >
                         <Avatar source={avatar_url} rounded size={44} />
                         <ListItem.Content>
-                            <ListItem.Title style={{ color: "white" }}>{name}</ListItem.Title>
+                            <ListItem.Title style={{ color: "white" , fontFamily : "Valorant Font" }}>{name}</ListItem.Title>
                             <ListItem.Subtitle style={{ color: "rgba(169,169,169,0.5)" }}>{subtitle}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>

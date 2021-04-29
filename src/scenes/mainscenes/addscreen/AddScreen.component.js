@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Modal, TouchableOpacity, Text, Linking, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Modal, TouchableOpacity, Text, Linking, KeyboardAvoidingView, Alert, DatePickerAndroid } from 'react-native';
 import style from './AddScreen.component.style';
 
 import { Input, Button, Avatar, Icon } from 'react-native-elements';
@@ -9,7 +9,7 @@ import DeleteScreen from '../../mainscenes/deletescreen/DeleteScreen.component';
 
 // Firebase Imports
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+import auth, { firebase } from '@react-native-firebase/auth';
 
 // API Functions
 import {
@@ -63,77 +63,56 @@ const AddScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
 
     // Success Callback 
-    const _success_callback = async (g) => {
+    const _success_callback = async () => {
 
-        switch (g) {
-            case "League Of Legends":
 
-                const tempDoc = [];
+        let id = await getID("BerattoBB"); // summonername == "BerattoBB"
+        let stats = await fetchStats("BerattoBB"); // summonername == "BerattoBB"
+        let profileIconId = await getProfileIconId("BerattoBB"); // summonername == "BerattoBB"
+        let userEmail = auth().currentUser.email;
 
-                let id = await getID("BerattoBB");
-                let stats = await fetchStats("BerattoBB");
-                let profileIconId = await getProfileIconId("BerattoBB");
+        const tempDoc = [];
 
-                await firestore()
-                    .collection("lolaccounts")
+        await firestore()
+            .collection("users")
+            .get()
+            .then(resp => {
+                resp.forEach(doc => {
+                    if (doc.data().LolAccount != null) {
+                        tempDoc.push(doc.data().LolAccount["Nickname"]);
+                    }
+                })
+            })
+            .then(() => {
+                firestore()
+                    .collection("users")
+                    .where("UserEmail", "==", userEmail)
                     .get()
                     .then(resp => {
                         resp.forEach(doc => {
-                            tempDoc.push(doc.data().Nickname)
+                            let tempList = doc.data().Games;
+                            tempList.push({ id: "0", gameName: "League Of Legends" });
+
+                            dispatch(games_set(tempList));
+                            doc.ref.update({ LolAccount: { FlexRanked: stats[1], Nickname: summonerName, ID: id, SoloQueueRanked: stats[0], iconID: profileIconId }, Games: tempList });
                         })
                     })
                     .then(() => {
-                        if (tempDoc.includes(summonerName)) {
-                            throw new BreakSignal;
-                        }
+                        setLoading(false);
+                        navigation.navigate("HomePage");
                     })
-                    .then(() => {
-                        firestore()
-                            .collection("users")
-                            .where("UserEmail", "==", auth().currentUser.email)
-                            .get()
-                            .then(resp => {
-                                resp.forEach(doc => {
-                                    firestore()
-                                        .collection("lolaccounts")
-                                        .doc(doc.id)
-                                        .set({
-                                            Nickname: summonerName, // summonername
-                                            SoloQueueRanked: stats[0],
-                                            FlexRanked: stats[1],
-                                            ID: id,
-                                            ProfileIconId: profileIconId
-                                        })
-                                        .then(() => {
-                                            let tempList = doc.data().Games;
-                                            tempList.push({ id: "0", gameName: "League Of Legends" });
+            })
+            .catch(e => {
+                if (e instanceof BreakSignal) {
+                    setLoading(false);
+                    Alert.alert(
+                        "Hatalı Giriş",
+                        "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
+                    );
+                }
+            })
 
-                                            dispatch(games_set(tempList));
-                                            doc.ref.update({ Games: tempList });
-
-                                        })
-                                        .then(() => {
-                                            doc.ref.update({ LolAccount: firestore().collection("lolaccounts").doc(doc.id) });
-                                        })
-                                })
-                            })
-                            .then(() => {
-                                navigation.navigate("HomePage")
-                                setLoading(false);
-                            })
-                    })
-                    .catch(e => {
-                        if (e instanceof BreakSignal) {
-                            setLoading(false);
-                            Alert.alert(
-                                "Hatalı Giriş",
-                                "Girmiş olduğun kullanıcı adıyla başka bir hesapla giriş yapılmış."
-                            );
-                        }
-                    })
-
-        }
-
+        setLoading(false);
     }
 
     // League Of Legends failed_callback
@@ -147,52 +126,43 @@ const AddScreen = ({ navigation, route }) => {
     // Valorant onPress event 
     const _onPressValorant = async () => {
         const tempDoc = [];
+        const currentUserEmail = auth().currentUser.email;
 
         await firestore()
-            .collection("valorantaccounts")
+            .collection("users")
             .get()
             .then(resp => {
                 resp.forEach(doc => {
-                    tempDoc.push(doc.data().Nickname)
+                    if (doc.data().ValorantAccount != null) {
+                        tempDoc.push(doc.data().ValorantAccount["Nickname"]);
+                    }
                 })
             })
             .then(() => {
                 if (tempDoc.includes(summonerName + " #" + tag)) {
-                    throw new BreakSignal;
+                    throw new BreakSignal();
                 }
             })
             .then(() => {
                 firestore()
                     .collection("users")
-                    .where("UserEmail", "==", auth().currentUser.email)
+                    .where("UserEmail", "==", currentUserEmail)
                     .get()
                     .then(resp => {
                         resp.forEach(doc => {
-                            firestore()
-                                .collection("valorantaccounts")
-                                .doc(doc.id)
-                                .set({
-                                    Nickname: summonerName + " #" + tag, // summonername + # + tag
-                                })
-                                .then(() => {
-                                    let tempList = doc.data().Games;
-                                    tempList.push({ id: "1", gameName: "Valorant" });
+                            let tempList = doc.data().Games;
+                            tempList.push({ id: "1", gameName: "Valorant" })
 
-                                    dispatch(games_set(tempList));
-                                    doc.ref.update({ Games: tempList });
-
-                                })
-                                .then(() => {
-                                    doc.ref.update({ ValorantAccount: firestore().collection("valorantaccounts").doc(doc.id) });
-                                })
+                            dispatch(games_set(tempList));
+                            doc.ref.update({ ValorantAccount: { Nickname: summonerName, League: "" }, Games: tempList });
                         })
                     })
                     .then(() => {
                         setLoading(false);
                         navigation.navigate("HomePage");
                     })
-
-            }).catch(e => {
+            })
+            .catch(e => {
                 if (e instanceof BreakSignal) {
                     setLoading(false);
                     Alert.alert(
@@ -201,18 +171,24 @@ const AddScreen = ({ navigation, route }) => {
                     );
                 }
             })
+
+        setLoading(false);
     }
+
 
     // Apex Legends onPress event
     const _onPressApex = async () => {
         const tempDoc = [];
+        const currentUserEmail = auth().currentUser.email
 
         await firestore()
-            .collection("apexaccounts")
+            .collection("users")
             .get()
             .then(resp => {
                 resp.forEach(doc => {
-                    tempDoc.push(doc.data().Nickname)
+                    if (doc.data().ApexAccount != null) {
+                        tempDoc.push(doc.data().ApexAccount["Nickname"])
+                    }
                 })
             })
             .then(() => {
@@ -223,32 +199,20 @@ const AddScreen = ({ navigation, route }) => {
             .then(() => {
                 firestore()
                     .collection("users")
-                    .where("UserEmail", "==", auth().currentUser.email)
+                    .where("UserEmail", "==", currentUserEmail)
                     .get()
                     .then(resp => {
                         resp.forEach(doc => {
-                            firestore()
-                                .collection("apexaccounts")
-                                .doc(doc.id)
-                                .set({
-                                    Nickname: summonerName // summonername
-                                })
-                                .then(() => {
-                                    let tempList = doc.data().Games;
-                                    tempList.push({ id: "2", gameName: "Apex Legends" });
+                            let tempList = doc.data().Games;
+                            tempList.push({ id: "2", gameName: "Apex Legends" });
 
-                                    dispatch(games_set(tempList));
-                                    doc.ref.update({ Games: tempList });
-
-                                })
-                                .then(() => {
-                                    doc.ref.update({ ApexAccount: firestore().collection("apexaccounts").doc(doc.id) });
-                                })
+                            dispatch(games_set(tempList));
+                            doc.ref.update({ ApexAccount: { Nickname: summonerName, League: "" }, Games: tempList })
                         })
                     })
                     .then(() => {
-                        navigation.navigate("HomePage")
                         setLoading(false);
+                        navigation.navigate("HomePage");
                     })
             })
             .catch(e => {
@@ -260,53 +224,47 @@ const AddScreen = ({ navigation, route }) => {
                     );
                 }
             })
+
+        setLoading(false);
     };
 
     // PUBG Mobile onPress event
     const _onPressPUBGMobile = async () => {
         const tempDoc = [];
+        const currentUserEmail = auth().currentUser.email
 
         await firestore()
-            .collection("pubgmobileaccounts")
+            .collection("users")
             .get()
             .then(resp => {
                 resp.forEach(doc => {
-                    tempDoc.push(doc.data().Nickname);
+                    if (doc.data().PUBGMobileAccount != null) {
+                        tempDoc.push(doc.data().PUBGMobileAccount["Nickname"])
+                    }
                 })
             })
             .then(() => {
                 if (tempDoc.includes(summonerName)) {
-                    throw new BreakSignal;
+                    throw new BreakSignal();
                 }
             })
             .then(() => {
                 firestore()
                     .collection("users")
-                    .where("UserEmail", "==", auth().currentUser.email)
+                    .where("UserEmail", "==", currentUserEmail)
                     .get()
-                    .then((resp) => {
+                    .then(resp => {
                         resp.forEach(doc => {
-                            firestore()
-                                .collection("pubgmobileaccounts")
-                                .doc(doc.id)
-                                .set({
-                                    Nickname: summonerName
-                                })
-                                .then(() => {
-                                    let tempList = doc.data().Games;
+                            let tempList = doc.data().Games;
+                            tempList.push({ id: "3", gameName: "PUBG Mobile" })
 
-                                    tempList.push({ id: "3", gameName: "PUBG Mobile" })
-                                    dispatch(games_set(tempList));
-                                    doc.ref.update({ Games: tempList });
-                                })
-                                .then(() => {
-                                    doc.ref.update({ PUBGMobileAccount: firestore().collection("pubgmobileaccounts").doc(doc.id) })
-                                })
+                            dispatch(games_set(tempList));
+                            doc.ref.update({ PUBGMobileAccount: { Nickname: summonerName, League: "" } })
                         })
                     })
                     .then(() => {
-                        navigation.navigate("HomePage")
                         setLoading(false);
+                        navigation.navigate("HomePage");
                     })
             })
             .catch(e => {
@@ -318,7 +276,6 @@ const AddScreen = ({ navigation, route }) => {
                     );
                 }
             })
-
     };
 
 
@@ -507,7 +464,7 @@ const AddScreen = ({ navigation, route }) => {
                                             onPress={async () => {
                                                 try {
                                                     setLoading(true);
-                                                    checkVerificationCode("BerattoBB", "zaxd31", _success_callback(type), _failed_callback);
+                                                    checkVerificationCode("BerattoBB", "zaxd31", _success_callback, _failed_callback);
                                                 }
                                                 catch (err) {
                                                     console.error(err);
@@ -790,7 +747,7 @@ const AddScreen = ({ navigation, route }) => {
                                                 size={70}></Avatar>
                                         </View>
                                         <View style={{ marginTop: 10 }}>
-                                            <Text style={[style.textStyleValorant , { fontFamily : "HeadlinerNo.45 DEMO",fontSize:40}]}>{type}</Text>
+                                            <Text style={[style.textStyleValorant, { fontFamily: "HeadlinerNo.45 DEMO", fontSize: 40 }]}>{type}</Text>
                                         </View>
                                     </View>
                                     <View style={style.inputViewValorant}>

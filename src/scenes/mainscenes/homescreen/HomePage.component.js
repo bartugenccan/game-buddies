@@ -67,9 +67,8 @@ function HomePage(props) {
                 resp.forEach(doc => {
                     doc.ref.update({ IsOnline: true })
                 })
-            })
-        
-        
+            });
+    
     }, [dispatch]);
 
 

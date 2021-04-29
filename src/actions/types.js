@@ -24,3 +24,5 @@ export const FORGOT_MAIL_FAILED_SEND = "forgot_mail_failed_send";
 export const SET_LOADING_HOME = "set_loading_home";
 export const GAMES_SET = "games_set";
 
+// Messages Screen
+export const RECENT_MESSAGE_SET = "recent_message_set" 

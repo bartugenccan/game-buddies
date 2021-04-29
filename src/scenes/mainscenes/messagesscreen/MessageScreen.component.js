@@ -81,12 +81,12 @@ const MessageScreen = () => {
                     </View>
                 </View>
             </Modal>
-            <View>
-                <FlatList
-                    keyExtractor={keyExtractor}
-                    data={list}
-                    renderItem={renderItem} />
-            </View>
+            <FlatList
+                keyExtractor={keyExtractor}
+                data={list}
+                renderItem={renderItem}
+                />
+
 
         </View>
 

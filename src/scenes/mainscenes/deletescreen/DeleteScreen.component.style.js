@@ -28,7 +28,7 @@ export default StyleSheet.create({
     },
     textStyle: {
         fontSize: 23,
-        color: "white",
+        color: "white"
     },
     bigTextView: {
         flex: 0.4,

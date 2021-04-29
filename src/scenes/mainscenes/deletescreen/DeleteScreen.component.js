@@ -24,7 +24,7 @@ const DeleteScreen = (props) => {
 
     const [loading, setLoading] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(true);
-    const [profileName, setProfileName] = useState("BerattoBB");
+    const [profileName, setProfileName] = useState("");
     const [iconId, setIconId] = useState();
 
 
@@ -39,32 +39,33 @@ const DeleteScreen = (props) => {
                     .get()
                     .then(resp => {
                         resp.forEach(async (doc) => {
-                            let lolAccountRef = firestore().collection("lolaccounts").doc(doc.id);
-                            let document = await lolAccountRef.get();
-                            setProfileName(document.data().Nickname);
-                            setIconId(doc.data().ProfileIconId);
+                            setProfileName(doc.data().LolAccount["Nickname"])
                         })
                     }).then(() => {
                         setLoading(false)
                     });
                 break;
+
             case "Valorant":
+
+                console.log("Valorant");
                 setLoading(true);
                 firestore()
                     .collection("users")
                     .where("UserEmail", "==", auth().currentUser.email)
                     .get()
                     .then(resp => {
-                        resp.forEach(async (doc) => {
-                            let valorantAccountRef = firestore().collection("valorantaccounts").doc(doc.id);
-                            let document = await valorantAccountRef.get();
-                            setProfileName(document.data().Nickname);
+                        resp.forEach(doc => {
+                            setProfileName(doc.data().ValorantAccount["Nickname"]);
                         })
                     }).then(() => {
                         setLoading(false)
                     });
+                break;
 
             case "Apex Legends":
+
+                /*
                 setLoading(true);
                 firestore()
                     .collection("users")
@@ -79,6 +80,24 @@ const DeleteScreen = (props) => {
                     }).then(() => {
                         setLoading(false)
                     });
+                    */
+
+                setLoading(true);
+                firestore()
+                    .collection("users")
+                    .where("UserEmail", "==", auth().currentUser.email)
+                    .get()
+                    .then(resp => {
+                        resp.forEach(async (doc) => {
+                            setProfileName(doc.data().ApexAccount["Nickname"])
+                        })
+                    }).then(() => {
+                        setLoading(false)
+                    });
+                break;
+
+            default:
+                break;
         }
     }, []);
 
@@ -113,11 +132,6 @@ const DeleteScreen = (props) => {
                         // For set games_arr
                         dispatch(games_set(tempList));
 
-                        // For delete the Lol Account From "lolaccount" collection
-                        firestore()
-                            .collection("lolaccounts")
-                            .doc(doc.id)
-                            .delete();
                     })
                 })
         } else if (g == "Valorant") {
@@ -140,7 +154,6 @@ const DeleteScreen = (props) => {
                         doc.ref.update({ Games: tempList, ValorantAccount: null });
                         dispatch(games_set(tempList));
 
-                        firestore().collection("valorantaccounts").doc(doc.id).delete();
                     })
                 })
 
@@ -163,7 +176,6 @@ const DeleteScreen = (props) => {
                         doc.ref.update({ Games: tempList, ApexAccount: null });
                         dispatch(games_set(tempList));
 
-                        firestore().collection("apexaccounts").doc(doc.id).delete();
                     })
                 })
         }
@@ -191,7 +203,7 @@ const DeleteScreen = (props) => {
                         visible={deleteModalVisible}
                         onRequestClose={() => {
                             setDeleteModalVisible(false)
-                            navigation.navigate("MobileModal");
+                            navigation.navigate("HomePage");
                         }}
                     >
                         <View style={style.container}>
@@ -317,7 +329,7 @@ const DeleteScreen = (props) => {
                                             size={55}></Avatar>
                                     </View>
                                     <View style={{ marginTop: 10 }}>
-                                        <Text style={[style.textStyle]}>{props.gameName}</Text>
+                                        <Text style={[style.textStyle, { fontFamily: "Valorant Font" }]}>{props.gameName}</Text>
                                     </View>
                                 </View>
                                 <View style={style.bigTextView}>

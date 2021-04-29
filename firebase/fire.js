@@ -31,11 +31,11 @@ class Fire {
                 Likes: { Count: 0, Users: [] },
                 Games: [],
                 uid: null,
-                LolAccount: null,
-                ValorantAccount: null,
+                iconUrl: "https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png",
                 ApexAccount: null,
+                LolAccount: null,
                 PUBGMobileAccount: null,
-                iconID: 1
+                ValorantAccount: null
             })
     }
 
@@ -58,23 +58,14 @@ class Fire {
                 PrefferedGender: preferredGender,
                 Games: [],
                 uid: null,
-                LolAccount: null,
-                ValorantAccount: null,
+                iconUrl: "https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png",
                 ApexAccount: null,
+                LolAccount: null,
                 PUBGMobileAccount: null,
-                iconID: 1
+                ValorantAccount: null
             })
-
     }
 
-    checkForLolAccount = async (uid) => {
-        let checkSnapShot = await db.collection("users").doc(uid).get()
-        if (checkSnapShot.data().LolAccount) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 }
 
 
