@@ -144,11 +144,22 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
-    apexButtonView : {
-        flex : 0.3,
-        width : "100%",
-        flexDirection : "row",
-        justifyContent : "space-evenly",
-        alignItems : "flex-end"
+    apexButtonView: {
+        flex: 0.3,
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "flex-end",
+    },
+    item: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: "hidden",
+        alignSelf: "center",
+        marginHorizontal: 5,
+        borderColor: "red"
     }
 })

@@ -13,7 +13,8 @@ import { useNavigation } from '@react-navigation/native';
 import { connect, useDispatch } from 'react-redux';
 
 import {
-    games_set
+    games_set,
+    profile_screen_stats_delete
 } from '../../../actions';
 
 
@@ -64,24 +65,6 @@ const DeleteScreen = (props) => {
                 break;
 
             case "Apex Legends":
-
-                /*
-                setLoading(true);
-                firestore()
-                    .collection("users")
-                    .where("UserEmail", "==", auth().currentUser.email)
-                    .get()
-                    .then(resp => {
-                        resp.forEach(async (doc) => {
-                            let apexLegendsRef = firestore().collection("apexaccounts").doc(doc.id);
-                            let document = await apexLegendsRef.get();
-                            setProfileName(document.data().Nickname);
-                        })
-                    }).then(() => {
-                        setLoading(false)
-                    });
-                    */
-
                 setLoading(true);
                 firestore()
                     .collection("users")
@@ -102,7 +85,7 @@ const DeleteScreen = (props) => {
     }, []);
 
 
-    const onPress = async (g) => {
+    const _onPress = async (g) => {
 
         if (g == "League Of Legends") {
             await firestore()
@@ -122,19 +105,19 @@ const DeleteScreen = (props) => {
                         }
 
                         // Deleting Lol from firebase user document and set null to LolAccount refference to null.
-                        doc
-                            .ref
-                            .update({
-                                Games: tempList,
-                                LolAccount: null
-                            });
+                        doc.ref.update({ Games: tempList, LolAccount: null });
 
                         // For set games_arr
                         dispatch(games_set(tempList));
 
                     })
                 })
-        } else if (g == "Valorant") {
+                .then(() => {
+                    dispatch(profile_screen_stats_delete("League Of Legends"));
+                })
+        }
+
+        else if (g == "Valorant") {
             await firestore()
                 .collection("users")
                 .where("UserEmail", "==", auth().currentUser.email)
@@ -153,11 +136,15 @@ const DeleteScreen = (props) => {
 
                         doc.ref.update({ Games: tempList, ValorantAccount: null });
                         dispatch(games_set(tempList));
-
                     })
                 })
+                .then(() => {
+                    dispatch(profile_screen_stats_delete("Valorant"))
+                })
 
-        } else if (g == "Apex Legends") {
+        }
+
+        else if (g == "Apex Legends") {
             await firestore()
                 .collection("users")
                 .where("UserEmail", "==", auth().currentUser.email)
@@ -177,6 +164,9 @@ const DeleteScreen = (props) => {
                         dispatch(games_set(tempList));
 
                     })
+                })
+                .then(() => {
+                    dispatch(profile_screen_stats_delete("Apex Legends"))
                 })
         }
 
@@ -217,8 +207,8 @@ const DeleteScreen = (props) => {
                                 }}></TouchableOpacity>
                             <KeyboardAvoidingView
                                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-                                style={style.bigView}
-                            >
+                                style={style.bigView}>
+
                                 <View style={style.iconView}>
                                     <View>
                                         <Avatar
@@ -267,7 +257,7 @@ const DeleteScreen = (props) => {
                                         onPress={() => {
                                             try {
                                                 setLoading(true);
-                                                onPress(props.gameName)
+                                                _onPress(props.gameName)
                                                     .then(() => {
                                                         setLoading(false);
                                                         navigation.navigate("HomePage")
@@ -361,7 +351,7 @@ const DeleteScreen = (props) => {
                                         onPress={() => {
                                             try {
                                                 setLoading(true);
-                                                onPress(props.gameName)
+                                                _onPress(props.gameName)
                                                     .then(() => {
                                                         setLoading(false);
                                                         navigation.navigate("HomePage")
@@ -455,7 +445,7 @@ const DeleteScreen = (props) => {
                                         onPress={() => {
                                             try {
                                                 setLoading(true);
-                                                onPress(props.gameName)
+                                                _onPress(props.gameName)
                                                     .then(() => {
                                                         setLoading(false);
                                                         navigation.navigate("HomePage")
@@ -490,4 +480,4 @@ const mapStateToProps = ({ HomeScreenResponse }) => {
     }
 };
 
-export default connect(mapStateToProps, { games_set })(DeleteScreen);
+export default connect(mapStateToProps, { games_set, profile_screen_stats_delete })(DeleteScreen);

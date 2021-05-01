@@ -23,14 +23,17 @@ import {
 import { connect, useDispatch } from 'react-redux';
 
 import {
-    games_set
+    games_set,
+    profile_screen_stats_set,
+    profile_screen_stats_add
 } from '../../../actions';
 
-
+import * as selector from '../../../utils/LeagueImageSelectors';
 
 function BreakSignal() { }
-
 BreakSignal.prototype = new Error();
+
+
 
 const AddScreen = ({ navigation, route }) => {
 
@@ -95,9 +98,17 @@ const AddScreen = ({ navigation, route }) => {
 
                             dispatch(games_set(tempList));
                             doc.ref.update({ LolAccount: { FlexRanked: stats[1], Nickname: summonerName, ID: id, SoloQueueRanked: stats[0], iconID: profileIconId }, Games: tempList });
+                            
                         })
                     })
                     .then(() => {
+                        dispatch(profile_screen_stats_add({
+                            name: "League Of Legends",
+                            avatar_url: require("../../../assets/images/League_of_Legends_icon.png"),
+                            league: selector.lolLeagueImageSelector(stats[0]),
+                            subtitle: summonerName
+                        }));
+
                         setLoading(false);
                         navigation.navigate("HomePage");
                     })
@@ -158,6 +169,13 @@ const AddScreen = ({ navigation, route }) => {
                         })
                     })
                     .then(() => {
+                        dispatch(profile_screen_stats_add({
+                            name: "Valorant",
+                            avatar_url: require("../../../assets/images/Valorant_icon.png"),
+                            league: false,
+                            subtitle: summonerName
+                        }));
+
                         setLoading(false);
                         navigation.navigate("HomePage");
                     })
@@ -211,6 +229,13 @@ const AddScreen = ({ navigation, route }) => {
                         })
                     })
                     .then(() => {
+                        dispatch(profile_screen_stats_add({
+                            name: "Apex Legends",
+                            avatar_url: require("../../../assets/images/Apex_Legends_icon.png"),
+                            league: false,
+                            subtitle: summonerName
+                        }));
+
                         setLoading(false);
                         navigation.navigate("HomePage");
                     })
@@ -812,4 +837,4 @@ const mapStateToProps = ({ HomeScreenResponse }) => {
     }
 };
 
-export default connect(mapStateToProps, { games_set })(AddScreen);
+export default connect(mapStateToProps, { games_set, profile_screen_stats_set, profile_screen_stats_add })(AddScreen);

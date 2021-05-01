@@ -9,6 +9,7 @@ import firestore from "@react-native-firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 
 
+
 const MessageScreen = () => {
 
     const navigation = useNavigation();
@@ -55,6 +56,7 @@ const MessageScreen = () => {
         return () => subscriber();
     }, []);
 
+
     const renderItem = ({ item }) => (
         <ListItem bottomDivider onPress={() => {
             navigation.navigate("Chat", { uid: item.uid, avatar_url: item.avatar_url, docid: item.docId, nickname: item.name })
@@ -70,7 +72,7 @@ const MessageScreen = () => {
 
 
     return (
-        <View>
+        <View style={{ backgroundColor: "white", flex: 1 }}>
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -85,9 +87,12 @@ const MessageScreen = () => {
                 keyExtractor={keyExtractor}
                 data={list}
                 renderItem={renderItem}
-                />
-
-
+                ListEmptyComponent={
+                    <View style={{flex : 0.5 , alignSelf : 'center' , marginTop : 100 }}>
+                        <Text style = {{color : "rgba(0,0,0,0.5)"}}>Maalesef hiç konuşma bulamadık!</Text>
+                    </View>
+                }
+            />
         </View>
 
     )

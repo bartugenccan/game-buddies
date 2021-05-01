@@ -37,6 +37,9 @@ class Fire {
                 PUBGMobileAccount: null,
                 ValorantAccount: null
             })
+            .catch(e => {
+                console.log(e);
+            })
     }
 
     addUserToData = async (username, useremail, gender, preferredGender) => {
@@ -63,6 +66,9 @@ class Fire {
                 LolAccount: null,
                 PUBGMobileAccount: null,
                 ValorantAccount: null
+            })
+            .catch(e => {
+                console.log(e);
             })
     }
 

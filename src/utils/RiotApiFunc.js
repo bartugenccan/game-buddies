@@ -1,4 +1,4 @@
-const API_KEY = "RGAPI-b263800e-5153-468c-ad27-a3a414389017";
+const API_KEY = "RGAPI-49320f00-da3c-4420-9b87-9419edb2ddb0";
 
 export async function getID(summonername) {
     try {

@@ -24,5 +24,12 @@ export const FORGOT_MAIL_FAILED_SEND = "forgot_mail_failed_send";
 export const SET_LOADING_HOME = "set_loading_home";
 export const GAMES_SET = "games_set";
 
+// Profile Screen Actions
+export const PROFILE_SCREEN_STATS_SET = "profile_screen_stats_set";
+export const PROFILE_SCREEN_STATS_ADD = "profile_screen_stats_add";
+export const PROFILE_SCREEN_STATS_DELETE = "profile_screen_stats_delete";
+export const PROFILE_NAME_SET = "profile_name_set";
+export const PROFILE_SCREEN_LEAGUE_SET = "profile_screen_league_set";
+
 // Messages Screen
-export const RECENT_MESSAGE_SET = "recent_message_set" 
+export const RECENT_MESSAGE_SET = "recent_message_set"

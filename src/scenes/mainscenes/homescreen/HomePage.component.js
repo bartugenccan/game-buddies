@@ -15,37 +15,48 @@ import firestore from "@react-native-firebase/firestore";
 // React Redux Imports
 import { connect, useDispatch } from 'react-redux';
 
+// Actions Import
 import {
     set_loading_home,
     games_set
 } from "../../../actions"
 
+// Utils Import
+import checkIfFirstLaunch from '../../../utils/checkIfFirstLaunch';
+
 
 function HomePage(props) {
-
 
     // Dispatch
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    useEffect(async () => {
+
+        const userEmail = auth().currentUser.email;
 
         dispatch(set_loading_home(true));
-        console.log(auth().currentUser.email);
 
-        firestore()
-            .collection("users")
-            .where("UserEmail", "==", auth().currentUser.email)
-            .get()
-            .then(resp => {
-                let batch = firestore().batch();
-                resp.docs.forEach((doc => {
-                    const docRef = firestore().collection("users").doc(doc.id)
-                    batch.update(docRef, { uid: auth().currentUser.uid })
-                }))
-                batch.commit().then(() => {
-                    console.log(auth().currentUser.uid);
-                })
-            });
+        const isFirstLaunch = await checkIfFirstLaunch();
+
+        if (isFirstLaunch == true) {
+            await firestore()
+                .collection("users")
+                .where("UserEmail", "==", auth().currentUser.email)
+                .get()
+                .then(resp => {
+                    let batch = firestore().batch();
+                    resp.docs.forEach((doc => {
+                        const docRef = firestore().collection("users").doc(doc.id)
+                        batch.update(docRef, { uid: auth().currentUser.uid })
+
+                    }))
+                    batch.commit().then(() => {
+                        console.log(auth().currentUser.uid);
+                    })
+                });
+
+
+        }
 
         // Set games while entering the homescreen    
         firestore()
@@ -59,6 +70,7 @@ function HomePage(props) {
             })
             .then(() => dispatch(set_loading_home(false)))
 
+
         firestore()
             .collection("users")
             .where("UserEmail", "==", auth().currentUser.email)
@@ -68,7 +80,7 @@ function HomePage(props) {
                     doc.ref.update({ IsOnline: true })
                 })
             });
-    
+
     }, [dispatch]);
 
 
@@ -173,6 +185,7 @@ function HomePage(props) {
         </View>
     )
 };
+
 
 const mapStateToProps = ({ HomeScreenResponse }) => {
     const { games_arr, loading } = HomeScreenResponse;
