@@ -56,48 +56,43 @@ const ValorantData = [
   },
   {
     id: '11',
+    name: 'GOLD III',
+    image: require('../../assets/images/ValorantRanksAssets/Valorant_Gold3.png'),
+  },
+  {
+    id: '12',
     name: 'PLATINUM I',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Platinum1.png'),
   },
   {
-    id: '12',
+    id: '13',
     name: 'PLATINUM II',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Platinum2.png'),
   },
   {
-    id: '13',
+    id: '14',
     name: 'PLATINUM III',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Platinum3.png'),
   },
   {
-    id: '14',
+    id: '15',
     name: 'DIAMOND I',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Diamond1.png'),
   },
   {
-    id: '15',
+    id: '16',
     name: 'DIAMOND II',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Diamond2.png'),
   },
   {
-    id: '16',
+    id: '17',
     name: 'DIAMOND III',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Diamond3.png'),
   },
   {
-    id: '17',
+    id: '18',
     name: 'IMMORTAL I',
     image: require('../../assets/images/ValorantRanksAssets/Valorant_Immortal1.png'),
-  },
-  {
-    id: '18',
-    name: 'IMMORTAL II',
-    image: require('../../assets/images/ValorantRanksAssets/Valorant_Immortal2.png'),
-  },
-  {
-    id: '19',
-    name: 'IMMORTAL III',
-    image: require('../../assets/images/ValorantRanksAssets/Valorant_Immortal3.png'),
   },
   {
     id: '20',

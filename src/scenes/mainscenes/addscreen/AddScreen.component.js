@@ -31,12 +31,14 @@ import {
 // Redux Imports
 import {connect, useDispatch} from 'react-redux';
 
+// Action Imports
 import {
   games_set,
   profile_screen_stats_set,
   profile_screen_stats_add,
 } from '../../../actions';
 
+// Util Imports
 import * as selector from '../../../utils/LeagueImageSelectors';
 
 function BreakSignal() {}
@@ -313,6 +315,14 @@ const AddScreen = ({navigation, route}) => {
             });
           })
           .then(() => {
+            dispatch(
+              profile_screen_stats_add({
+                name: 'PUBG Mobile',
+                avatar_url: require('../../../assets/images/PUBG_Mobile_icon.png'),
+                league: false,
+                subtitle: summonerName,
+              }),
+            );
             setLoading(false);
             navigation.navigate('HomePage');
           });

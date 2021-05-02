@@ -27,13 +27,17 @@ import {
 
 // Datas Import
 import ApexData from '../../../utils/datas/ApexLeaguesData';
+import ValorantData from '../../../utils/datas/ValorantLeaguesData';
+
 // Redux Import
 import {connect, useDispatch} from 'react-redux';
 // Util Import
 import * as selector from '../../../utils/LeagueImageSelectors';
 
+// Key Extractor for Games Flatlist
 const keyExtractor = (item, index) => index.toString();
 
+// Item component for League Select Flatlist
 const Item = ({item, onPress, borderWidth}) => (
   <TouchableOpacity
     style={[style.item, borderWidth]}
@@ -65,7 +69,6 @@ const ProfileScreen = props => {
             setUsername(doc.data().UserName);
 
             if (doc.data().LolAccount != null) {
-              // !=
               let source = selector.lolLeagueImageSelector(
                 doc.data().LolAccount['SoloQueueRanked'],
               );
@@ -77,7 +80,6 @@ const ProfileScreen = props => {
               });
             }
             if (doc.data().ValorantAccount != null) {
-              // !=
               let source = selector.valorantImageSelector(
                 doc.data().ValorantAccount['League'],
               );
@@ -90,7 +92,6 @@ const ProfileScreen = props => {
               });
             }
             if (doc.data().ApexAccount != null) {
-              // !=
               let source = selector.apexImageSelector(
                 doc.data().ApexAccount['League'],
               );
@@ -113,11 +114,13 @@ const ProfileScreen = props => {
     });
   }, [dispatch]);
 
+  // OnPress event for select league
   const _onPress = gameName => {
     setGame(gameName);
     setModalVisible(true);
   };
 
+  // Flatlist renderItem function for biggest Games View
   const renderItem = ({item}) => {
     return (
       <ListItem containerStyle={{backgroundColor: '#fff'}}>
@@ -144,18 +147,26 @@ const ProfileScreen = props => {
     );
   };
 
+  // Flatlist renderLeagueItem function for league select view
   const renderLeagueItem = ({item}) => {
     const borderWidth = item.id === selectedID ? 5 : 0;
 
     return (
       <Item
         item={item}
-        onPress={() => setSelectedID(item.id)}
+        onPress={() => {
+          if (selectedID == item.id) {
+            setSelectedID(null);
+          } else if (selectedID != item.id) {
+            setSelectedID(item.id);
+          }
+        }}
         borderWidth={{borderWidth}}
       />
     );
   };
 
+  // Conditional rendering for Edit Modal
   const renderChoice = c => {
     if (c == 'Apex Legends') {
       return (
@@ -253,7 +264,7 @@ const ProfileScreen = props => {
               <FlatList
                 horizontal={true}
                 keyExtractor={item => item.id}
-                data={ApexData}
+                data={ValorantData}
                 renderItem={renderLeagueItem}
                 showsHorizontalScrollIndicator={false}
                 extraData={selectedID}
@@ -291,7 +302,7 @@ const ProfileScreen = props => {
                   titleStyle={{fontSize: 20}}
                   title="Kaydet"
                   onPress={() => {
-                    ApexData.forEach(elem => {
+                    ValorantData.forEach(elem => {
                       if (elem.id === selectedID) {
                         console.log(elem.name);
                         dispatch(
@@ -299,6 +310,7 @@ const ProfileScreen = props => {
                         );
                       }
 
+                      setSelectedID(null);
                       setModalVisible(false);
                     });
                   }}
@@ -397,6 +409,7 @@ const ProfileScreen = props => {
                 type="font-awesome"
                 color="white"
                 size={25}
+                onPress={() => props.navigation.navigate('Messages')}
               />
             </TouchableOpacity>
           </View>

@@ -1,30 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  View,
-  ImageBackground,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import {Text, View, StyleSheet, Dimensions} from 'react-native';
 import style from './DuoFinderScreen.component.style';
 import {Avatar, Icon} from 'react-native-elements';
 import SwipeCards from 'react-native-swipe-cards-deck';
+import TinderCard from '../../../components/TinderCard/TinderCard.component';
 
-function Card({data}) {
-  return (
-    <View style={[styles.card, {backgroundColor: '#ffffff'}]}>
-      <Text>{data.text}</Text>
-    </View>
-  );
-}
-
-function StatusCard({text}) {
-  return (
-    <View>
-      <Text style={styles.cardsText}>{text}</Text>
-    </View>
-  );
-}
+// Loading Screen Import
+import LoadingScreen from '../duofinderloadingscreen/LoadingScreen.component';
 
 function handleYup(card) {
   console.log(`Yup for ${card.text}`);
@@ -36,77 +18,63 @@ function handleNope(card) {
   return true;
 }
 
-function handleMaybe(card) {
-  console.log(`Maybe for ${card.text}`);
-  return false;
-}
-
 const DuoFinderScreen = () => {
   const [cards, setCards] = useState();
 
   useEffect(() => {
     setTimeout(() => {
       setCards([
-        {text: 'Tomato'},
-        {text: 'Aubergine'},
-        {text: 'Courgette'},
-        {text: 'Blueberry'},
-        {text: 'Umm...'},
-        {text: 'orange'},
+        {
+          username: 'BerattoBB',
+          profileIconUrl:
+            'https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png',
+          backgroundUrl:
+            'https://s3.envato.com/files/0a892d74-9142-489e-b30f-d52e8a3733aa/inline_image_preview.jpg',
+          valorantaccount: {
+            nickname: 'iksBe #TR1',
+            league: 'BRONZE III',
+          },
+          apexaccount: {
+            nickname: 'BERATTOBB',
+            league: 'APEX PREDATOR',
+          },
+          leagueoflegendsaccount: {
+            nickname: 'BerattoBB',
+            league: 'GOLD I',
+          },
+          uid: 'hıasdouadad13123dabjdaus131',
+          reviews: {
+            1: {
+              reviewSender: 'Bartu TR',
+              reviewMessage: 'HLLSN',
+              reviewSenderProfileIcon:
+                'https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png',
+            },
+          },
+        },
       ]);
-    }, 0);
+    }, 1000);
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={style.container}>
       <View style={{flex: 1, width: '100%'}}>
         {cards ? (
           <SwipeCards
             cards={cards}
-            renderCard={cardData => <Card data={cardData} />}
+            renderCard={cardData => <TinderCard data={cardData} />}
             keyExtractor={cardData => String(cardData.text)}
-            renderNoMoreCards={() => <StatusCard text="No more cards..." />}
+            renderNoMoreCards={() => <Text>o more cards..</Text>}
             handleYup={handleYup}
             handleNope={handleNope}
-            handleMaybe={handleMaybe}
-            hasMaybeAction={true}
-            // If you want a stack of cards instead of one-per-one view, activate stack mode
-            stack={true}
-            stackDepth={1}
+            hasMaybeAction={false}
           />
         ) : (
-          <StatusCard text="Loading..." />
+          <LoadingScreen />
         )}
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: (Dimensions.get('screen').height * 80) / 100,
-    width: (Dimensions.get('screen').width * 4) / 5,
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.46,
-    shadowRadius: 11.14,
-
-    elevation: 17,
-  },
-  cardsText: {
-    fontSize: 22,
-  },
-});
 
 export default DuoFinderScreen;
