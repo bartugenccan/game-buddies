@@ -68,6 +68,7 @@ const DuoFinderScreen = () => {
             handleYup={handleYup}
             handleNope={handleNope}
             hasMaybeAction={false}
+            dragY={false}
           />
         ) : (
           <LoadingScreen />

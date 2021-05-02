@@ -45,7 +45,6 @@ export default StyleSheet.create({
     backgroundColor: '#892cdc',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginTop: 20,
   },
   reviewContainer: {
     alignSelf: 'center',
