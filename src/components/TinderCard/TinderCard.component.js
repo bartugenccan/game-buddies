@@ -47,12 +47,6 @@ const TinderCard = ({data}) => {
         league: require('../../assets/images/ValorantRanksAssets/Valorant_Bronze1.png'),
         subtitle: 'iksBe',
       },
-      {
-        name: 'Valorant',
-        avatar_url: require('../../assets/images/Valorant_icon.png'),
-        league: require('../../assets/images/ValorantRanksAssets/Valorant_Bronze1.png'),
-        subtitle: 'iksBe',
-      },
     ]);
 
     setReviewList([{}]);
@@ -69,7 +63,7 @@ const TinderCard = ({data}) => {
       <View style={style.gamesLine}>
         <Text style={style.gameTextStyle}>Oyunlar</Text>
       </View>
-      <View style={{backgroundColor: 'red', flex: 0.5}}>
+      <View style={{backgroundColor: '#fff'}}>
         <FlatList
           keyExtractor={keyExtractor}
           data={gamesList}

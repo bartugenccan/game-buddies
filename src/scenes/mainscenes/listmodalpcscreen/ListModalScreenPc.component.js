@@ -45,7 +45,7 @@ const ListModalScreenPc = ({navigation}) => {
 
   // Cusstom Component For FlatLists Item
   const PlatformList = props => {
-    function renderChoice(name, avatar_url, subtitle, fontFamily) {
+    function renderChoice(name, avatar_url, subtitle) {
       if (subtitle != 'Çok yakında.') {
         return (
           <ListItem

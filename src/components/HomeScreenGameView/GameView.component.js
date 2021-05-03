@@ -8,7 +8,7 @@ const GameView = ({gameName, gameImage}) => {
   return (
     <TouchableOpacity
       style={style.container}
-      onPress={() => navigation.navigate('DuoFinder', {gameName: gameName})}
+      onPress={() => navigation.navigate('DuoFinder', {type: gameName})}
       activeOpacity={0.7}>
       <ImageBackground
         resizeMode="cover"

@@ -1,24 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, Dimensions} from 'react-native';
+import {Alert, View} from 'react-native';
 import style from './DuoFinderScreen.component.style';
 import {Avatar, Icon} from 'react-native-elements';
-import SwipeCards from 'react-native-swipe-cards-deck';
-import TinderCard from '../../../components/TinderCard/TinderCard.component';
+
+// React Navigation Import
+import {useNavigation} from '@react-navigation/native';
 
 // Loading Screen Import
 import LoadingScreen from '../duofinderloadingscreen/LoadingScreen.component';
 
-function handleYup(card) {
-  console.log(`Yup for ${card.text}`);
-  return true; // return false if you wish to cancel the action
-}
+// Firebase Imports
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
-function handleNope(card) {
-  console.log(`Nope for ${card.text}`);
-  return true;
-}
-
-const DuoFinderScreen = () => {
+const DuoFinderScreen = ({route, navigation}) => {
   const [cards, setCards] = useState();
 
   useEffect(() => {
@@ -59,20 +54,7 @@ const DuoFinderScreen = () => {
   return (
     <View style={style.container}>
       <View style={{flex: 1, width: '100%'}}>
-        {cards ? (
-          <SwipeCards
-            cards={cards}
-            renderCard={cardData => <TinderCard data={cardData} />}
-            keyExtractor={cardData => String(cardData.text)}
-            renderNoMoreCards={() => <Text>o more cards..</Text>}
-            handleYup={handleYup}
-            handleNope={handleNope}
-            hasMaybeAction={false}
-            dragY={false}
-          />
-        ) : (
-          <LoadingScreen />
-        )}
+        {cards ? <Text>BerattoBB</Text> : <LoadingScreen />}
       </View>
     </View>
   );
