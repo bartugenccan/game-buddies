@@ -5961,6 +5961,11 @@
   "resolved" "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.1.1.tgz"
   "version" "3.1.1"
 
+"react-native-shadow-cards@^1.0.2":
+  "integrity" "sha512-cUk9+4T8XTwWPKJzLxmnFia9i0m5PWdLPrtGiShVH5vVH48TZ/8JLBzsUe50tfzTxvMWPvQM1vZE8Sytfj1mjw=="
+  "resolved" "https://registry.npmjs.org/react-native-shadow-cards/-/react-native-shadow-cards-1.0.2.tgz"
+  "version" "1.0.2"
+
 "react-native-shimmer@^0.6.0":
   "integrity" "sha512-uDrriPwzbOKj3XlFDNhCVst+veTy58RVNpcaJfLlZR2pX3/4A4P+E7rGeDUhfe2lWz/OTEwDWidVkrIcCakEng=="
   "resolved" "https://registry.npmjs.org/react-native-shimmer/-/react-native-shimmer-0.6.0.tgz"
