@@ -1,15 +1,11 @@
 import React from 'react';
-import {ImageBackground, TouchableOpacity} from 'react-native';
+import {ImageBackground, View} from 'react-native';
 import style from './GameView.component.style';
 import {useNavigation} from '@react-navigation/native';
 
 const GameView = ({gameName, gameImage}) => {
-  const navigation = useNavigation();
   return (
-    <TouchableOpacity
-      style={style.container}
-      onPress={() => navigation.navigate('DuoFinder', {type: gameName})}
-      activeOpacity={0.7}>
+    <View style={style.container} activeOpacity={0.7}>
       <ImageBackground
         resizeMode="cover"
         source={{uri: gameImage}}
@@ -20,7 +16,7 @@ const GameView = ({gameName, gameImage}) => {
           borderRadius: 50,
         }}
       />
-    </TouchableOpacity>
+    </View>
   );
 };
 

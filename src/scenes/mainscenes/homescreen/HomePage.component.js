@@ -1,6 +1,7 @@
 // React Imports
 import React, {useEffect, useLayoutEffect} from 'react';
 import {Text, View, TouchableOpacity, Modal, FlatList} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 // Style Imports
 import style from './HomePage.component.style';
@@ -22,6 +23,7 @@ import {set_loading_home, games_set} from '../../../actions';
 import checkIfFirstLaunch from '../../../utils/checkIfFirstLaunch';
 
 function HomePage(props) {
+  const navigation = useNavigation();
   // Dispatch
   const dispatch = useDispatch();
 
@@ -92,71 +94,79 @@ function HomePage(props) {
   const renderGameView = ({item}) => {
     if (item.id == '0') {
       return (
-        <View
+        <TouchableOpacity
           style={{
             width: '100%',
             height: 200,
             marginTop: 20,
             overflow: 'hidden',
-          }}>
+          }}
+          onPress={() => navigation.navigate('LolDuoFinder')}
+          activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
             gameImage={
               'https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/bltcfa4652c8d383f56/5e21837f63d1b6503160d39b/Home-page.jpg'
             }
           />
-        </View>
+        </TouchableOpacity>
       );
     } else if (item.id == '1') {
       return (
-        <View
+        <TouchableOpacity
           style={{
             width: '100%',
             height: 200,
             marginTop: 10,
             overflow: 'hidden',
-          }}>
+          }}
+          onPress={() => navigation.navigate('ValorantDuoFinder')}
+          activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
             gameImage={
               'https://www.tvovermind.com/wp-content/uploads/2021/03/valorant-update.png'
             }
           />
-        </View>
+        </TouchableOpacity>
       );
     } else if (item.id == '2') {
       return (
-        <View
+        <TouchableOpacity
           style={{
             width: '100%',
             height: 200,
             marginTop: 10,
             overflow: 'hidden',
-          }}>
+          }}
+          onPress={() => navigation.navigate('ApexDuoFinder')}
+          activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
             gameImage={
               'https://images2.alphacoders.com/995/thumb-1920-995140.jpg'
             }
           />
-        </View>
+        </TouchableOpacity>
       );
     } else if (item.id == '3') {
       return (
-        <View
+        <TouchableOpacity
           style={{
             width: '100%',
             height: 200,
             marginTop: 10,
             overflow: 'hidden',
-          }}>
+          }}
+          onPress={() => navigation.navigate('PUBGMobileDuoFinder')}
+          activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
             gameImage={
               'https://playerbros.com/wp-content/uploads/2020/12/12.jpg'
             }
           />
-        </View>
+        </TouchableOpacity>
       );
     }
   };

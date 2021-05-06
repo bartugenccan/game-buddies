@@ -10,7 +10,10 @@ import ModalNavigation from './ModalNavigation';
 
 // Style Import
 import {Icon} from 'react-native-elements';
-import DuoFinderScreen from '../scenes/mainscenes/duofinderscreen/DuoFinderScreen.component';
+import LolDuoFinderScreen from '../scenes/mainscenes/lolduofinderscreen/LolDuoFinderScreen.component';
+import ApexDuoFinderScreen from '../scenes/mainscenes/apexduofinder/ApexDuoFinderScreen.component';
+import ValorantDuoFinderScreen from '../scenes/mainscenes/valorantduofinder/ValorantDuoFinderScreen.component';
+import PUBGMobileDuoFinderScreen from '../scenes/mainscenes/pubgmobileduofinder/PUBGMobileDuoFinderScreen.component';
 
 // Creating stack navigator
 const Stack = createStackNavigator();
@@ -25,12 +28,6 @@ const HomePageNavigation = props => {
         cardStyle: {backgroundColor: 'transparent'},
         cardOverlayEnabled: false,
         cardStyleInterpolator: ({current: {progress}}) => ({
-          cardStyle: {
-            opacity: progress.interpolate({
-              inputRange: [0, 0.2, 0.5, 1],
-              outputRange: [0, 0.3, 0.8, 1],
-            }),
-          },
           overlayStyle: {
             opacity: progress.interpolate({
               inputRange: [0, 1],
@@ -73,8 +70,32 @@ const HomePageNavigation = props => {
         options={{headerShown: false}}></Stack.Screen>
 
       <Stack.Screen
-        name="DuoFinder"
-        component={DuoFinderScreen}
+        name="LolDuoFinder"
+        component={LolDuoFinderScreen}
+        options={{
+          headerShown: false,
+          cardStyle: {backgroundColor: '#ffffff'},
+        }}></Stack.Screen>
+
+      <Stack.Screen
+        name="ValorantDuoFinder"
+        component={ValorantDuoFinderScreen}
+        options={{
+          headerShown: false,
+          cardStyle: {backgroundColor: '#ffffff'},
+        }}></Stack.Screen>
+
+      <Stack.Screen
+        name="ApexDuoFinder"
+        component={ApexDuoFinderScreen}
+        options={{
+          headerShown: false,
+          cardStyle: {backgroundColor: '#ffffff'},
+        }}></Stack.Screen>
+
+      <Stack.Screen
+        name="PUBGMobileDuoFinder"
+        component={PUBGMobileDuoFinderScreen}
         options={{
           headerShown: false,
           cardStyle: {backgroundColor: '#ffffff'},

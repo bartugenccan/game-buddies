@@ -8,6 +8,7 @@ export default StyleSheet.create({
     borderRadius: 15,
     flexDirection: 'row',
     overflow: 'hidden',
+    alignSelf: 'center',
   },
   avatarView: {
     flex: 0.3,
@@ -25,16 +26,20 @@ export default StyleSheet.create({
   usernameTextStyle: {
     color: 'black',
     fontSize: 20,
-    marginLeft: 10,
     fontFamily: 'segoe-ui-light-2',
   },
   smallStatsView: {
     flex: 0.6,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   smallestStatsView: {
     flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  roleText: {
+    fontSize: 15,
   },
 });

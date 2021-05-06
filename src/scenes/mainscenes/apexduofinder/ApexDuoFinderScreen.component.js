@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList} from 'react-native';
-import style from './DuoFinderScreen.component.style';
+import style from './ApexDuoFinderScreen.component.style';
 import {Avatar, Icon, ListItem} from 'react-native-elements';
 
 // React Navigation Import
@@ -15,7 +15,7 @@ import auth from '@react-native-firebase/auth';
 
 import ItemOfList from '../../../components/Item/Item.component.js';
 
-const DuoFinderScreen = () => {
+const ApexDuoFinderScreen = () => {
   const [cards, setCards] = useState();
 
   const renderItem = ({item}) => {
@@ -59,4 +59,4 @@ const DuoFinderScreen = () => {
   );
 };
 
-export default DuoFinderScreen;
+export default ApexDuoFinderScreen;

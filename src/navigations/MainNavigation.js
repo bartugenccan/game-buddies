@@ -13,7 +13,12 @@ const Tab = createBottomTabNavigator();
 const MainNavigation = () => {
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    const hideOnScreens = ['DuoFinder', 'Chats'];
+    const hideOnScreens = [
+      'LolDuoFinder',
+      'Chats',
+      'ApexDuoFinder',
+      'ValorantDuoFinder',
+    ];
     if (hideOnScreens.indexOf(routeName) > -1) {
       return false;
     }
