@@ -13,6 +13,7 @@ import style from './AddPostModal.component.style';
 import {Avatar} from 'react-native-elements';
 import LolLaneImageFlatlistItem from '../../components/LolLaneImageFlatlistItem/LolLaneImageFlatlistItem.component';
 import {BallIndicator} from 'react-native-indicators';
+import Toast from 'react-native-simple-toast';
 
 // React-Redux Import
 import {connect, useDispatch} from 'react-redux';
@@ -27,6 +28,9 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
+// Image Selector Import
+import * as selector from '../../utils/LeagueImageSelectors';
+
 // Datas Imports
 import FilterLaneLolData from '../../utils/datas/LeagueOfLegendsFilterDatas/FilterLaneLolData';
 
@@ -34,6 +38,8 @@ const AddPostModal = props => {
   const [username, setUsername] = useState('');
   const [profileIcon, setProfileIcon] = useState(1);
   const [isVoiceChat, setVoiceChat] = useState(false);
+  const [lolRank, setLolRank] = useState();
+  const [iconURL, setIconURL] = useState();
 
   // League Of Legends Playing Role Selection
   const [selectedLaneLol, setSelectedLaneLol] = useState([]);
@@ -45,13 +51,40 @@ const AddPostModal = props => {
   // Loading State
   const [loading, setLoading] = useState(false);
 
+  // Firebase createPost function
+  const createPost = async () => {
+    try {
+      await firestore().collection('lolposts').add({
+        UserName: username,
+        playing_lane: selectedLaneLol,
+        wantsLane: selectedLaneWantsLol,
+        voiceChat: isVoiceChat,
+        createdAt: firestore.FieldValue.serverTimestamp(),
+        rank: lolRank,
+        icon: iconURL,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Function for onPress Event
   const _onPress = async () => {
     try {
       if (selectedLaneLol.length === 0) {
-        console.log('Olmaz');
-      } else if (selectedLaneLol.length !== 0) {
-        await firestore().collection('lolposts').add({});
+        Toast.show(
+          'Lütfen oynamak istediğiniz koridor veya koridorları seçiniz.',
+          Toast.SHORT,
+          ['RCTModalHostViewController'],
+        );
+      } else if (selectedLaneWantsLol == 0) {
+        Toast.show(
+          'Lütfen aradığınız koridor veya koridorları seçiniz.',
+          Toast.SHORT,
+          ['RCTModalHostViewController'],
+        );
+      } else if (selectedLaneLol.length !== 0 && selectedLaneWantsLol !== 0) {
+        await createPost();
       }
     } catch (err) {
       console.log(err);
@@ -61,6 +94,7 @@ const AddPostModal = props => {
   // Dispatch
   const dispatch = useDispatch();
 
+  // Renders button depend on loading state.
   const renderButton = () => {
     if (loading) {
       return <BallIndicator color={'white'} size={30} />;
@@ -68,7 +102,6 @@ const AddPostModal = props => {
       return (
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => _onPress()}
           style={{
             width: '100%',
             height: '100%',
@@ -80,6 +113,21 @@ const AddPostModal = props => {
               fontFamily: 'Roboto-Medium',
               color: 'white',
               fontSize: 20,
+            }}
+            onPress={() => {
+              setLoading(true);
+              _onPress().then(() => {
+                setSelectedLaneLol([]);
+                setVoiceChat(false);
+                setSelectedLaneWantsLol([]);
+                setLoading(false);
+                dispatch(set_modal_visibility(false));
+                Toast.show(
+                  'İlanınız başarıyla oluşturuldu. Takım arkadaşı arayan kullanıcılar size bu ilan üzerinden mesaj atabilirler.',
+                  Toast.LONG,
+                  ['RCTModalHostViewController'],
+                );
+              });
             }}>
             İlanı oluştur
           </Text>
@@ -87,6 +135,7 @@ const AddPostModal = props => {
       );
     }
   };
+
   // RenderItem function for League of Legends lane image
   const renderItemLolImageLane = ({item}) => {
     let backgroundColor = selectedLaneLol.includes(item.id)
@@ -161,6 +210,8 @@ const AddPostModal = props => {
         resp.forEach(doc => {
           setUsername(doc.data().LolAccount['Nickname']);
           setProfileIcon(doc.data().LolAccount['iconID']);
+          setLolRank(doc.data().LolAccount['SoloQueueRanked']);
+          setIconURL(doc.data().iconUrl);
         });
       });
   });

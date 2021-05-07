@@ -20,22 +20,70 @@ import auth from '@react-native-firebase/auth';
 // React-Redux Imports
 import {connect, useDispatch} from 'react-redux';
 
+// Image Selector Import
+import * as selector from '../../../utils/LeagueImageSelectors';
+
 // Datas Import
 import FilterLeagueLolData from '../../../utils/datas/LeagueOfLegendsFilterDatas/FilterLeagueLolData';
 import FilterLaneLolData from '../../../utils/datas/LeagueOfLegendsFilterDatas/FilterLaneLolData';
 import {set_modal_visibility} from '../../../actions';
 
+// Little Function For Time Difference
+const timeDifference = (date1, date2) => {
+  var difference = date1.getTime() - date2.toDate();
+
+  var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+  difference -= daysDifference * 1000 * 60 * 60 * 24;
+
+  var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+  difference -= hoursDifference * 1000 * 60 * 60;
+
+  var minutesDifference = Math.floor(difference / 1000 / 60);
+  difference -= minutesDifference * 1000 * 60;
+
+  var secondsDifference = Math.floor(difference / 1000);
+
+  if (daysDifference != 0) {
+    let resStr = daysDifference + ' gün önce';
+    return resStr;
+  } else if (daysDifference === 0 && hoursDifference != 0) {
+    let resStr = hoursDifference + ' saat önce';
+    return resStr;
+  } else if (
+    daysDifference == 0 &&
+    hoursDifference == 0 &&
+    minutesDifference != 0
+  ) {
+    let resStr = minutesDifference + ' dakika önce';
+    return resStr;
+  } else if (
+    daysDifference == 0 &&
+    hoursDifference == 0 &&
+    minutesDifference == 0 &&
+    secondsDifference != 0
+  ) {
+    let resStr = secondsDifference + ' saniye önce';
+    return resStr;
+  }
+};
+
+// Little Function For String
+const methodTier = str => {
+  let arr = str.split(' ');
+
+  return arr.pop();
+};
+
 const DuoFinderScreen = props => {
   // Initial States
   const [cards, setCards] = useState();
   const [filterVisible, setFilterVisible] = useState(false);
-
+  const [testCards, setTestCards] = useState([]);
   const [selectedLeagueLol, setSelectedLeagueLol] = useState([]);
   const [selectedLaneLol, setSelectedLaneLol] = useState([]);
-  const [voiceChat, setVoiceChat] = useState(null);
+  const [filterVoiceChat, setFilterVoiceChat] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [addPostVisible, setAddPostVisible] = useState(false);
 
   // Dispatch
   const dispatch = useDispatch();
@@ -44,6 +92,70 @@ const DuoFinderScreen = props => {
     {label: 'Farketmez', value: 1},
     {label: 'Sesli Sohbet olsun.', value: 2},
   ];
+
+  useEffect(async () => {
+    let arr = [];
+    await firestore()
+      .collection('lolposts')
+      .orderBy('createdAt')
+      .limit(20)
+      .get()
+      .then(resp => {
+        resp.forEach(doc => {
+          var today = new Date();
+          arr.push({
+            avatar_url: doc.data().icon,
+            username: doc.data().UserName,
+            league: selector.lolLeagueImageSelector(doc.data().rank),
+            tier: methodTier(doc.data().rank),
+            ago: timeDifference(today, doc.data().createdAt),
+            playingLane: doc.data().playing_lane,
+            wantedLaned: doc.data().wantsLane,
+            voice_chat: doc.data().voiceChat,
+          });
+        });
+      })
+      .then(() => {
+        console.log(arr);
+      });
+
+    setTimeout(() => {
+      setCards([
+        {
+          avatar_url:
+            'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+          username: 'BerattoBB',
+          league: selector.lolLeagueImageSelector('SILVER I'),
+          ago: '1 saat önce',
+          tier: 'II',
+          voice_chat: false,
+          wanted_lane: ['Support', 'Mid'],
+          playing_lane: ['Top , Jungle'],
+        },
+        {
+          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
+          username: 'BeattoBB',
+          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
+          ago: '15 dakika önce',
+          tier: 'III',
+          voice_chat: true,
+          wanted_lane: ['Mid'],
+          playing_lane: ['Top , Bot'],
+        },
+        {
+          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
+          username: 'BerattoBB',
+          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
+          ago: '15 dakika önce',
+          tier: 'IV',
+          voice_chat: false,
+          wanted_lane: ['Mid'],
+          playing_lane: ['Top'],
+        },
+      ]);
+    }, 1000);
+  }, []);
+
   const renderItem = ({item}) => {
     return (
       <ItemOfList
@@ -51,6 +163,11 @@ const DuoFinderScreen = props => {
         username={item.username}
         subtitle={item.subtitle}
         league={item.league}
+        ago={item.ago}
+        tier={item.tier}
+        voice_chat={item.voice_chat}
+        playingLane={item.playing_lane}
+        wantsLane={item.wanted_lane}
       />
     );
   };
@@ -185,7 +302,7 @@ const DuoFinderScreen = props => {
               buttonColor={'#892cdc'}
               borderRadius={50}
               hasPadding
-              onPress={value => setVoiceChat(value)}
+              onPress={value => setFilterVoiceChat(value)}
               style={{width: '80%'}}
               borderColor={'#892cdc'}
               borderWidth={1}
@@ -213,31 +330,6 @@ const DuoFinderScreen = props => {
       return null;
     }
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setCards([
-        {
-          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
-          username: 'BerattoBB',
-          subtitle: 'SILVER III',
-          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
-        },
-        {
-          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
-          username: 'BerattoBB',
-          subtitle: 'SILVER III',
-          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
-        },
-        {
-          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
-          username: 'BerattoBB',
-          subtitle: 'SILVER III',
-          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
-        },
-      ]);
-    }, 1000);
-  }, []);
 
   return (
     <View style={style.container}>

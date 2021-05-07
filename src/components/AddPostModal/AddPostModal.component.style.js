@@ -76,14 +76,3 @@ export default StyleSheet.create({
     overflow: 'hidden',
   },
 });
-
-/*
-
- <Text>Sesli sohbet kullanıyorum.</Text>
-            <Switch
-              style={{backgroundColor: 'red'}}
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              thumbColor={isVoiceChat ? '#f5dd4b' : '#f4f3f4'}
-              onValueChange={toggleSwitch}
-              value={isVoiceChat}></Switch>
-*/
