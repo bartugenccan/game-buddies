@@ -1,5 +1,8 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 
 // Pages Import
 import HomePage from '../scenes/mainscenes/homescreen/HomePage.component';
@@ -10,10 +13,13 @@ import ModalNavigation from './ModalNavigation';
 
 // Style Import
 import {Icon} from 'react-native-elements';
+
+// Page Imports
 import LolDuoFinderScreen from '../scenes/mainscenes/lolduofinderscreen/LolDuoFinderScreen.component';
 import ApexDuoFinderScreen from '../scenes/mainscenes/apexduofinder/ApexDuoFinderScreen.component';
 import ValorantDuoFinderScreen from '../scenes/mainscenes/valorantduofinder/ValorantDuoFinderScreen.component';
 import PUBGMobileDuoFinderScreen from '../scenes/mainscenes/pubgmobileduofinder/PUBGMobileDuoFinderScreen.component';
+import ChatScreenInDuoFinder from '../scenes/mainscenes/chatscreeninduofinder/ChatScreenInDuoFinder.component';
 
 // Creating stack navigator
 const Stack = createStackNavigator();
@@ -100,6 +106,16 @@ const HomePageNavigation = props => {
           headerShown: false,
           cardStyle: {backgroundColor: '#ffffff'},
         }}></Stack.Screen>
+
+      <Stack.Screen
+        name="ChatScreenInDuoFinder"
+        component={ChatScreenInDuoFinder}
+        options={({route}) => ({
+          title: route.params.nickname,
+          cardStyle: {backgroundColor: '#fff'},
+          headerShown: true,
+        })}
+      />
     </Stack.Navigator>
   );
 };

@@ -42,4 +42,14 @@ export default StyleSheet.create({
   roleText: {
     fontSize: 15,
   },
+  wantsLane: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  playingLane: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

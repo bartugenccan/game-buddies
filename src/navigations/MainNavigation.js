@@ -18,6 +18,7 @@ const MainNavigation = () => {
       'Chats',
       'ApexDuoFinder',
       'ValorantDuoFinder',
+      'ChatScreenInDuoFinder',
     ];
     if (hideOnScreens.indexOf(routeName) > -1) {
       return false;

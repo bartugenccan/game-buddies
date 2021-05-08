@@ -28,9 +28,6 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-// Image Selector Import
-import * as selector from '../../utils/LeagueImageSelectors';
-
 // Datas Imports
 import FilterLaneLolData from '../../utils/datas/LeagueOfLegendsFilterDatas/FilterLaneLolData';
 
@@ -62,6 +59,7 @@ const AddPostModal = props => {
         createdAt: firestore.FieldValue.serverTimestamp(),
         rank: lolRank,
         icon: iconURL,
+        uid: auth().currentUser.uid,
       });
     } catch (err) {
       console.error(err);

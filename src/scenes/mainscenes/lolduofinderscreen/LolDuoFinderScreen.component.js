@@ -17,55 +17,22 @@ import LoadingScreen from '../duofinderloadingscreen/LoadingScreen.component';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
+// useNavigation
+import {useNavigation} from '@react-navigation/native';
+
 // React-Redux Imports
 import {connect, useDispatch} from 'react-redux';
 
 // Image Selector Import
 import * as selector from '../../../utils/LeagueImageSelectors';
 
+// Time Difference Function
+import * as format from '../../../utils/Formatters';
+
 // Datas Import
 import FilterLeagueLolData from '../../../utils/datas/LeagueOfLegendsFilterDatas/FilterLeagueLolData';
 import FilterLaneLolData from '../../../utils/datas/LeagueOfLegendsFilterDatas/FilterLaneLolData';
 import {set_modal_visibility} from '../../../actions';
-
-// Little Function For Time Difference
-const timeDifference = (date1, date2) => {
-  var difference = date1.getTime() - date2.toDate();
-
-  var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-  difference -= daysDifference * 1000 * 60 * 60 * 24;
-
-  var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
-  difference -= hoursDifference * 1000 * 60 * 60;
-
-  var minutesDifference = Math.floor(difference / 1000 / 60);
-  difference -= minutesDifference * 1000 * 60;
-
-  var secondsDifference = Math.floor(difference / 1000);
-
-  if (daysDifference != 0) {
-    let resStr = daysDifference + ' gün önce';
-    return resStr;
-  } else if (daysDifference === 0 && hoursDifference != 0) {
-    let resStr = hoursDifference + ' saat önce';
-    return resStr;
-  } else if (
-    daysDifference == 0 &&
-    hoursDifference == 0 &&
-    minutesDifference != 0
-  ) {
-    let resStr = minutesDifference + ' dakika önce';
-    return resStr;
-  } else if (
-    daysDifference == 0 &&
-    hoursDifference == 0 &&
-    minutesDifference == 0 &&
-    secondsDifference != 0
-  ) {
-    let resStr = secondsDifference + ' saniye önce';
-    return resStr;
-  }
-};
 
 // Little Function For String
 const methodTier = str => {
@@ -82,8 +49,11 @@ const DuoFinderScreen = props => {
   const [selectedLeagueLol, setSelectedLeagueLol] = useState([]);
   const [selectedLaneLol, setSelectedLaneLol] = useState([]);
   const [filterVoiceChat, setFilterVoiceChat] = useState(null);
-
   const [loading, setLoading] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState();
+  const [currentUserIcon, setCurrentUserIcon] = useState();
+  // Navigation
+  const navigation = useNavigation();
 
   // Dispatch
   const dispatch = useDispatch();
@@ -94,7 +64,19 @@ const DuoFinderScreen = props => {
   ];
 
   useEffect(async () => {
+    await firestore()
+      .collection('users')
+      .where('UserEmail', '==', auth().currentUser.email)
+      .get()
+      .then(resp => {
+        resp.forEach(doc => {
+          setCurrentUserIcon(doc.data().iconUrl);
+          setCurrentUsername(doc.data().UserName);
+        });
+      });
+
     let arr = [];
+
     await firestore()
       .collection('lolposts')
       .orderBy('createdAt')
@@ -104,70 +86,38 @@ const DuoFinderScreen = props => {
         resp.forEach(doc => {
           var today = new Date();
           arr.push({
-            avatar_url: doc.data().icon,
+            uid: doc.data().uid,
             username: doc.data().UserName,
+            avatar_url: doc.data().icon,
             league: selector.lolLeagueImageSelector(doc.data().rank),
             tier: methodTier(doc.data().rank),
-            ago: timeDifference(today, doc.data().createdAt),
-            playingLane: doc.data().playing_lane,
-            wantedLaned: doc.data().wantsLane,
+            playing_lane: format.laneFormatter(doc.data().playing_lane),
+            wanted_lane: format.laneFormatter(doc.data().wantsLane),
+            ago: format.timeDifference(today, doc.data().createdAt),
             voice_chat: doc.data().voiceChat,
           });
         });
       })
       .then(() => {
-        console.log(arr);
+        setCards(arr);
       });
-
-    setTimeout(() => {
-      setCards([
-        {
-          avatar_url:
-            'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
-          username: 'BerattoBB',
-          league: selector.lolLeagueImageSelector('SILVER I'),
-          ago: '1 saat önce',
-          tier: 'II',
-          voice_chat: false,
-          wanted_lane: ['Support', 'Mid'],
-          playing_lane: ['Top , Jungle'],
-        },
-        {
-          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
-          username: 'BeattoBB',
-          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
-          ago: '15 dakika önce',
-          tier: 'III',
-          voice_chat: true,
-          wanted_lane: ['Mid'],
-          playing_lane: ['Top , Bot'],
-        },
-        {
-          avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
-          username: 'BerattoBB',
-          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
-          ago: '15 dakika önce',
-          tier: 'IV',
-          voice_chat: false,
-          wanted_lane: ['Mid'],
-          playing_lane: ['Top'],
-        },
-      ]);
-    }, 1000);
   }, []);
 
   const renderItem = ({item}) => {
     return (
       <ItemOfList
-        avatar_url={item.avatar_url}
+        uid={item.uid}
         username={item.username}
-        subtitle={item.subtitle}
+        avatar_url={item.avatar_url}
         league={item.league}
-        ago={item.ago}
         tier={item.tier}
-        voice_chat={item.voice_chat}
         playingLane={item.playing_lane}
         wantsLane={item.wanted_lane}
+        navigation={navigation}
+        ago={item.ago}
+        voice_chat={item.voice_chat}
+        currentUserIcon={currentUserIcon}
+        currentUsername={currentUsername}
       />
     );
   };
