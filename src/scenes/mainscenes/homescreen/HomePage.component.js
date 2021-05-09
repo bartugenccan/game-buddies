@@ -1,5 +1,5 @@
 // React Imports
-import React, {useEffect, useLayoutEffect} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Text, View, TouchableOpacity, Modal, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -20,7 +20,9 @@ import {connect, useDispatch} from 'react-redux';
 import {set_loading_home, games_set} from '../../../actions';
 
 // Utils Import
-import checkIfFirstLaunch from '../../../utils/checkIfFirstLaunch';
+
+// AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomePage(props) {
   const navigation = useNavigation();
@@ -28,28 +30,29 @@ function HomePage(props) {
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    const userEmail = auth().currentUser.email;
-
     dispatch(set_loading_home(true));
 
-    const isFirstLaunch = await checkIfFirstLaunch();
+    AsyncStorage.getItem('firstLogin').then(value => {
+      if (value == null) {
+        AsyncStorage.setItem('firstLogin', 'true');
+        AsyncStorage.setItem('useruid', auth().currentUser.uid);
 
-    if (isFirstLaunch == true) {
-      await firestore()
-        .collection('users')
-        .where('UserEmail', '==', auth().currentUser.email)
-        .get()
-        .then(resp => {
-          let batch = firestore().batch();
-          resp.docs.forEach(doc => {
-            const docRef = firestore().collection('users').doc(doc.id);
-            batch.update(docRef, {uid: auth().currentUser.uid});
+        firestore()
+          .collection('users')
+          .where('UserEmail', '==', auth().currentUser.email)
+          .get()
+          .then(resp => {
+            let batch = firestore().batch();
+            resp.docs.forEach(doc => {
+              const docRef = firestore().collection('users').doc(doc.id);
+              batch.update(docRef, {uid: auth().currentUser.uid});
+            });
+            batch.commit().then(() => {
+              console.log(auth().currentUser.uid);
+            });
           });
-          batch.commit().then(() => {
-            console.log(auth().currentUser.uid);
-          });
-        });
-    }
+      }
+    });
 
     // Set games while entering the homescreen
     firestore()
@@ -74,19 +77,20 @@ function HomePage(props) {
       });
   }, [dispatch]);
 
-  //console.log(auth().currentUser.uid);
   // When app is close set IsOnline to false.
   useLayoutEffect(() => {
-    return () => {
+    return async () => {
+      const uid = await AsyncStorage.getItem('useruid');
       firestore()
         .collection('users')
-        .where('UserEmail', '==', auth().currentUser.email)
+        .where('uid', '==', uid)
         .get()
         .then(resp => {
           resp.forEach(doc => {
             doc.ref.update({IsOnline: false});
           });
         });
+      AsyncStorage.clear();
     };
   }, []);
 

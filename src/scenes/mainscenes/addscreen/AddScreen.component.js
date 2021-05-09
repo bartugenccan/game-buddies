@@ -540,7 +540,7 @@ const AddScreen = ({navigation, route}) => {
                         try {
                           setLoading(true);
                           checkVerificationCode(
-                            'BerattoBB',
+                            'bugraaaaaa',
                             'zaxd31',
                             _success_callback,
                             _failed_callback,

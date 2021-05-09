@@ -9,7 +9,7 @@ import auth from '@react-native-firebase/auth';
 
 import style from './ChatScreenInDuoFinder.component.style';
 
-const ChatScreenInDuoFinder = ({navigaton, route}) => {
+const ChatScreenInDuoFinder = ({route}) => {
   // Receiver route.params
   const avatar_url = route.params.avatar_url;
   const useruid = route.params.uid;
@@ -20,7 +20,7 @@ const ChatScreenInDuoFinder = ({navigaton, route}) => {
   const currentUserIcon = route.params.currentUserIcon;
 
   const [messages, setMessages] = useState([]);
-  const [isCreated, setIsCreated] = useState(null);
+  const [isExist, setIsExist] = useState(null);
 
   const db = firestore().collection('messages');
 
@@ -29,38 +29,38 @@ const ChatScreenInDuoFinder = ({navigaton, route}) => {
       ? route.params.uid + auth().currentUser.uid
       : auth().currentUser.uid + route.params.uid;
 
-  useEffect(async () => {
+  useEffect(() => {
     const chatRef = firestore().collection('messages').doc(docID);
-    const doc = await chatRef.get();
+    const doc = chatRef.get();
 
-    if (!doc.exists) {
-      setIsCreated(false);
-    } else {
-      setIsCreated(true);
-      const messageListener = db
-        .doc(docID)
-        .collection('MESSAGES')
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(querySnapshot => {
-          const messages = querySnapshot.docs.map(doc => {
-            const firebaseData = doc.data();
+    if (doc.exists == true) {
+      setIsExist(true);
+    } else if (doc.exists == false) {
+      setIsExist(false);
+    }
 
-            const data = {
-              _id: doc.id,
-              text: '',
-              createdAt: new Date().getTime(),
-              ...firebaseData,
-            };
+    const messageListener = db
+      .doc(docID)
+      .collection('MESSAGES')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(querySnapshot => {
+        const messages = querySnapshot.docs.map(doc => {
+          const firebaseData = doc.data();
 
-            return data;
-          });
-
-          setMessages(messages);
+          const data = {
+            _id: doc.id,
+            text: '',
+            createdAt: new Date().getTime(),
+            ...firebaseData,
+          };
+          return data;
         });
 
-      return () => messageListener();
-    }
-  });
+        setMessages(messages);
+      });
+
+    return () => messageListener();
+  }, []);
 
   function renderInputToolbar(props) {
     return <InputToolbar {...props} containerStyle={style.input} />;
@@ -103,42 +103,26 @@ const ChatScreenInDuoFinder = ({navigaton, route}) => {
   const onSend = async messages => {
     const text = messages[0].text;
 
-    if (isCreated) {
-      db.doc(docID)
-        .collection('MESSAGES')
-        .add({
-          text,
-          createdAt: new Date().getTime(),
-          user: {
-            _id: auth().currentUser.uid,
-            avatar: avatar_url,
-          },
-        });
-    } else {
-      let currentUserUid = auth().currentUser.uid;
-      db.doc(docID)
-        .set({
-          members: [currentUserUid, useruid],
-          recentMessage: '',
-          [useruid]: [avatar_url, nickname],
-          [currentUserUid]: [currentUserIcon, currentUsername],
-        })
-        .then(() => {
-          db.doc(docID)
-            .collection('MESSAGES')
-            .add({
-              text,
-              createdAt: new Date().getTime(),
-              user: {
-                _id: auth().currentUser.uid,
-                avatar: avatar_url,
-              },
-            });
-        })
-        .then(() => {
-          setMessages([text]);
-        });
+    if (isExist == false) {
+      db.doc(docID).set({
+        members: [auth().currentUser.uid, useruid],
+        recentMessage: '',
+        [useruid]: [avatar_url, nickname],
+        [auth().currentUser.uid]: [currentUserIcon, currentUsername],
+      });
     }
+
+    db.doc(docID)
+      .collection('MESSAGES')
+      .add({
+        text,
+        createdAt: new Date().getTime(),
+        user: {
+          _id: auth().currentUser.uid,
+          avatar: avatar_url,
+        },
+      })
+      .then(db.doc(docID).update({recentMessage: text}));
   };
 
   const renderSend = props => {

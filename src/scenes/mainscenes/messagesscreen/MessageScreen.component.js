@@ -17,13 +17,13 @@ const MessageScreen = () => {
   const keyExtractor = (item, index) => index.toString();
 
   useEffect(() => {
-    const users = [];
     const tempDocId = '';
 
     const subscriber = firestore()
       .collection('messages')
       .where('members', 'array-contains', auth().currentUser.uid)
       .onSnapshot(resp => {
+        const users = [];
         resp.forEach(doc => {
           let memberArray = doc.data().members;
 
@@ -34,6 +34,7 @@ const MessageScreen = () => {
           }
 
           let otherMember = memberArray[0];
+
           users.push({
             name: doc.data()[otherMember][1],
             avatar_url: doc.data()[otherMember][0],
@@ -47,7 +48,7 @@ const MessageScreen = () => {
       });
     setLoading(false);
 
-    return () => subscriber();
+    () => subscriber();
   }, []);
 
   const renderItem = ({item}) => (
@@ -97,6 +98,7 @@ const MessageScreen = () => {
         keyExtractor={keyExtractor}
         data={list}
         renderItem={renderItem}
+        extraData={list}
         ListEmptyComponent={
           <View style={{flex: 0.5, alignSelf: 'center', marginTop: 100}}>
             <Text style={{color: 'rgba(0,0,0,0.5)'}}>
