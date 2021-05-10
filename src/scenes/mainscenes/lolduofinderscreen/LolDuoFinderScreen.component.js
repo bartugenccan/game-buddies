@@ -37,15 +37,16 @@ import {set_modal_visibility} from '../../../actions';
 // Little Function For String
 const methodTier = str => {
   let arr = str.split(' ');
-
   return arr.pop();
 };
+
+// Filter Function Import
+import filterFunction from '../../../utils/filterFunction';
 
 const DuoFinderScreen = props => {
   // Initial States
   const [cards, setCards] = useState();
   const [filterVisible, setFilterVisible] = useState(false);
-  const [testCards, setTestCards] = useState([]);
   const [selectedLeagueLol, setSelectedLeagueLol] = useState([]);
   const [selectedLaneLol, setSelectedLaneLol] = useState([]);
   const [filterVoiceChat, setFilterVoiceChat] = useState(null);
@@ -91,8 +92,8 @@ const DuoFinderScreen = props => {
             avatar_url: doc.data().icon,
             league: selector.lolLeagueImageSelector(doc.data().rank),
             tier: methodTier(doc.data().rank),
-            playing_lane: format.laneFormatter(doc.data().playing_lane),
-            wanted_lane: format.laneFormatter(doc.data().wantsLane),
+            playing_lane: format.LolLaneFormatter(doc.data().playing_lane),
+            wanted_lane: format.LolLaneFormatter(doc.data().wantsLane),
             ago: format.timeDifference(today, doc.data().createdAt),
             voice_chat: doc.data().voiceChat,
           });
@@ -243,8 +244,8 @@ const DuoFinderScreen = props => {
             }}>
             <SwitchSelector
               options={[
-                {label: 'Farketmez', value: 1},
-                {label: 'Sesli sohbet olsun', value: 2},
+                {label: 'Farketmez', value: true},
+                {label: 'Sesli sohbet olsun', value: false},
               ]}
               initial={0}
               textColor={'#892cdc'}
@@ -271,6 +272,15 @@ const DuoFinderScreen = props => {
                 width: '50%',
                 backgroundColor: '#892cdc',
                 justifyContent: 'space-evenly',
+              }}
+              onPress={() => {
+                let tempCards = filterFunction(
+                  cards,
+                  selectedLeagueLol,
+                  [],
+                  filterVoiceChat,
+                );
+                setCards(tempCards);
               }}
             />
           </View>

@@ -38,7 +38,7 @@ export function timeDifference(date1, date2) {
 }
 
 // Lane Formatter Func
-export const laneFormatter = arr => {
+export const LolLaneFormatter = arr => {
   const tempDoc = [];
 
   for (let i = 0; i < arr.length; i++) {

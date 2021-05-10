@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Text} from 'react-native';
 import style from './ValorantDuoFinderScreen.component.style';
-import {Avatar, Icon, ListItem} from 'react-native-elements';
 
 // React Navigation Import
 import {useNavigation} from '@react-navigation/native';
@@ -9,11 +8,15 @@ import {useNavigation} from '@react-navigation/native';
 // Loading Screen Import
 import LoadingScreen from '../duofinderloadingscreen/LoadingScreen.component';
 
-// Firebase Imports
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+// Utils
+import * as selector from '../../../utils/LeagueImageSelectors';
+import ItemOfValorant from '../../../components/ItemOfValorant/ItemOfValorant.component';
 
-import ItemOfList from '../../../components/Item/Item.component.js';
+// Little Function For String
+const methodTier = str => {
+  let arr = str.split(' ');
+  return arr.pop();
+};
 
 const ValorantDuoFinderScreen = () => {
   const [cards, setCards] = useState();
@@ -21,11 +24,11 @@ const ValorantDuoFinderScreen = () => {
 
   const renderItem = ({item}) => {
     return (
-      <ItemOfList
+      <ItemOfValorant
         avatar_url={item.avatar_url}
         username={item.username}
-        subtitle={item.subtitle}
         league={item.league}
+        tier={item.tier}
       />
     );
   };
@@ -34,10 +37,14 @@ const ValorantDuoFinderScreen = () => {
     setTimeout(() => {
       setCards([
         {
+          uid: 'asdjhadahdha',
+          username: 'Blackmamba97 #TR1',
           avatar_url: 'https://www.w3schools.com/w3images/avatar2.png',
-          username: 'BerattoBB',
-          subtitle: 'SILVER III',
-          league: require('../../../assets/images/LOLLeagueEmblems/Emblem_Gold.png'),
+          league: selector.valorantImageSelector('PLATINUM III'),
+          tier: methodTier('PLATINUM III'),
+          favorite_champs: ['Breach , Raze'],
+          ago: '10 dk önce',
+          voice_chat: false,
         },
       ]);
     }, 1000);

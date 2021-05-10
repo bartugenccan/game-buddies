@@ -7,7 +7,6 @@ import {
   Linking,
   KeyboardAvoidingView,
   Alert,
-  DatePickerAndroid,
 } from 'react-native';
 import style from './AddScreen.component.style';
 
@@ -182,7 +181,10 @@ const AddScreen = ({navigation, route}) => {
 
               dispatch(games_set(tempList));
               doc.ref.update({
-                ValorantAccount: {Nickname: summonerName, League: ''},
+                ValorantAccount: {
+                  Nickname: summonerName + ' #' + tag,
+                  League: '',
+                },
                 Games: tempList,
               });
             });
