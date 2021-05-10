@@ -2,10 +2,10 @@ import React from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {Avatar, Icon} from 'react-native-elements';
 import {Card} from 'react-native-shadow-cards';
-import {useNavigation} from '@react-navigation/native';
 
 import style from './Item.component.style';
 
+// Lane Image Selector Function with switch-case
 const laneImageSelector = i => {
   switch (i) {
     case 'Orta':

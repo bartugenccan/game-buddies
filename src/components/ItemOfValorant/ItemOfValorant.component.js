@@ -41,8 +41,6 @@ const champImageSelector = c => {
 };
 
 const renderChamps = arr => {
-  const list = [];
-
   if (arr.length == 1) {
     return (
       <View
@@ -88,13 +86,33 @@ const renderChamps = arr => {
   }
 };
 
-const ItemOfValorant = ({avatar_url, username, league, tier}) => (
+const ItemOfValorant = ({
+  avatar_url,
+  username,
+  league,
+  tier,
+  ago,
+  uid,
+  currentUsername,
+  currentUserIcon,
+  voice_chat,
+  navigation,
+}) => (
   <TouchableOpacity
     style={{
       flex: 1,
       flexDirection: 'row',
       overflow: 'hidden',
       alignSelf: 'center',
+    }}
+    onPress={() => {
+      navigation.navigate('ChatScreenInDuoFinder', {
+        uid: uid,
+        avatar_url: avatar_url,
+        nickname: username,
+        currentUserIcon: currentUserIcon,
+        currentUsername: currentUsername,
+      });
     }}
     activeOpacity={1}>
     <Card style={style.container}>
@@ -108,20 +126,46 @@ const ItemOfValorant = ({avatar_url, username, league, tier}) => (
         />
       </View>
       <View style={style.statsView}>
-        <View style={{flex: 0.45, flexDirection: 'row'}}>
+        <View style={{flex: 0.42, flexDirection: 'row'}}>
           <View
             style={{
               flex: 0.7,
-              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'row',
             }}>
             <Text
               style={{
                 fontSize: 15,
                 fontFamily: 'segoe-ui-light-2',
-                marginLeft: 15,
               }}>
               {username}
             </Text>
+            {voice_chat == true ? (
+              <Icon
+                name="microphone"
+                type="font-awesome"
+                size={15}
+                style={{marginLeft: 5}}
+                containerStyle={{
+                  height: 23,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              />
+            ) : (
+              <Icon
+                name="microphone-slash"
+                type="font-awesome"
+                size={17}
+                style={{marginLeft: 5}}
+                containerStyle={{
+                  height: 23,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 3,
+                }}
+              />
+            )}
           </View>
           <View
             style={{
@@ -149,21 +193,29 @@ const ItemOfValorant = ({avatar_url, username, league, tier}) => (
         </View>
         <View
           style={{
-            flex: 0.45,
+            flex: 0.43,
             flexDirection: 'row',
             alignItems: 'center',
           }}>
           <Text
             style={{
               fontSize: 15,
-              fontFamily: 'segoe-ui-light-2',
-              paddingLeft: 15,
+              marginLeft: 0,
               height: 25,
             }}>
             Favori Ajanları :
           </Text>
-
-          {renderChamps(['Astra', 'Omen'])}
+          {renderChamps(['Raze', 'Omen'])}
+        </View>
+        <View style={{flex: 0.15, alignItems: 'flex-end'}}>
+          <Text
+            style={{
+              marginRight: 25,
+              fontSize: 11,
+              color: 'gray',
+            }}>
+            {ago}
+          </Text>
         </View>
       </View>
     </Card>

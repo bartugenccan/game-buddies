@@ -15,7 +15,7 @@ const MainNavigation = () => {
     const routeName = getFocusedRouteNameFromRoute(route);
     const hideOnScreens = [
       'LolDuoFinder',
-      'Chats',
+      'Chat',
       'ApexDuoFinder',
       'ValorantDuoFinder',
       'ChatScreenInDuoFinder',

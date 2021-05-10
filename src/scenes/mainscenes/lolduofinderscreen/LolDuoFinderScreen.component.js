@@ -53,6 +53,7 @@ const DuoFinderScreen = props => {
   const [loading, setLoading] = useState(false);
   const [currentUsername, setCurrentUsername] = useState();
   const [currentUserIcon, setCurrentUserIcon] = useState();
+
   // Navigation
   const navigation = useNavigation();
 
