@@ -37,6 +37,7 @@ const AddPostModal = props => {
   const [isVoiceChat, setVoiceChat] = useState(false);
   const [lolRank, setLolRank] = useState();
   const [iconURL, setIconURL] = useState();
+  const [token, setToken] = useState();
 
   // League Of Legends Playing Role Selection
   const [selectedLaneLol, setSelectedLaneLol] = useState([]);
@@ -60,6 +61,7 @@ const AddPostModal = props => {
         rank: lolRank,
         icon: iconURL,
         uid: auth().currentUser.uid,
+        tokenS: token,
       });
     } catch (err) {
       console.error(err);
@@ -199,8 +201,8 @@ const AddPostModal = props => {
     );
   };
 
-  useEffect(() => {
-    firestore()
+  useEffect(async () => {
+    await firestore()
       .collection('users')
       .where('UserEmail', '==', auth().currentUser.email)
       .get()
@@ -210,9 +212,10 @@ const AddPostModal = props => {
           setProfileIcon(doc.data().LolAccount['iconID']);
           setLolRank(doc.data().LolAccount['SoloQueueRanked']);
           setIconURL(doc.data().iconUrl);
+          setToken(doc.data().tokenS);
         });
       });
-  });
+  }, []);
 
   return (
     <Modal

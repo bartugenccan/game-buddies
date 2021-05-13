@@ -3,6 +3,7 @@ import {Text, View, Modal, FlatList} from 'react-native';
 import {ListItem, Avatar} from 'react-native-elements';
 import Spinner from '../../../components/Spinner/Spinner.component';
 
+// Firebase Imports
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -41,6 +42,7 @@ const MessageScreen = () => {
             uid: memberArray[0],
             recentMessage: doc.data().recentMessage,
             docId: doc.id,
+            tokenS: doc.data()[otherMember][2],
           });
         });
 
@@ -60,6 +62,7 @@ const MessageScreen = () => {
           avatar_url: item.avatar_url,
           docid: item.docId,
           nickname: item.name,
+          token: item.tokenS,
         });
       }}>
       <Avatar source={{uri: item.avatar_url}} rounded size={50} />

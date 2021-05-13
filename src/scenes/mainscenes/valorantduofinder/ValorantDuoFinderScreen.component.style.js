@@ -5,4 +5,11 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  headerView: {
+    width: '100%',
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
 });

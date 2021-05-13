@@ -27,7 +27,7 @@ import {
 
 // Datas Import
 import ApexData from '../../../utils/datas/ApexLeaguesData';
-import ValorantData from '../../../utils/datas/ValorantLeaguesData';
+import ValorantData from '../../../utils/datas/ValorantDatas/ValorantLeaguesData';
 
 // Redux Import
 import {connect, useDispatch} from 'react-redux';

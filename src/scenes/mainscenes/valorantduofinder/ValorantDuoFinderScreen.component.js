@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, Modal} from 'react-native';
+
+// Style Imports
 import style from './ValorantDuoFinderScreen.component.style';
+import Spinner from '../../../components/Spinner/Spinner.component';
+import {Icon, Button} from 'react-native-elements';
 
 // React Navigation Import
 import {useNavigation} from '@react-navigation/native';
@@ -11,6 +15,16 @@ import firestore from '@react-native-firebase/firestore';
 
 // Loading Screen Import
 import LoadingScreen from '../duofinderloadingscreen/LoadingScreen.component';
+
+// React-Redux Imports
+import {connect, useDispatch} from 'react-redux';
+import {set_modal_visibility} from '../../../actions';
+
+// Time Difference Function
+import * as format from '../../../utils/Formatters';
+
+// Add Post Modal Import
+import AddPostModalValorant from '../../../components/AddPostModalValorant/AddPostModalValorant.component';
 
 // Utils
 import * as selector from '../../../utils/LeagueImageSelectors';
@@ -28,9 +42,13 @@ const ValorantDuoFinderScreen = () => {
   const [cards, setCards] = useState();
   const [currentUsername, setCurrentUsername] = useState();
   const [currentUserIcon, setCurrentUserIcon] = useState();
+  const [loading, setLoading] = useState(false);
 
   // Navigation
   const navigation = useNavigation();
+
+  // Dispatch
+  const dispatch = useDispatch();
 
   const renderItem = ({item}) => {
     return (
@@ -90,19 +108,72 @@ const ValorantDuoFinderScreen = () => {
 
   return (
     <View style={style.container}>
-      <View style={{flex: 1, width: '100%'}}>
-        {cards ? (
+      <Modal animationType="fade" transparent={true} visible={loading}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}>
+          <View
+            style={{
+              height: 100,
+              width: 200,
+              backgroundColor: '#892cdc',
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Spinner color={'yellow'} size={100}></Spinner>
+          </View>
+        </View>
+      </Modal>
+      <AddPostModalValorant />
+      {cards ? (
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
+          <View style={style.headerView}>
+            <Icon
+              name="plus-circle"
+              type="font-awesome"
+              size={35}
+              onPress={() => null}
+              containerStyle={{marginRight: 13}}
+              onPress={() => {
+                dispatch(set_modal_visibility(true));
+              }}
+              color={'green'}
+            />
+            <Icon
+              name="search"
+              type="material-icons"
+              size={35}
+              onPress={() => setFilterVisible(!filterVisible)}
+              containerStyle={{marginRight: 15}}
+            />
+          </View>
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={cards}
             renderItem={renderItem}
           />
-        ) : (
-          <LoadingScreen />
-        )}
-      </View>
+        </View>
+      ) : (
+        <LoadingScreen />
+      )}
     </View>
   );
 };
 
-export default ValorantDuoFinderScreen;
+const mapStateToProps = ({LolAddPostResponse}) => {
+  const {voice_chat, modal_visibility} = LolAddPostResponse;
+
+  return {
+    voice_chat,
+    modal_visibility,
+  };
+};
+
+export default connect(mapStateToProps, {set_modal_visibility})(
+  ValorantDuoFinderScreen,
+);

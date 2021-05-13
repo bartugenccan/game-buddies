@@ -4,19 +4,28 @@ import {Icon} from 'react-native-elements';
 
 import {GiftedChat, Bubble, Send, InputToolbar} from 'react-native-gifted-chat';
 
+// Firebase Imports
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 import style from './ChatScreen.component.style';
 
+import {Websocket} from '../../../utils/services/Websocket';
+var client = new Websocket();
+
 const ChatScreen = ({navigation, route}) => {
-  const [avatar_url, setAvatarUrl] = useState(route.params.avatar_url);
-  const [docID, setDocID] = useState(route.params.docid);
+  const avatar_url = route.params.avatar_url;
+  const docID = route.params.docid;
+  const nickname = route.params.nickname;
+
+  const tokenS = route.params.token;
   const [messages, setMessages] = useState([]);
 
   const db = firestore().collection('messages');
 
   useEffect(() => {
+    client.connect();
+
     const messageListener = db
       .doc(docID)
       .collection('MESSAGES')
@@ -38,7 +47,10 @@ const ChatScreen = ({navigation, route}) => {
         setMessages(messages);
       });
 
-    return () => messageListener();
+    return () => {
+      client.disconnect();
+      messageListener();
+    };
   }, []);
 
   function renderBubble(props) {
@@ -93,6 +105,7 @@ const ChatScreen = ({navigation, route}) => {
 
   const onSend = async messages => {
     const text = messages[0].text;
+
     db.doc(docID)
       .collection('MESSAGES')
       .add({
@@ -107,6 +120,8 @@ const ChatScreen = ({navigation, route}) => {
     db.doc(docID).update({
       recentMessage: text,
     });
+
+    client.sendMessage(nickname, text, tokenS);
   };
 
   function renderInputToolbar(props) {

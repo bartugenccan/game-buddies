@@ -1,26 +1,35 @@
-import React, {useEffect, useState, useCallback} from 'react';
-import {Text, ScrollView, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import {Icon, registerCustomIconType} from 'react-native-elements';
 
+// Gifted Chat Import
 import {GiftedChat, Bubble, Send, InputToolbar} from 'react-native-gifted-chat';
 
+// Firebase Impors
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 
+// Style Imports
 import style from './ChatScreenInDuoFinder.component.style';
+
+// Websocket Class Import
+import {Websocket} from '../../../utils/services/Websocket';
+var client = new Websocket();
 
 const ChatScreenInDuoFinder = ({route}) => {
   // Receiver route.params
   const avatar_url = route.params.avatar_url;
   const useruid = route.params.uid;
   const nickname = route.params.nickname;
+  const receiverToken = route.params.receiverToken;
 
   // Sender route.params
   const currentUsername = route.params.currentUsername;
   const currentUserIcon = route.params.currentUserIcon;
 
   const [messages, setMessages] = useState([]);
-  const [isExist, setIsExist] = useState(null);
+  const [isExist, setIsExist] = useState(false);
 
   const db = firestore().collection('messages');
 
@@ -30,13 +39,12 @@ const ChatScreenInDuoFinder = ({route}) => {
       : auth().currentUser.uid + route.params.uid;
 
   useEffect(() => {
+    client.connect();
     const chatRef = firestore().collection('messages').doc(docID);
     const doc = chatRef.get();
 
     if (doc.exists == true) {
       setIsExist(true);
-    } else if (doc.exists == false) {
-      setIsExist(false);
     }
 
     const messageListener = db
@@ -59,7 +67,10 @@ const ChatScreenInDuoFinder = ({route}) => {
         setMessages(messages);
       });
 
-    return () => messageListener();
+    return () => {
+      client.disconnect();
+      messageListener();
+    };
   }, []);
 
   function renderInputToolbar(props) {
@@ -107,10 +118,12 @@ const ChatScreenInDuoFinder = ({route}) => {
       db.doc(docID).set({
         members: [auth().currentUser.uid, useruid],
         recentMessage: '',
-        [useruid]: [avatar_url, nickname],
-        [auth().currentUser.uid]: [currentUserIcon, currentUsername],
+        [useruid]: [avatar_url, nickname, receiverToken],
+        [auth().currentUser.uid]: [currentUserIcon, currentUsername, userToken],
       });
     }
+
+    setIsExist(true);
 
     db.doc(docID)
       .collection('MESSAGES')
@@ -122,7 +135,10 @@ const ChatScreenInDuoFinder = ({route}) => {
           avatar: avatar_url,
         },
       })
-      .then(db.doc(docID).update({recentMessage: text}));
+      .then(db.doc(docID).update({recentMessage: text}))
+      .then(() => {
+        client.sendMessage(currentUsername, text, receiverToken);
+      });
   };
 
   const renderSend = props => {

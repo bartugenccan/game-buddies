@@ -1,6 +1,14 @@
 // React Imports
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Text, View, TouchableOpacity, Modal, FlatList} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  Alert,
+  Platform,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // Style Imports
@@ -12,6 +20,7 @@ import Spinner from '../../../components/Spinner/Spinner.component';
 // Firebase Imports
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import firebase from '@react-native-firebase/app';
 
 // React Redux Imports
 import {connect, useDispatch} from 'react-redux';
@@ -19,20 +28,55 @@ import {connect, useDispatch} from 'react-redux';
 // Actions Import
 import {set_loading_home, games_set} from '../../../actions';
 
-// Utils Import
+// Messaging Import
+import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
 
 // AsyncStorage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomePage(props) {
   const navigation = useNavigation();
+
   // Dispatch
   const dispatch = useDispatch();
 
   useEffect(async () => {
     dispatch(set_loading_home(true));
+    const unsubscribe = messaging().onMessage(async response => {
+      console.log(response);
+      if (Platform.OS !== 'ios') {
+        showNotification(response.notification);
+        return true;
+      }
+    });
 
-    AsyncStorage.getItem('firstLogin').then(value => {
+    async function showNotification(notification) {
+      // Create a channel
+      const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+      });
+
+      // Display a notification
+      await notifee.displayNotification({
+        title: notification.title,
+        body: notification.body,
+        android: {
+          channelId,
+        },
+      });
+    }
+
+    const unss = messaging().setBackgroundMessageHandler(
+      async remoteMessage => {
+        console.log('xd  ' + remoteMessage.category);
+      },
+    );
+
+    AsyncStorage.getItem('firstLogin').then(async value => {
+      const token = await messaging().getToken();
+
       if (value == null) {
         AsyncStorage.setItem('firstLogin', 'true');
         AsyncStorage.setItem('useruid', auth().currentUser.uid);
@@ -46,6 +90,7 @@ function HomePage(props) {
             resp.docs.forEach(doc => {
               const docRef = firestore().collection('users').doc(doc.id);
               batch.update(docRef, {uid: auth().currentUser.uid});
+              docRef.update({tokenS: token});
             });
             batch.commit().then(() => {
               console.log(auth().currentUser.uid);
@@ -75,6 +120,11 @@ function HomePage(props) {
           doc.ref.update({IsOnline: true});
         });
       });
+
+    () => {
+      unsubscribe();
+      unss();
+    };
   }, [dispatch]);
 
   // When app is close set IsOnline to false.

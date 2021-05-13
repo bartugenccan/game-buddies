@@ -14,5 +14,16 @@ export default StyleSheet.create({
   },
   item: {
     marginHorizontal: 8,
+    borderRadius: 15,
+  },
+  buttonContainer: {
+    width: '50%',
+    height: 50,
+    backgroundColor: '#00cc00',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    marginTop: 30,
   },
 });

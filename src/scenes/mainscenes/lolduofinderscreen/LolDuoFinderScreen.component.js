@@ -4,10 +4,19 @@ import React, {useState, useEffect} from 'react';
 import {View, FlatList, Text, TouchableOpacity, Modal} from 'react-native';
 import style from './LolDuoFinderScreen.component.style';
 import {Icon, Button} from 'react-native-elements';
+
+// List Item Component
 import ItemOfList from '../../../components/Item/Item.component.js';
+import SelfItemLol from '../../../components/SelfItemLol/SelfItemLol.component';
 import LolLeagueFlatListItem from '../../../components/LolLeagueFlatListItem/LolLeagueFlatListItem.component';
+
+// Switch Selector
 import SwitchSelector from 'react-native-switch-selector';
+
+// Loading Spinner
 import Spinner from '../../../components/Spinner/Spinner.component';
+
+// Add Post Modal Component
 import AddPostModal from '../../../components/AddPostModal/AddPostModal.component';
 
 // Loading Screen Import
@@ -46,6 +55,7 @@ import filterFunction from '../../../utils/filterFunction';
 const DuoFinderScreen = props => {
   // Initial States
   const [cards, setCards] = useState();
+  const [selfCard, setSelfCard] = useState();
   const [filterVisible, setFilterVisible] = useState(false);
   const [selectedLeagueLol, setSelectedLeagueLol] = useState([]);
   const [selectedLaneLol, setSelectedLaneLol] = useState([]);
@@ -60,13 +70,11 @@ const DuoFinderScreen = props => {
   // Dispatch
   const dispatch = useDispatch();
 
-  const voiceChatOption = [
-    {label: 'Farketmez', value: 1},
-    {label: 'Sesli Sohbet olsun.', value: 2},
-  ];
+  useEffect(() => {
+    let selfArr = [];
+    let arr = [];
 
-  useEffect(async () => {
-    await firestore()
+    firestore()
       .collection('users')
       .where('UserEmail', '==', auth().currentUser.email)
       .get()
@@ -77,11 +85,32 @@ const DuoFinderScreen = props => {
         });
       });
 
-    let arr = [];
-
-    await firestore()
+    const selfSub = firestore()
       .collection('lolposts')
-      .orderBy('createdAt')
+      .where('uid', '==', auth().currentUser.uid)
+      .get()
+      .then(resp => {
+        resp.forEach(doc => {
+          var today = new Date();
+          selfArr.push({
+            username: doc.data().UserName,
+            avatar_url: doc.data().icon,
+            league: selector.lolLeagueImageSelector(doc.data().rank),
+            tier: methodTier(doc.data().rank),
+            playing_lane: format.LolLaneFormatter(doc.data().playing_lane),
+            wanted_lane: format.LolLaneFormatter(doc.data().wantsLane),
+            ago: format.timeDifference(today, doc.data().createdAt),
+            voice_chat: doc.data().voiceChat,
+          });
+        });
+      })
+      .then(() => {
+        setSelfCard(selfArr);
+      });
+
+    const bigSubs = firestore()
+      .collection('lolposts')
+      .where('uid', '!=', auth().currentUser.uid)
       .limit(20)
       .get()
       .then(resp => {
@@ -97,13 +126,19 @@ const DuoFinderScreen = props => {
             wanted_lane: format.LolLaneFormatter(doc.data().wantsLane),
             ago: format.timeDifference(today, doc.data().createdAt),
             voice_chat: doc.data().voiceChat,
+            token: doc.data().tokenS,
           });
         });
       })
       .then(() => {
         setCards(arr);
       });
-  }, []);
+
+    return function () {
+      bigSubs;
+      selfSub;
+    };
+  }, [cards, selfCard]);
 
   const renderItem = ({item}) => {
     return (
@@ -120,6 +155,22 @@ const DuoFinderScreen = props => {
         voice_chat={item.voice_chat}
         currentUserIcon={currentUserIcon}
         currentUsername={currentUsername}
+        token={item.token}
+      />
+    );
+  };
+
+  const renderSelfItem = ({item}) => {
+    return (
+      <SelfItemLol
+        username={item.username}
+        avatar_url={item.avatar_url}
+        league={item.league}
+        tier={item.tier}
+        playingLane={item.playing_lane}
+        wantsLane={item.wanted_lane}
+        ago={item.ago}
+        voice_chat={item.voice_chat}
       />
     );
   };
@@ -341,10 +392,53 @@ const DuoFinderScreen = props => {
 
           {renderChoice(filterVisible)}
 
+          <View>
+            <FlatList
+              keyExtractor={(item, index) => index.toString()}
+              data={selfCard}
+              renderItem={renderSelfItem}
+              ListHeaderComponent={
+                <View style={{marginLeft: 25}}>
+                  <Text style={{color: 'black', fontFamily: 'Roboto-Bold'}}>
+                    Benim İlanım
+                  </Text>
+                </View>
+              }
+              ListEmptyComponent={
+                <View
+                  style={{
+                    width: '100%',
+                    height: 75,
+
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: 'Roboto-Medium',
+                      color: 'gray',
+                      fontSize: 12,
+                      width: '60%',
+                      textAlign: 'center',
+                    }}>
+                    İlan oluşturduktan sonra burdan ilanını inceleyebilirsin.
+                  </Text>
+                </View>
+              }
+            />
+          </View>
+
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={cards}
             renderItem={renderItem}
+            ListHeaderComponent={
+              <View style={{marginLeft: 25}}>
+                <Text style={{color: 'black', fontFamily: 'Roboto-Bold'}}>
+                  Tüm İlanlar
+                </Text>
+              </View>
+            }
           />
         </View>
       ) : (

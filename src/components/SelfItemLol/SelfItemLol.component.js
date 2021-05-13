@@ -1,9 +1,13 @@
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, Alert} from 'react-native';
 import {Avatar, Icon} from 'react-native-elements';
 import {Card} from 'react-native-shadow-cards';
 
-import style from './Item.component.style';
+import style from './SelfItemLol.component.style';
+
+// Firebase Import
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 // Lane Image Selector Function with switch-case
 const laneImageSelector = i => {
@@ -23,20 +27,27 @@ const laneImageSelector = i => {
   }
 };
 
-const ItemOfList = ({
-  uid,
+const deletePost = async () => {
+  await firestore()
+    .collection('lolposts')
+    .where('uid', '==', auth().currentUser.uid)
+    .get()
+    .then(resp => {
+      resp.forEach(doc => {
+        doc.ref.delete();
+      });
+    });
+};
+
+const SelfItemLol = ({
   username,
   avatar_url,
   league,
   tier,
   playingLane,
   wantsLane,
-  navigation,
   ago,
   voice_chat,
-  currentUsername,
-  currentUserIcon,
-  token,
 }) => (
   <TouchableOpacity
     style={{
@@ -45,16 +56,22 @@ const ItemOfList = ({
       overflow: 'hidden',
       alignSelf: 'center',
     }}
-    onPress={() =>
-      navigation.navigate('ChatScreenInDuoFinder', {
-        uid: uid,
-        avatar_url: avatar_url,
-        nickname: username,
-        currentUsername: currentUsername,
-        currentUserIcon: currentUserIcon,
-        receiverToken: token,
-      })
-    }
+    onLongPress={() => {
+      Alert.alert(
+        'İlanınızı kaldırmak istiyor musunuz ?',
+        'İlanınızı kaldırarak daha sonra yeni bir ilan oluşturabilirsiniz.',
+        [
+          {
+            text: 'Vazgeç',
+            onPress: () => null,
+          },
+          {
+            text: 'Kaldır',
+            onPress: () => deletePost(),
+          },
+        ],
+      );
+    }}
     activeOpacity={1}>
     <Card style={style.container}>
       <View style={style.avatarView}>
@@ -205,4 +222,4 @@ const ItemOfList = ({
   </TouchableOpacity>
 );
 
-export default ItemOfList;
+export default SelfItemLol;

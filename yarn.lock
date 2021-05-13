@@ -981,6 +981,11 @@
     "@types/yargs" "^15.0.0"
     "chalk" "^4.0.0"
 
+"@notifee/react-native@^1.6.0":
+  "integrity" "sha512-ipVoU8SxAT/J7bSDDtbk922TfzJGY9+fHLUOGt0EwSUCdciesWdcbrM7sORdGiluAln5/eK2WJeFKlcNUTI7HQ=="
+  "resolved" "https://registry.npmjs.org/@notifee/react-native/-/react-native-1.6.0.tgz"
+  "version" "1.6.0"
+
 "@react-native-async-storage/async-storage@^1.15.4":
   "integrity" "sha512-pC0MS6UBuv/YiVAxtzi7CgUed8oCQNYMtGt0yb/I9fI/BWTiJK5cj4YtW2XtL95K5IuvPX/6uGWaouZ8KqXwdg=="
   "resolved" "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.15.4.tgz"
@@ -1141,23 +1146,28 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.10.tgz"
   "version" "0.1.10"
 
-"@react-native-firebase/app@^11.3.2", "@react-native-firebase/app@11.3.2":
-  "integrity" "sha512-6W+Wrnj9X3zCicwWs/fMRMPhdSCNDASeypltmqAGr0jupdB5eV3dd0BoQa10xT6yw8U5QBvZSS0jXHrPWcIIdA=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-11.3.2.tgz"
-  "version" "11.3.2"
+"@react-native-firebase/app@^11.2.0", "@react-native-firebase/app@11.2.0":
+  "integrity" "sha512-TLrttjy6h5rhmRqnKFe67GNbYeB1VZphH5Gm+pYJzfIbMsh/m6q2Au1D4jmLnfjpqXAaTtAhetnODyT1TH/LzQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-11.2.0.tgz"
+  "version" "11.2.0"
   dependencies:
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
 
-"@react-native-firebase/auth@^11.3.2":
-  "integrity" "sha512-/syhrRJccE0MuWiNYY95AVyNbmc8qZVOH0CY2qJKdwhCAIfc6b6h3RqztoFqv9phdWpdSvhBKscNUx2Ejm17Tg=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-11.3.2.tgz"
-  "version" "11.3.2"
+"@react-native-firebase/auth@^11.2.0":
+  "integrity" "sha512-lySvD0UrhQ+ERTp+ZViGPNWfKRLBZAfdK5RgdudbKyUqxiGS0Wx0lI6XMh0A7yT7yMKbhE2cSWAoJPYsEGG9mg=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-11.2.0.tgz"
+  "version" "11.2.0"
 
-"@react-native-firebase/firestore@^11.3.2":
-  "integrity" "sha512-ThwjyQOWrrER2QNQ8hb0GvayQXDffBwsv7oMcjeA4dI1QbwmsH9x9Tg5aXQL4olMIP+il2BjHyPZSFBK5/F4Hw=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-11.3.2.tgz"
-  "version" "11.3.2"
+"@react-native-firebase/firestore@^11.2.0":
+  "integrity" "sha512-UdSp/qn/jqe9a48ThscdgOg6rGFQLvoSqr+NKZz/TDImkCz0udobyYEMhLePyyzjsOcEtkmFkxw9640EKdzmwg=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-11.2.0.tgz"
+  "version" "11.2.0"
+
+"@react-native-firebase/messaging@^11.2.0":
+  "integrity" "sha512-TSfEpTqZGf/eQ/5qTVyhX74YvOkk4Kx7Dq/y6XBz8rYFEyxayjpJ/RV9SXTUbDYunOyhC7EUJxcWvG6C5AjoTw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-11.2.0.tgz"
+  "version" "11.2.0"
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
@@ -1280,6 +1290,11 @@
   "version" "7.11.1"
   dependencies:
     "@babel/types" "^7.3.0"
+
+"@types/component-emitter@^1.2.10":
+  "integrity" "sha512-bsjleuRKWmGqajMerkzox19aGbscQX5rmmvvXl3wlIp5gMG1HgkiwPxsN5p070fBDKTNSPgojVbuY1+HWMbFhg=="
+  "resolved" "https://registry.npmjs.org/@types/component-emitter/-/component-emitter-1.2.10.tgz"
+  "version" "1.2.10"
 
 "@types/eslint-visitor-keys@^1.0.0":
   "integrity" "sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag=="
@@ -1903,6 +1918,11 @@
     "babel-plugin-jest-hoist" "^26.6.2"
     "babel-preset-current-node-syntax" "^1.0.0"
 
+"backo2@~1.0.2":
+  "integrity" "sha1-MasayLEpNjRj41s+u2n038+6eUc="
+  "resolved" "https://registry.npmjs.org/backo2/-/backo2-1.0.2.tgz"
+  "version" "1.0.2"
+
 "balanced-match@^1.0.0":
   "integrity" "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
   "resolved" "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz"
@@ -1920,6 +1940,11 @@
     "isobject" "^3.0.1"
     "mixin-deep" "^1.2.0"
     "pascalcase" "^0.1.1"
+
+"base64-arraybuffer@0.1.4":
+  "integrity" "sha1-mBjHngWbE1X5fgQooBfIOOkLqBI="
+  "resolved" "https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.4.tgz"
+  "version" "0.1.4"
 
 "base64-js@^1.1.2", "base64-js@^1.5.1":
   "integrity" "sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA=="
@@ -2329,7 +2354,7 @@
   "resolved" "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz"
   "version" "1.0.1"
 
-"component-emitter@^1.2.1":
+"component-emitter@^1.2.1", "component-emitter@~1.3.0":
   "integrity" "sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg=="
   "resolved" "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz"
   "version" "1.3.0"
@@ -2493,7 +2518,7 @@
   dependencies:
     "ms" "2.0.0"
 
-"debug@^4.0.1", "debug@^4.1.0", "debug@^4.1.1":
+"debug@^4.0.1", "debug@^4.1.0", "debug@^4.1.1", "debug@~4.3.1":
   "integrity" "sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ=="
   "resolved" "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz"
   "version" "4.3.1"
@@ -2682,6 +2707,28 @@
   "version" "1.4.4"
   dependencies:
     "once" "^1.4.0"
+
+"engine.io-client@~5.1.1":
+  "integrity" "sha512-jPFpw2HLL0lhZ2KY0BpZhIJdleQcUO9W1xkIpo0h3d6s+5D6+EV/xgQw9qWOmymszv2WXef/6KUUehyxEKomlQ=="
+  "resolved" "https://registry.npmjs.org/engine.io-client/-/engine.io-client-5.1.1.tgz"
+  "version" "5.1.1"
+  dependencies:
+    "base64-arraybuffer" "0.1.4"
+    "component-emitter" "~1.3.0"
+    "debug" "~4.3.1"
+    "engine.io-parser" "~4.0.1"
+    "has-cors" "1.1.0"
+    "parseqs" "0.0.6"
+    "parseuri" "0.0.6"
+    "ws" "~7.4.2"
+    "yeast" "0.1.2"
+
+"engine.io-parser@~4.0.1":
+  "integrity" "sha512-sHfEQv6nmtJrq6TKuIz5kyEKH/qSdK56H/A+7DnAuUPWosnIZAS2NHNcPLmyjtY3cGS/MqJdZbUjW97JU72iYg=="
+  "resolved" "https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-4.0.2.tgz"
+  "version" "4.0.2"
+  dependencies:
+    "base64-arraybuffer" "0.1.4"
 
 "enquirer@^2.3.5":
   "integrity" "sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg=="
@@ -3447,6 +3494,11 @@
   "integrity" "sha512-LSBS2LjbNBTf6287JEbEzvJgftkF5qFkmCo9hDRpAzKhUOlJ+hx8dd4USs00SgsUNwc4617J9ki5YtEClM2ffA=="
   "resolved" "https://registry.yarnpkg.com/has-bigints/-/has-bigints-1.0.1.tgz"
   "version" "1.0.1"
+
+"has-cors@1.1.0":
+  "integrity" "sha1-XkdHk/fqmEPRu5nCPu9J/xJv/zk="
+  "resolved" "https://registry.npmjs.org/has-cors/-/has-cors-1.1.0.tgz"
+  "version" "1.1.0"
 
 "has-flag@^3.0.0":
   "integrity" "sha1-tdRU3CGZriJWmfNGfloH87lVuv0="
@@ -5660,6 +5712,16 @@
   "resolved" "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz"
   "version" "6.0.1"
 
+"parseqs@0.0.6":
+  "integrity" "sha512-jeAGzMDbfSHHA091hr0r31eYfTig+29g3GKKE/PPbEQ65X0lmMwlEoqmhzu0iztID5uJpZsFlUPDP8ThPL7M8w=="
+  "resolved" "https://registry.npmjs.org/parseqs/-/parseqs-0.0.6.tgz"
+  "version" "0.0.6"
+
+"parseuri@0.0.6":
+  "integrity" "sha512-AUjen8sAkGgao7UyCX6Ahv0gIK2fABKmYjvP4xmy5JaKvcbTRueIqIPHLAfq30xJddqSE033IOMUSOMCcK3Sow=="
+  "resolved" "https://registry.npmjs.org/parseuri/-/parseuri-0.0.6.tgz"
+  "version" "0.0.6"
+
 "parseurl@~1.3.3":
   "integrity" "sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ=="
   "resolved" "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.3.tgz"
@@ -6864,6 +6926,28 @@
     "source-map-resolve" "^0.5.0"
     "use" "^3.1.0"
 
+"socket.io-client@^4.1.1":
+  "integrity" "sha512-avzRzFZIkmyNxqvhmm5ns0Itq5dgEkesDPB6Tl0Yben47U08MvdFnVXAuFDULQhDXjuYdCb6QUEILYLUKQEuGg=="
+  "resolved" "https://registry.npmjs.org/socket.io-client/-/socket.io-client-4.1.1.tgz"
+  "version" "4.1.1"
+  dependencies:
+    "@types/component-emitter" "^1.2.10"
+    "backo2" "~1.0.2"
+    "component-emitter" "~1.3.0"
+    "debug" "~4.3.1"
+    "engine.io-client" "~5.1.1"
+    "parseuri" "0.0.6"
+    "socket.io-parser" "~4.0.4"
+
+"socket.io-parser@~4.0.4":
+  "integrity" "sha512-t+b0SS+IxG7Rxzda2EVvyBZbvFPBCjJoyHuE0P//7OAsN23GItzDRdWa6ALxZI/8R5ygK7jAR6t028/z+7295g=="
+  "resolved" "https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-4.0.4.tgz"
+  "version" "4.0.4"
+  dependencies:
+    "@types/component-emitter" "^1.2.10"
+    "component-emitter" "~1.3.0"
+    "debug" "~4.3.1"
+
 "source-map-resolve@^0.5.0":
   "integrity" "sha512-Htz+RnsXWk5+P2slx5Jh3Q66vhQj1Cllm0zvnaY98+NFx+Dv2CF/f5O/t8x+KaNdrdIAsruNzoh/KpialbqAnw=="
   "resolved" "https://registry.yarnpkg.com/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
@@ -7746,6 +7830,11 @@
   "resolved" "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz"
   "version" "7.4.5"
 
+"ws@~7.4.2":
+  "integrity" "sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g=="
+  "resolved" "https://registry.npmjs.org/ws/-/ws-7.4.5.tgz"
+  "version" "7.4.5"
+
 "xcode@^2.0.0":
   "integrity" "sha512-uCrmPITrqTEzhn0TtT57fJaNaw8YJs1aCzs+P/QqxsDbvPZSv7XMPPwXrKvHtD6pLjBM/NaVwraWJm8q83Y4iQ=="
   "resolved" "https://registry.yarnpkg.com/xcode/-/xcode-2.1.0.tgz"
@@ -7874,3 +7963,8 @@
     "which-module" "^1.0.0"
     "y18n" "^3.2.1"
     "yargs-parser" "^4.2.0"
+
+"yeast@0.1.2":
+  "integrity" "sha1-AI4G2AlDIMNy28L47XagymyKxBk="
+  "resolved" "https://registry.npmjs.org/yeast/-/yeast-0.1.2.tgz"
+  "version" "0.1.2"
