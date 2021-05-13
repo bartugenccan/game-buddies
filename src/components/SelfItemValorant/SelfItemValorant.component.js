@@ -3,7 +3,7 @@ import {TouchableOpacity, Text, View, Dimensions} from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 import {Avatar, Icon} from 'react-native-elements';
 
-import style from './ItemOfValorant.component.style';
+import style from './SelfItemValorant.component';
 
 const champImageSelector = c => {
   switch (c) {
@@ -86,18 +86,14 @@ const renderChamps = arr => {
   }
 };
 
-const ItemOfValorant = ({
+const SelfItemValorant = ({
   avatar_url,
   username,
   league,
   tier,
   ago,
   uid,
-  currentUsername,
-  currentUserIcon,
   voice_chat,
-  navigation,
-  token,
 }) => (
   <TouchableOpacity
     style={{
@@ -105,16 +101,6 @@ const ItemOfValorant = ({
       flexDirection: 'row',
       overflow: 'hidden',
       alignSelf: 'center',
-    }}
-    onPress={() => {
-      navigation.navigate('ChatScreenInDuoFinder', {
-        uid: uid,
-        avatar_url: avatar_url,
-        nickname: username,
-        currentUserIcon: currentUserIcon,
-        currentUsername: currentUsername,
-        receiverToken: token,
-      });
     }}
     activeOpacity={1}>
     <Card style={style.container}>
@@ -224,4 +210,4 @@ const ItemOfValorant = ({
   </TouchableOpacity>
 );
 
-export default ItemOfValorant;
+export default SelfItemValorant;

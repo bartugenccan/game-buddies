@@ -25,5 +25,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
     marginTop: 30,
+    alignSelf: 'center',
   },
 });

@@ -32,6 +32,8 @@ import {set_modal_visibility} from '../../../actions';
 import SelfItemApex from '../../../components/SelfItemApex/SelfItemApex.component';
 
 const ApexDuoFinderScreen = props => {
+  const isMounted = useRef(false);
+
   const [cards, setCards] = useState();
   const [selfCard, setSelfCard] = useState();
 
@@ -47,11 +49,12 @@ const ApexDuoFinderScreen = props => {
 
   // Dispatch
   const dispatch = useDispatch();
-  const mountedRef = useRef(true);
 
   useEffect(() => {
     let realArr = [];
     let selfArr = [];
+
+    isMounted.current = true;
 
     firestore()
       .collection('users')
@@ -68,51 +71,50 @@ const ApexDuoFinderScreen = props => {
       .collection('apexposts')
       .where('uid', '==', auth().currentUser.uid)
       .limit(20)
-      .get()
-      .then(resp => {
+      .onSnapshot(resp => {
         resp.forEach(doc => {
-          var today = new Date();
-          selfArr.push({
-            uid: doc.data().uid,
-            username: doc.data().UserName,
-            avatar_url: doc.data().icon,
-            league: selector.apexImageSelector(doc.data().rank),
-            ago: format.timeDifference(today, doc.data().createdAt),
-            favChamp: doc.data().favoriteChamp,
-          });
+          if (isMounted.current) {
+            resp.forEach(doc => {
+              var today = new Date();
+              selfArr.push({
+                uid: doc.data().uid,
+                username: doc.data().UserName,
+                avatar_url: doc.data().icon,
+                league: selector.apexImageSelector(doc.data().rank),
+                ago: format.timeDifference(today, doc.data().createdAt),
+                favChamp: doc.data().favoriteChamp,
+              });
+            });
+          }
         });
-      })
-      .then(() => {
-        setSelfCard(selfArr);
       });
 
     const bigItemSubs = firestore()
       .collection('apexposts')
       .where('uid', '!=', auth().currentUser.uid)
       .limit(20)
-      .get()
-      .then(resp => {
+      .onSnapshot(resp => {
         resp.forEach(doc => {
-          var today = new Date();
-          realArr.push({
-            uid: doc.data().uid,
-            username: doc.data().UserName,
-            avatar_url: doc.data().icon,
-            league: selector.apexImageSelector(doc.data().rank),
-            ago: format.timeDifference(today, doc.data().createdAt),
-            token: doc.data().tokenS,
-            favChamp: doc.data().favoriteChamp,
-          });
+          if (isMounted.current == true) {
+            var today = new Date();
+            realArr.push({
+              uid: doc.data().uid,
+              username: doc.data().UserName,
+              avatar_url: doc.data().icon,
+              league: selector.apexImageSelector(doc.data().rank),
+              ago: format.timeDifference(today, doc.data().createdAt),
+              token: doc.data().tokenS,
+              favChamp: doc.data().favoriteChamp,
+            });
+            setCards(realArr);
+          }
         });
-      })
-      .then(() => {
-        setCards(realArr);
       });
 
     return () => {
-      bigItemSubs;
-      selfSub;
-      mountedRef.current = false;
+      isMounted.current = false;
+      bigItemSubs();
+      selfSub();
     };
   }, [cards, selfCard]);
 

@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react';
 
-import {Text, View, FlatList, TouchableOpacity, Modal} from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Modal,
+  Switch,
+} from 'react-native';
 
 // Styling Import
 import {Avatar, Icon, ListItem, Button} from 'react-native-elements';
 import {BallIndicator} from 'react-native-indicators';
 import Toast from 'react-native-simple-toast';
-import SwitchSelector from 'react-native-switch-selector';
 import style from './AddPostModalApex.component.style';
 
 // Data Imports
@@ -29,14 +35,19 @@ const AddPostModalApex = props => {
   // Initial States
   const [selectedLegendApex, setSelectedLegendApex] = useState([]);
   const [username, setUsername] = useState();
-  const [profileIcon, setProfileIcon] = useState();
   const [iconURL, setIconURL] = useState();
   const [token, setToken] = useState();
   const [apexRank, setApexRank] = useState();
-  const [voiceChat, setVoiceChat] = useState();
+  const [isVoiceChat, setVoiceChat] = useState(false);
+
+  // Can Add State
+  const [canAdd, setCanAdd] = useState();
 
   // Loading State
   const [loading, setLoading] = useState(false);
+
+  // Function for Switch
+  const toggleSwitch = () => setVoiceChat(!isVoiceChat);
 
   useEffect(async () => {
     await firestore()
@@ -62,7 +73,7 @@ const AddPostModalApex = props => {
       console.log('createPost');
       await firestore().collection('apexposts').add({
         UserName: username,
-        voiceChat: voiceChat,
+        voiceChat: isVoiceChat,
         createdAt: firestore.FieldValue.serverTimestamp(),
         rank: apexRank,
         icon: iconURL,
@@ -109,7 +120,6 @@ const AddPostModalApex = props => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            setLoading(true);
             _onPress().then(() => setLoading(false));
           }}>
           <Text
@@ -151,7 +161,7 @@ const AddPostModalApex = props => {
     <Modal
       animationType="fade"
       transparent={true}
-      visible={props.modal_visibility}
+      visible={props.modal_visibility} // true
       onRequestClose={() => {
         dispatch(set_modal_visibility(false));
       }}>
@@ -181,20 +191,13 @@ const AddPostModalApex = props => {
               flex: 0.2,
               alignItems: 'center',
             }}>
-            <Avatar
-              source={{
-                uri:
-                  'https://i.pinimg.com/236x/ea/a6/68/eaa668ece7e463e23e42db4c9bab09b2.jpg',
-              }}
-              size={70}
-              rounded
-            />
+            <Avatar source={{uri: iconURL}} size={70} rounded />
             <Text
               style={{
                 fontWeight: 'bold',
                 fontSize: 20,
               }}>
-              Blackmamba97
+              {username}
             </Text>
           </View>
           <View
@@ -220,32 +223,44 @@ const AddPostModalApex = props => {
                 extraData={selectedLegendApex}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={{marginTop: 6, marginBottom: 20}}
+                style={{marginTop: 6}}
               />
             </View>
           </View>
           <View
             style={{
               flex: 0.3,
-              alignItems: 'center',
             }}>
-            <SwitchSelector
-              options={[
-                {label: 'Farketmez', value: true},
-                {label: 'Sesli sohbet olsun', value: false},
-              ]}
-              initial={0}
-              textColor={'#892cdc'}
-              selectedColor={'white'}
-              buttonColor={'#892cdc'}
-              borderRadius={50}
-              hasPadding
-              style={{width: '80%'}}
-              borderColor={'#892cdc'}
-              borderWidth={1}
-              onPress={value => setVoiceChat(value)}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                height: 50,
+              }}>
+              <View
+                style={{
+                  flex: 0.7,
 
+                  justifyContent: 'center',
+                }}>
+                <Text style={{marginLeft: 15, fontFamily: 'Roboto-Medium'}}>
+                  Sesli sohbet kullanıyorum.
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 0.3,
+                  justifyContent: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Switch
+                  trackColor={{false: '#767577', true: '#81b0ff'}}
+                  thumbColor={isVoiceChat ? 'blue' : '#f4f3f4'}
+                  onValueChange={toggleSwitch}
+                  value={isVoiceChat}
+                  style={{marginRight: 10}}
+                />
+              </View>
+            </View>
             <View style={style.buttonContainer}>{renderButton()}</View>
           </View>
         </View>

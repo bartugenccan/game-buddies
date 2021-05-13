@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
 // Style Imports
 import {View, FlatList, Text, TouchableOpacity, Modal} from 'react-native';
@@ -53,6 +53,8 @@ const methodTier = str => {
 import filterFunction from '../../../utils/filterFunction';
 
 const DuoFinderScreen = props => {
+  const isMounted = useRef(false);
+
   // Initial States
   const [cards, setCards] = useState();
   const [selfCard, setSelfCard] = useState();
@@ -72,7 +74,8 @@ const DuoFinderScreen = props => {
 
   useEffect(() => {
     let selfArr = [];
-    let arr = [];
+
+    isMounted.current = true;
 
     firestore()
       .collection('users')
@@ -88,8 +91,9 @@ const DuoFinderScreen = props => {
     const selfSub = firestore()
       .collection('lolposts')
       .where('uid', '==', auth().currentUser.uid)
-      .get()
-      .then(resp => {
+      .limit(20)
+      .onSnapshot(resp => {
+        let selfArr = [];
         resp.forEach(doc => {
           var today = new Date();
           selfArr.push({
@@ -103,8 +107,6 @@ const DuoFinderScreen = props => {
             voice_chat: doc.data().voiceChat,
           });
         });
-      })
-      .then(() => {
         setSelfCard(selfArr);
       });
 
@@ -112,8 +114,8 @@ const DuoFinderScreen = props => {
       .collection('lolposts')
       .where('uid', '!=', auth().currentUser.uid)
       .limit(20)
-      .get()
-      .then(resp => {
+      .onSnapshot(resp => {
+        const arr = [];
         resp.forEach(doc => {
           var today = new Date();
           arr.push({
@@ -129,16 +131,14 @@ const DuoFinderScreen = props => {
             token: doc.data().tokenS,
           });
         });
-      })
-      .then(() => {
         setCards(arr);
       });
 
-    return function () {
-      bigSubs;
-      selfSub;
+    return () => {
+      selfSub();
+      bigSubs();
     };
-  }, [cards, selfCard]);
+  }, []);
 
   const renderItem = ({item}) => {
     return (
