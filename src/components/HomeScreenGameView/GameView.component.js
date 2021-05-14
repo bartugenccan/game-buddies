@@ -1,7 +1,6 @@
 import React from 'react';
 import {ImageBackground, View} from 'react-native';
 import style from './GameView.component.style';
-import {useNavigation} from '@react-navigation/native';
 
 const GameView = ({gameName, gameImage}) => {
   return (

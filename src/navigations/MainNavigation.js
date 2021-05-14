@@ -6,7 +6,10 @@ import HomePageNavigation from '../navigations/HomePageNavigation';
 import ProfileScreen from '../scenes/mainscenes/profilescreen/ProfileScreen.component';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {Icon} from 'react-native-elements';
+
+// Stack Imports
 import ChatStack from './ChatStack';
+import ProfileScreenStack from './ProfileScreenStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,11 +17,13 @@ const MainNavigation = () => {
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
     const hideOnScreens = [
+      'ProfileEdit',
       'LolDuoFinder',
       'Chat',
       'ApexDuoFinder',
       'ValorantDuoFinder',
       'ChatScreenInDuoFinder',
+      'EmailVerifyScreen',
     ];
     if (hideOnScreens.indexOf(routeName) > -1) {
       return false;
@@ -61,12 +66,13 @@ const MainNavigation = () => {
 
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
-        options={{
+        component={ProfileScreenStack}
+        options={({route}) => ({
+          tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: () => (
             <Icon name="user" type="font-awesome" color="white" size={30} />
           ),
-        }}></Tab.Screen>
+        })}></Tab.Screen>
     </Tab.Navigator>
   );
 };

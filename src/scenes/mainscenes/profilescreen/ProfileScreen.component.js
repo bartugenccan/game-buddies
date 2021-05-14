@@ -19,6 +19,9 @@ import Spinner from '../../../components/Spinner/Spinner.component';
 import style from './ProfileScreen.component.style';
 import {ListItem, Avatar, Icon, Button} from 'react-native-elements';
 
+// React-Navigation Import
+import {useNavigation} from '@react-navigation/native';
+
 // Action Import
 import {
   profile_screen_stats_set,
@@ -31,6 +34,7 @@ import ValorantData from '../../../utils/datas/ValorantDatas/ValorantLeaguesData
 
 // Redux Import
 import {connect, useDispatch} from 'react-redux';
+
 // Util Import
 import * as selector from '../../../utils/LeagueImageSelectors';
 
@@ -48,10 +52,15 @@ const Item = ({item, onPress, borderWidth}) => (
 );
 
 const ProfileScreen = props => {
+  // Navigation
+  const navigation = useNavigation();
+
+  // Dispatch
   const dispatch = useDispatch();
 
   // Initial States
   const [username, setUsername] = useState('');
+  const [bio, setBio] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [game, setGame] = useState();
   const [loading, setLoading] = useState(false);
@@ -67,6 +76,7 @@ const ProfileScreen = props => {
         .then(resp => {
           resp.forEach(doc => {
             setUsername(doc.data().UserName);
+            setBio(doc.data().bio);
 
             if (doc.data().LolAccount != null) {
               let source = selector.lolLeagueImageSelector(
@@ -232,9 +242,7 @@ const ProfileScreen = props => {
                         dispatch(
                           profile_screen_league_set('Apex Legends', elem.name),
                         );
-                        // firebase de hallet agaaaaa!!
                       }
-
                       setModalVisible(false);
                     });
                   }}
@@ -328,8 +336,7 @@ const ProfileScreen = props => {
       style={{
         backgroundColor: '#fff',
         height: '100%',
-        width:
-          '100%' /* Maybe can write flex : 1 , instead of height : 100 and width : 100*/,
+        width: '100%',
       }}>
       <Modal animationType="fade" transparent={true} visible={loading}>
         <View
@@ -377,12 +384,26 @@ const ProfileScreen = props => {
                 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Diana_0.jpg',
             }}
             style={style.coverImage}>
+            <TouchableOpacity
+              style={{alignSelf: 'flex-end', marginRight: 15, marginTop: 10}}>
+              <Icon
+                type="font-awesome"
+                name="gear"
+                color="#fff"
+                size={25}
+                onPress={() => navigation.navigate('ProfileEdit')}
+              />
+            </TouchableOpacity>
             <View style={style.coverTitleContainer}>
               <Text style={style.coverTitle} />
             </View>
             <View style={style.coverMetaContainer}>
               <Text style={style.coverName}>{username}</Text>
-              <Text style={style.coverBio}>Saas</Text>
+              <Text style={style.coverBio}>
+                {bio == ''
+                  ? 'Profilinizi ayarlamak için ekranin sağ üstündeki ikona basabilirsin'
+                  : bio}
+              </Text>
             </View>
           </ImageBackground>
         </View>
