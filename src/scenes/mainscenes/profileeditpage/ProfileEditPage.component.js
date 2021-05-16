@@ -24,7 +24,7 @@ const ProfileEditPage = () => {
     {
       title: 'Profilimi Düzenle',
       icon: 'user',
-      onPress: console.log('Beratto'),
+      onPress: () => navigation.navigate('Edit'),
     },
     {
       title: 'E-Postamı Doğrula',

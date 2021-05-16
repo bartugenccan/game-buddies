@@ -76,7 +76,6 @@ const ProfileScreen = props => {
         .then(resp => {
           resp.forEach(doc => {
             setUsername(doc.data().UserName);
-            setBio(doc.data().bio);
 
             if (doc.data().LolAccount != null) {
               let source = selector.lolLeagueImageSelector(
@@ -118,10 +117,23 @@ const ProfileScreen = props => {
         });
     };
 
+    const subToBio = firestore()
+      .collection('users')
+      .where('UserEmail', '==', auth().currentUser.email)
+      .onSnapshot(resp => {
+        resp.forEach(doc => {
+          setBio(doc.data().bio);
+        });
+      });
+
     setLoading(true);
     fetchProfile().then(() => {
       setLoading(false);
     });
+
+    () => {
+      subToBio();
+    };
   }, [dispatch]);
 
   // OnPress event for select league

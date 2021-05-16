@@ -75,7 +75,7 @@ function HomePage(props) {
     );
 
     AsyncStorage.getItem('firstLogin').then(async value => {
-      const token = await messaging().getToken();
+      //const token = await messaging().getToken();
 
       if (value == null) {
         AsyncStorage.setItem('firstLogin', 'true');
@@ -90,7 +90,7 @@ function HomePage(props) {
             resp.docs.forEach(doc => {
               const docRef = firestore().collection('users').doc(doc.id);
               batch.update(docRef, {uid: auth().currentUser.uid});
-              docRef.update({tokenS: token});
+              //docRef.update({tokenS: token});
             });
             batch.commit().then(() => {
               console.log(auth().currentUser.uid);

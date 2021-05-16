@@ -24,6 +24,7 @@ const MainNavigation = () => {
       'ValorantDuoFinder',
       'ChatScreenInDuoFinder',
       'EmailVerifyScreen',
+      'Edit',
     ];
     if (hideOnScreens.indexOf(routeName) > -1) {
       return false;
