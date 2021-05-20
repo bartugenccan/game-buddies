@@ -65,74 +65,77 @@ const ProfileScreen = props => {
   const [game, setGame] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedID, setSelectedID] = useState(null);
+  const [profileIconUrl, setProfileIconUrl] = useState(
+    'https://i.pinimg.com/originals/1c/cd/aa/1ccdaaab931962febc8644df28084afb.jpg',
+  );
+  const [backgroundUrl, setBackgroundUrl] = useState(
+    'https://i.pinimg.com/originals/1c/cd/aa/1ccdaaab931962febc8644df28084afb.jpg',
+  );
 
   useEffect(() => {
-    const games = [];
-    const fetchProfile = async () => {
-      await firestore()
-        .collection('users')
-        .where('UserEmail', '==', auth().currentUser.email)
-        .get()
-        .then(resp => {
-          resp.forEach(doc => {
-            setUsername(doc.data().UserName);
-
-            if (doc.data().LolAccount != null) {
-              let source = selector.lolLeagueImageSelector(
-                doc.data().LolAccount['SoloQueueRanked'],
-              );
-              games.push({
-                name: 'League Of Legends',
-                avatar_url: require('../../../assets/images/League_of_Legends_icon.png'),
-                league: source,
-                subtitle: doc.data().LolAccount['Nickname'],
-              });
-            }
-            if (doc.data().ValorantAccount != null) {
-              let source = selector.valorantImageSelector(
-                doc.data().ValorantAccount['League'],
-              );
-
-              games.push({
-                name: 'Valorant',
-                avatar_url: require('../../../assets/images/Valorant_icon.png'),
-                league: source,
-                subtitle: doc.data().ValorantAccount['Nickname'],
-              });
-            }
-            if (doc.data().ApexAccount != null) {
-              let source = selector.apexImageSelector(
-                doc.data().ApexAccount['League'],
-              );
-              games.push({
-                name: 'Apex Legends',
-                avatar_url: require('../../../assets/images/Apex_Legends_icon.png'),
-                league: source,
-                subtitle: doc.data().ApexAccount['Nickname'],
-              });
-            }
-          });
-
-          dispatch(profile_screen_stats_set(games));
-        });
-    };
-
     const subToBio = firestore()
       .collection('users')
       .where('UserEmail', '==', auth().currentUser.email)
       .onSnapshot(resp => {
         resp.forEach(doc => {
           setBio(doc.data().bio);
+          console.log(doc.data().bio);
         });
       });
 
-    setLoading(true);
-    fetchProfile().then(() => {
-      setLoading(false);
-    });
+    const subToProfile = firestore()
+      .collection('users')
+      .where('UserEmail', '==', auth().currentUser.email)
+      .onSnapshot(resp => {
+        const games = [];
+        resp.forEach(doc => {
+          setUsername(doc.data().UserName);
+          setProfileIconUrl(doc.data().iconUrl);
+          setBackgroundUrl(doc.data().backgroundUrl);
+
+          if (doc.data().LolAccount != null) {
+            let source = selector.lolLeagueImageSelector(
+              doc.data().LolAccount['SoloQueueRanked'],
+            );
+            games.push({
+              name: 'League Of Legends',
+              avatar_url: require('../../../assets/images/League_of_Legends_icon.png'),
+              league: source,
+              subtitle: doc.data().LolAccount['Nickname'],
+            });
+          }
+          if (doc.data().ValorantAccount != null) {
+            let source = selector.valorantImageSelector(
+              doc.data().ValorantAccount['League'],
+            );
+
+            games.push({
+              name: 'Valorant',
+              avatar_url: require('../../../assets/images/Valorant_icon.png'),
+              league: source,
+              subtitle: doc.data().ValorantAccount['Nickname'],
+            });
+          }
+
+          if (doc.data().ApexAccount != null) {
+            let source = selector.apexImageSelector(
+              doc.data().ApexAccount['League'],
+            );
+            games.push({
+              name: 'Apex Legends',
+              avatar_url: require('../../../assets/images/Apex_Legends_icon.png'),
+              league: source,
+              subtitle: doc.data().ApexAccount['Nickname'],
+            });
+          }
+        });
+
+        dispatch(profile_screen_stats_set(games));
+      });
 
     () => {
       subToBio();
+      subToProfile();
     };
   }, [dispatch]);
 
@@ -392,8 +395,7 @@ const ProfileScreen = props => {
         <View style={style.coverContainer}>
           <ImageBackground
             source={{
-              uri:
-                'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Diana_0.jpg',
+              uri: backgroundUrl,
             }}
             style={style.coverImage}>
             <TouchableOpacity
@@ -422,8 +424,7 @@ const ProfileScreen = props => {
         <View style={style.profileImageContainer}>
           <Image
             source={{
-              uri:
-                'https://cdn.icon-icons.com/icons2/1736/PNG/512/4043260-avatar-male-man-portrait_113269.png',
+              uri: profileIconUrl,
             }}
             style={style.profileImage}
           />
@@ -462,7 +463,20 @@ const ProfileScreen = props => {
           keyExtractor={keyExtractor}
           data={props.profile_games_arr}
           renderItem={renderItem}
-          contentContainerStyle={{backgroundColor: 'red'}}
+          contentContainerStyle={{backgroundColor: '#fff'}}
+          ListEmptyComponent={
+            <Text
+              style={{
+                alignSelf: 'center',
+                fontSize: 12,
+                marginTop: 30,
+                textAlign: 'center',
+                color: 'gray',
+              }}>
+              Oyunlarının ve liglerini profilinde görmek için anasayfadan
+              hesabını bağlaman gerek.
+            </Text>
+          }
         />
       </View>
       <View

@@ -15,10 +15,16 @@ import EditProfileAvatar from '../../../components/EditProfileAvatar/EditProfile
 // Avatar Select Modal Import
 import ProfileUrlModal from '../../../components/ProfileUrlModal/ProfileUrlModal.component';
 
+// Background Select Modal Import
+import ProfileBackgroundModal from '../../../components/ProfileBackgroundModal/ProfileBackgroundModal.component';
+
 const EditScreen = () => {
   const [bio, setBio] = useState('');
-  const [canSaveBio, setCanSaveBio] = useState(false);
-  const [profileIconModalVisib, setProfileIconModalVisib] = useState(true);
+  const [profileIconModalVisib, setProfileIconModalVisib] = useState(false);
+  const [
+    profileBackgroundModalVisib,
+    setProfileBackgroundModalVisib,
+  ] = useState(false);
 
   const _onPress = () => {
     console.log('bio.length ==  ' + bio.length);
@@ -44,6 +50,7 @@ const EditScreen = () => {
       ]);
     }
   };
+
   const renderView = () => {
     if (bio.length <= 60 && bio.length != 0) {
       return (
@@ -68,9 +75,20 @@ const EditScreen = () => {
     }
   };
 
+  const _closeFunc = () => {
+    setProfileIconModalVisib(false);
+  };
+
+  const _closeFuncBg = () => {
+    setProfileBackgroundModalVisib(false);
+  };
   return (
     <View style={{flex: 1}}>
-      <ProfileUrlModal visible={profileIconModalVisib} />
+      <ProfileUrlModal visible={profileIconModalVisib} closeFunc={_closeFunc} />
+      <ProfileBackgroundModal
+        visible={profileBackgroundModalVisib}
+        closeFunc={_closeFuncBg}
+      />
       <View style={{width: '100%', height: 150, marginTop: 20}}>
         <View
           style={{
@@ -86,7 +104,9 @@ const EditScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{color: '#178bd8', fontSize: 15, marginBottom: 10}}>
+          <Text
+            style={{color: '#178bd8', fontSize: 15, marginBottom: 10}}
+            onPress={() => setProfileIconModalVisib(true)}>
             Profil Fotoğrafını Değiştir
           </Text>
         </View>
@@ -97,7 +117,8 @@ const EditScreen = () => {
           fontSize: 15,
           marginBottom: 10,
           textAlign: 'center',
-        }}>
+        }}
+        onPress={() => setProfileBackgroundModalVisib(true)}>
         Arkaplan Fotoğrafını Değiştir
       </Text>
       <View style={{width: '100%', height: 60, marginTop: 15}}>

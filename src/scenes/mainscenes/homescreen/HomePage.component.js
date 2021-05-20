@@ -20,7 +20,6 @@ import Spinner from '../../../components/Spinner/Spinner.component';
 // Firebase Imports
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import firebase from '@react-native-firebase/app';
 
 // React Redux Imports
 import {connect, useDispatch} from 'react-redux';
@@ -34,6 +33,9 @@ import notifee from '@notifee/react-native';
 
 // AsyncStorage
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Toast Import
+import Toast from 'react-native-simple-toast';
 
 function HomePage(props) {
   const navigation = useNavigation();
@@ -155,7 +157,23 @@ function HomePage(props) {
             marginTop: 20,
             overflow: 'hidden',
           }}
-          onPress={() => navigation.navigate('LolDuoFinder')}
+          onPress={() => {
+            const ref = firestore().collection('users');
+
+            ref.where('uid', '==', auth().currentUser.uid).onSnapshot(resp =>
+              resp.forEach(doc => {
+                if (doc.data().LolAccount['SoloQueueRanked'] == '') {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için öncelikle profil sayfasına gidip oynacağın oyundaki ligini seçmen gerek.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
+                } else if (doc.data().LolAccount['SoloQueueRanked'] != '') {
+                  navigation.navigate('LolDuoFinder');
+                }
+              }),
+            );
+          }}
           activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
@@ -174,7 +192,23 @@ function HomePage(props) {
             marginTop: 10,
             overflow: 'hidden',
           }}
-          onPress={() => navigation.navigate('ValorantDuoFinder')}
+          onPress={() => {
+            const ref = firestore().collection('users');
+
+            ref.where('uid', '==', auth().currentUser.uid).onSnapshot(resp =>
+              resp.forEach(doc => {
+                if (doc.data().ValorantAccount['League'] == '') {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için öncelikle profil sayfasına gidip oynacağın oyundaki ligini seçmen gerek.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
+                } else if (doc.data().ValorantAccount['League'] != '') {
+                  navigation.navigate('ValorantDuoFinder');
+                }
+              }),
+            );
+          }}
           activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
@@ -193,7 +227,23 @@ function HomePage(props) {
             marginTop: 10,
             overflow: 'hidden',
           }}
-          onPress={() => navigation.navigate('ApexDuoFinder')}
+          onPress={() => {
+            const ref = firestore().collection('users');
+
+            ref.where('uid', '==', auth().currentUser.uid).onSnapshot(resp =>
+              resp.forEach(doc => {
+                if (doc.data().ApexAccount['League'] == '') {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için öncelikle profil sayfasına gidip oynacağın oyundaki ligini seçmen gerek.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
+                } else if (doc.data().ApexAccount['League'] != '') {
+                  navigation.navigate('ApexDuoFinder');
+                }
+              }),
+            );
+          }}
           activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}
@@ -212,7 +262,23 @@ function HomePage(props) {
             marginTop: 10,
             overflow: 'hidden',
           }}
-          onPress={() => navigation.navigate('PUBGMobileDuoFinder')}
+          onPress={() => {
+            const ref = firestore().collection('users');
+
+            ref.where('uid', '==', auth().currentUser.uid).onSnapshot(resp =>
+              resp.forEach(doc => {
+                if (doc.data().PUBGMobileAccount['League'] == '') {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için öncelikle profil sayfasına gidip oynacağın oyundaki ligini seçmen gerek.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
+                } else if (doc.data().PUBGMobileAccount['League'] != '') {
+                  navigation.navigate('PUBGMobileDuoFinder');
+                }
+              }),
+            );
+          }}
           activeOpacity={0.7}>
           <GameView
             gameName={item.gameName}

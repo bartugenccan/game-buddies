@@ -131,6 +131,8 @@ const ApexDuoFinderScreen = props => {
         navigation={navigation}
         token={item.token}
         favChamp={item.favChamp}
+        currentUserIcon={currentUserIcon}
+        currentUsername={currentUsername}
       />
     );
   };

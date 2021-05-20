@@ -27,9 +27,11 @@ const ChatScreenInDuoFinder = ({route}) => {
   // Sender route.params
   const currentUsername = route.params.currentUsername;
   const currentUserIcon = route.params.currentUserIcon;
+  console.log(currentUserIcon);
 
   const [messages, setMessages] = useState([]);
   const [isExist, setIsExist] = useState(false);
+  const [userToken, setUserToken] = useState('');
 
   const db = firestore().collection('messages');
 
@@ -46,6 +48,11 @@ const ChatScreenInDuoFinder = ({route}) => {
     if (doc.exists == true) {
       setIsExist(true);
     }
+
+    firestore()
+      .collection('users')
+      .where('uid', '==', auth().currentUser.uid)
+      .onSnapshot(resp => resp.forEach(doc => setUserToken(doc.data().tokenS)));
 
     const messageListener = db
       .doc(docID)

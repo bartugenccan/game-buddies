@@ -1,15 +1,17 @@
-import React, {useEffect, useState, useCallback} from 'react';
-import {Text, ScrollView, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import {Icon} from 'react-native-elements';
 
-import {GiftedChat, Bubble, Send, InputToolbar} from 'react-native-gifted-chat';
+import {GiftedChat, Actions} from 'react-native-gifted-chat';
 
 // Firebase Imports
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-import style from './ChatScreen.component.style';
+// Toolbar Import
+import * as toolbar from '../../../components/InputToolbar/InputToolbar';
 
+// Websocket Import and Initilaze it.
 import {Websocket} from '../../../utils/services/Websocket';
 var client = new Websocket();
 
@@ -53,55 +55,64 @@ const ChatScreen = ({navigation, route}) => {
     };
   }, []);
 
-  function renderBubble(props) {
-    return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          right: {
-            backgroundColor: 'rgb(123,134,170)',
-          },
-          left: {
-            borderRadius: 20,
-          },
-        }}
-        textStyle={{
-          right: {
-            fontFamily: 'segoe-ui-light-2',
-            color: '#fff',
-          },
-        }}
-        containerToPreviousStyle={{
-          right: {borderTopRightRadius: 15},
-          left: {borderTopLeftRadius: 15},
-        }}
-        containerToNextStyle={{
-          right: {borderTopRightRadius: 15},
-          left: {borderTopLeftRadius: 15},
-        }}
-        containerStyle={{
-          right: {borderTopRightRadius: 15},
-          left: {borderTopLeftRadius: 15},
-        }}
-      />
-    );
-  }
+  const renderActions = props => (
+    <Actions
+      {...props}
+      containerStyle={{
+        width: 44,
+        height: 44,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 4,
+        marginRight: 4,
+        marginBottom: 0,
+      }}
+      icon={() => (
+        <Icon
+          name="paper-plane"
+          type={'font-awesome'}
+          size={23}
+          iconStyle={{color: '#892cdc', marginRight: 5}}
+        />
+      )}
+      options={{
+        'Oyun isteği gönder': () => {
+          let inviteMessage = 'Oyun oynamak ister misin ?';
 
-  const renderSend = props => {
-    return (
-      <Send {...props}>
-        <View style={style.sendingContainer}>
-          <Icon
-            name="paper-plane"
-            type={'font-awesome'}
-            size={25}
-            containerStyle={{marginRight: 20}}
-            iconStyle={{color: '#892cdc'}}
-          />
-        </View>
-      </Send>
-    );
-  };
+          db.doc(docID)
+            .collection('MESSAGES')
+            .add({
+              text: inviteMessage,
+              createdAt: new Date().getTime(),
+              user: {
+                _id: 1,
+                avatar: avatar_url,
+              },
+              quickReplies: {
+                type: 'radiobox',
+                keepIt: false,
+                values: [
+                  {
+                    title: '👍 Olur',
+                    value: 'yes',
+                  },
+                  {
+                    title: '👎 Şimdi olmaz',
+                    value: 'no',
+                  },
+                ],
+              },
+            });
+        },
+        Cancel: () => {
+          console.log('');
+        },
+      }}
+      optionTintColor="#222B45"
+    />
+  );
+
+  const onQuickReply = quickReply => {};
 
   const onSend = async messages => {
     const text = messages[0].text;
@@ -124,10 +135,6 @@ const ChatScreen = ({navigation, route}) => {
     client.sendMessage(nickname, text, tokenS);
   };
 
-  function renderInputToolbar(props) {
-    return <InputToolbar {...props} containerStyle={style.input} />;
-  }
-
   return (
     <View style={{backgroundColor: '#ffffff', flex: 1}}>
       <GiftedChat
@@ -137,11 +144,15 @@ const ChatScreen = ({navigation, route}) => {
           _id: auth().currentUser.uid,
           avatar: avatar_url,
         }}
-        renderSend={renderSend}
-        renderBubble={renderBubble}
-        alwaysShowSend
-        renderInputToolbar={props => renderInputToolbar(props)}
+        renderSend={toolbar.renderSend}
+        renderBubble={toolbar.renderBubble}
+        renderInputToolbar={props => toolbar.renderInputToolbar(props)}
+        renderActions={renderActions}
+        renderComposer={toolbar.renderComposer}
         renderUsernameOnMessage
+        alwaysShowSend
+        placeholder="Bir mesaj yazınız..."
+        onQuickReply={quickReply => onQuickReply(quickReply)}
       />
     </View>
   );

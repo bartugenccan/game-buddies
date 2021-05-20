@@ -73,8 +73,6 @@ const DuoFinderScreen = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let selfArr = [];
-
     isMounted.current = true;
 
     firestore()

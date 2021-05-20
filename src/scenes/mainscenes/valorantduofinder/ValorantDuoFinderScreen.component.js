@@ -82,6 +82,7 @@ const ValorantDuoFinderScreen = () => {
         currentUsername={currentUsername}
         navigation={navigation}
         voice_chat={item.voice_chat}
+        token={item.token}
       />
     );
   };
@@ -95,6 +96,7 @@ const ValorantDuoFinderScreen = () => {
         resp.forEach(doc => {
           setCurrentUserIcon(doc.data().iconUrl);
           setCurrentUsername(doc.data().UserName);
+          console.log(doc.data().iconUrl);
         });
       });
 
@@ -129,7 +131,8 @@ const ValorantDuoFinderScreen = () => {
       .onSnapshot(resp => {
         const selfArr = [];
         resp.forEach(doc => {
-          arr.push({
+          var today = new Date();
+          selfArr.push({
             username: doc.data().UserName,
             avatar_url: doc.data().icon,
             league: selector.valorantImageSelector(doc.data().rank),

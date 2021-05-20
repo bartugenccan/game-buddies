@@ -42,17 +42,17 @@ const ProfileEditPage = () => {
     {
       title: 'Kullanıcı Sözleşmemiz',
       icon: 'file',
-      onPress: console.log('Beratto'),
+      onPress: console.log(),
     },
     {
       title: 'Gizlilik Sözleşmemiz',
       icon: 'file',
-      onPress: console.log('Beratto'),
+      onPress: console.log(),
     },
     {
       title: 'Çıkış yap',
       icon: 'log-out',
-      onPress: () => console.log('Beratto'), // auth().signOut();
+      onPress: () => auth().signOut(), //
     },
   ];
 
