@@ -37,7 +37,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Toast Import
 import Toast from 'react-native-simple-toast';
 
-// Websocket Import
 import socket from '../../../utils/services/Websocket';
 
 function HomePage(props) {
@@ -47,9 +46,8 @@ function HomePage(props) {
   const dispatch = useDispatch();
 
   useEffect(async () => {
+    console.log('Beratto');
     dispatch(set_loading_home(true));
-
-    AppState.addEventListener('change', _handleAppStateChange);
 
     const unsubscribe = messaging().onMessage(async response => {
       console.log(response);
