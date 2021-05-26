@@ -13,10 +13,6 @@ import messaging from '@react-native-firebase/messaging';
 // Style Imports
 import style from './ChatScreenInDuoFinder.component.style';
 
-// Websocket Class Import
-import {Websocket} from '../../../utils/services/Websocket';
-var client = new Websocket();
-
 const ChatScreenInDuoFinder = ({route}) => {
   // Receiver route.params
   const avatar_url = route.params.avatar_url;
@@ -142,10 +138,7 @@ const ChatScreenInDuoFinder = ({route}) => {
           avatar: avatar_url,
         },
       })
-      .then(db.doc(docID).update({recentMessage: text}))
-      .then(() => {
-        client.sendMessage(currentUsername, text, receiverToken);
-      });
+      .then(db.doc(docID).update({recentMessage: text}));
   };
 
   const renderSend = props => {

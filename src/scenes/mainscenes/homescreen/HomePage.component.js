@@ -1,12 +1,12 @@
 // React Imports
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {
   Text,
   View,
   TouchableOpacity,
   Modal,
   FlatList,
-  Alert,
+  AppState,
   Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -37,6 +37,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Toast Import
 import Toast from 'react-native-simple-toast';
 
+// Websocket Import
+import socket from '../../../utils/services/Websocket';
+
 function HomePage(props) {
   const navigation = useNavigation();
 
@@ -45,6 +48,9 @@ function HomePage(props) {
 
   useEffect(async () => {
     dispatch(set_loading_home(true));
+
+    AppState.addEventListener('change', _handleAppStateChange);
+
     const unsubscribe = messaging().onMessage(async response => {
       console.log(response);
       if (Platform.OS !== 'ios') {
@@ -77,7 +83,7 @@ function HomePage(props) {
     );
 
     AsyncStorage.getItem('firstLogin').then(async value => {
-      //const token = await messaging().getToken();
+      const token = await messaging().getToken();
 
       if (value == null) {
         AsyncStorage.setItem('firstLogin', 'true');
@@ -92,7 +98,7 @@ function HomePage(props) {
             resp.docs.forEach(doc => {
               const docRef = firestore().collection('users').doc(doc.id);
               batch.update(docRef, {uid: auth().currentUser.uid});
-              //docRef.update({tokenS: token});
+              docRef.update({tokenS: token});
             });
             batch.commit().then(() => {
               console.log(auth().currentUser.uid);
@@ -142,7 +148,6 @@ function HomePage(props) {
             doc.ref.update({IsOnline: false});
           });
         });
-      AsyncStorage.clear();
     };
   }, []);
 

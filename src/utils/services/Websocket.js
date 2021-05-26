@@ -1,28 +1,10 @@
-const SERVER_URL = 'ws://192.168.1.40:9999';
+import io from 'socket.io-client';
 
-import socketIOClient from 'socket.io-client';
+const SERVER_URL = 'ws://207.154.211.28:8000/';
 
-class Websocket {
-  connect() {
-    this.client = socketIOClient(SERVER_URL, {
-      transports: ['websocket'],
-    });
-    this.client.connect();
-  }
+const socket = io(SERVER_URL, {
+  transports: ['websocket'],
+  jsonp: false,
+});
 
-  disconnect() {
-    this.client.disconnect();
-  }
-
-  sendMessage(nickname, text, tokenS) {
-    this.client.send(
-      JSON.stringify({
-        token: tokenS,
-        type: 'Notification',
-        notification: {title: nickname, body: text},
-      }),
-    );
-  }
-}
-
-export {Websocket};
+export default socket;

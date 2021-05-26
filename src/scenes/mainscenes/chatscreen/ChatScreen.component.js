@@ -11,10 +11,6 @@ import auth from '@react-native-firebase/auth';
 // Toolbar Import
 import * as toolbar from '../../../components/InputToolbar/InputToolbar';
 
-// Websocket Import and Initilaze it.
-import {Websocket} from '../../../utils/services/Websocket';
-var client = new Websocket();
-
 const ChatScreen = ({navigation, route}) => {
   const avatar_url = route.params.avatar_url;
   const docID = route.params.docid;
@@ -26,8 +22,6 @@ const ChatScreen = ({navigation, route}) => {
   const db = firestore().collection('messages');
 
   useEffect(() => {
-    client.connect();
-
     const messageListener = db
       .doc(docID)
       .collection('MESSAGES')
@@ -50,7 +44,6 @@ const ChatScreen = ({navigation, route}) => {
       });
 
     return () => {
-      client.disconnect();
       messageListener();
     };
   }, []);
@@ -112,8 +105,6 @@ const ChatScreen = ({navigation, route}) => {
     />
   );
 
-  const onQuickReply = quickReply => {};
-
   const onSend = async messages => {
     const text = messages[0].text;
 
@@ -131,8 +122,6 @@ const ChatScreen = ({navigation, route}) => {
     db.doc(docID).update({
       recentMessage: text,
     });
-
-    client.sendMessage(nickname, text, tokenS);
   };
 
   return (
@@ -152,7 +141,6 @@ const ChatScreen = ({navigation, route}) => {
         renderUsernameOnMessage
         alwaysShowSend
         placeholder="Bir mesaj yazınız..."
-        onQuickReply={quickReply => onQuickReply(quickReply)}
       />
     </View>
   );
