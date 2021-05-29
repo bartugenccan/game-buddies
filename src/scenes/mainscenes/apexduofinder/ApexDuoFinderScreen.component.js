@@ -30,6 +30,7 @@ import {set_modal_visibility} from '../../../actions';
 
 // Self Item Import
 import SelfItemApex from '../../../components/SelfItemApex/SelfItemApex.component';
+import {ScreenStackHeaderBackButtonImage} from 'react-native-screens';
 
 const ApexDuoFinderScreen = props => {
   const isMounted = useRef(false);
@@ -74,17 +75,16 @@ const ApexDuoFinderScreen = props => {
       .onSnapshot(resp => {
         resp.forEach(doc => {
           if (isMounted.current) {
-            resp.forEach(doc => {
-              var today = new Date();
-              selfArr.push({
-                uid: doc.data().uid,
-                username: doc.data().UserName,
-                avatar_url: doc.data().icon,
-                league: selector.apexImageSelector(doc.data().rank),
-                ago: format.timeDifference(today, doc.data().createdAt),
-                favChamp: doc.data().favoriteChamp,
-              });
+            var today = new Date();
+            selfArr.push({
+              uid: doc.data().uid,
+              username: doc.data().UserName,
+              avatar_url: doc.data().icon,
+              league: selector.apexImageSelector(doc.data().rank),
+              ago: format.timeDifference(today, doc.data().createdAt),
+              favChamp: doc.data().favoriteChamp,
             });
+            setSelfCard(selfArr);
           }
         });
       });
