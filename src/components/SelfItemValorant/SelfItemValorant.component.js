@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, Text, View, Dimensions} from 'react-native';
+import {TouchableOpacity, Text, View} from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 import {Avatar, Icon} from 'react-native-elements';
 

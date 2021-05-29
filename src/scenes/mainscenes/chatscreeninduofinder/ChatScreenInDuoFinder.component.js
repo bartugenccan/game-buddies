@@ -37,7 +37,6 @@ const ChatScreenInDuoFinder = ({route}) => {
       : auth().currentUser.uid + route.params.uid;
 
   useEffect(() => {
-    client.connect();
     const chatRef = firestore().collection('messages').doc(docID);
     const doc = chatRef.get();
 
@@ -71,7 +70,6 @@ const ChatScreenInDuoFinder = ({route}) => {
       });
 
     return () => {
-      client.disconnect();
       messageListener();
     };
   }, []);

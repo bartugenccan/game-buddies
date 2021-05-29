@@ -38,3 +38,10 @@ export const SET_PLAYING_LANE_LOL = 'set_playing_lane_lol';
 export const SET_WANTS_LANE_LOL = 'set_wants_lane_lol';
 export const SET_VOICE_CHAT_LOL = 'set_voice_chat_lol';
 export const SET_MODAL_VISIBILITY = 'set_modal_visibility';
+
+// Websocket Actions
+export const WS_INIT = 'ws_init';
+export const SEND_NOTIFICATION = 'send_notification';
+export const SEND_REQUEST = 'send_request';
+export const WS_CLOSE = 'ws_close';
+export const WS_MATCH = 'ws_match';

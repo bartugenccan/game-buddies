@@ -437,13 +437,15 @@ const ProfileScreen = props => {
             </TouchableOpacity>
           </View>
           <View style={style.messageView}>
-            <TouchableOpacity style={style.messageContainer} activeOpacity={1}>
+            <TouchableOpacity
+              style={style.messageContainer}
+              activeOpacity={1}
+              onPress={() => props.navigation.navigate('Messages')}>
               <Icon
                 name="envelope"
                 type="font-awesome"
                 color="white"
                 size={25}
-                onPress={() => props.navigation.navigate('Messages')}
               />
             </TouchableOpacity>
           </View>

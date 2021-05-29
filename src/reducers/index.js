@@ -8,6 +8,7 @@ import ForgotScreenReducers from './ForgotScreenReducers';
 import HomeScreenReducers from './HomeScreenReducers';
 import ProfileScreenReducers from './ProfileScreenReducers';
 import LolAddPostReducers from './LolAddPostReducers';
+import WebsocketReducers from './WebsocketReducers';
 
 export default combineReducers({
   LoginScreenResponse: LoginScreenReducers,
@@ -16,4 +17,5 @@ export default combineReducers({
   HomeScreenResponse: HomeScreenReducers,
   ProfileScreenResponse: ProfileScreenReducers,
   LolAddPostResponse: LolAddPostReducers,
+  WebsocketResponse: WebsocketReducers,
 });

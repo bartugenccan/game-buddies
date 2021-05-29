@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {View, Alert} from 'react-native';
 import {Icon} from 'react-native-elements';
 
-import {GiftedChat, Actions} from 'react-native-gifted-chat';
+import {GiftedChat} from 'react-native-gifted-chat';
 
 // Firebase Imports
 import firestore from '@react-native-firebase/firestore';
@@ -11,16 +11,65 @@ import auth from '@react-native-firebase/auth';
 // Toolbar Import
 import * as toolbar from '../../../components/InputToolbar/InputToolbar';
 
+// React Redux Import
+import {connect, useDispatch} from 'react-redux';
+
+// Action Imports
+import {ws_close, send_notification, send_request} from '../../../actions/';
+
 const ChatScreen = ({navigation, route}) => {
+  // Dispatch
+  const dispatch = useDispatch();
+
+  const uid = route.params.uid;
   const avatar_url = route.params.avatar_url;
   const docID = route.params.docid;
   const nickname = route.params.nickname;
 
   const tokenS = route.params.token;
+
+  const [currentUserName, setCurrentUserName] = useState();
   const [messages, setMessages] = useState([]);
 
   const db = firestore().collection('messages');
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Icon
+          type="font-awesome-5"
+          name="khanda"
+          iconStyle={{marginRight: 15}}
+          onPress={() =>
+            Alert.alert(
+              'Kullanıcıya oyun daveti göndermek istiyor musunuz?',
+              '',
+              [
+                {
+                  text: 'Gönder!',
+                  onPress: () => {
+                    dispatch(
+                      send_request(
+                        '1',
+                        currentUserName,
+                        'League Of Legends',
+                        avatar_url,
+                        auth().currentUser.uid,
+                      ),
+                    );
+                  },
+                },
+                {
+                  text: 'Vazgeç',
+                  onPress: () => null,
+                },
+              ],
+            )
+          }
+        />
+      ),
+    });
+  });
   useEffect(() => {
     const messageListener = db
       .doc(docID)
@@ -39,71 +88,17 @@ const ChatScreen = ({navigation, route}) => {
 
           return data;
         });
-
         setMessages(messages);
       });
+
+    db.doc(docID).onSnapshot(resp => {
+      setCurrentUserName(resp.data()[auth().currentUser.uid][1]);
+    });
 
     return () => {
       messageListener();
     };
-  }, []);
-
-  const renderActions = props => (
-    <Actions
-      {...props}
-      containerStyle={{
-        width: 44,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 4,
-        marginRight: 4,
-        marginBottom: 0,
-      }}
-      icon={() => (
-        <Icon
-          name="paper-plane"
-          type={'font-awesome'}
-          size={23}
-          iconStyle={{color: '#892cdc', marginRight: 5}}
-        />
-      )}
-      options={{
-        'Oyun isteği gönder': () => {
-          let inviteMessage = 'Oyun oynamak ister misin ?';
-
-          db.doc(docID)
-            .collection('MESSAGES')
-            .add({
-              text: inviteMessage,
-              createdAt: new Date().getTime(),
-              user: {
-                _id: 1,
-                avatar: avatar_url,
-              },
-              quickReplies: {
-                type: 'radiobox',
-                keepIt: false,
-                values: [
-                  {
-                    title: '👍 Olur',
-                    value: 'yes',
-                  },
-                  {
-                    title: '👎 Şimdi olmaz',
-                    value: 'no',
-                  },
-                ],
-              },
-            });
-        },
-        Cancel: () => {
-          console.log('');
-        },
-      }}
-      optionTintColor="#222B45"
-    />
-  );
+  }, [dispatch]);
 
   const onSend = async messages => {
     const text = messages[0].text;
@@ -122,6 +117,8 @@ const ChatScreen = ({navigation, route}) => {
     db.doc(docID).update({
       recentMessage: text,
     });
+
+    dispatch(send_notification('q', currentUserName, text));
   };
 
   return (
@@ -136,7 +133,6 @@ const ChatScreen = ({navigation, route}) => {
         renderSend={toolbar.renderSend}
         renderBubble={toolbar.renderBubble}
         renderInputToolbar={props => toolbar.renderInputToolbar(props)}
-        renderActions={renderActions}
         renderComposer={toolbar.renderComposer}
         renderUsernameOnMessage
         alwaysShowSend
@@ -146,4 +142,16 @@ const ChatScreen = ({navigation, route}) => {
   );
 };
 
-export default ChatScreen;
+const mapStateToProps = ({WebsocketResponse}) => {
+  const {status} = WebsocketResponse;
+
+  return {
+    status,
+  };
+};
+
+export default connect(mapStateToProps, {
+  ws_close,
+  send_notification,
+  send_request,
+})(ChatScreen);

@@ -34,6 +34,7 @@ class Fire {
         PUBGMobileAccount: null,
         ValorantAccount: null,
         bio: '',
+        activeGames: false,
       })
       .catch(e => {
         console.log(e);
@@ -64,6 +65,7 @@ class Fire {
         PUBGMobileAccount: null,
         ValorantAccount: null,
         bio: '',
+        activeGames: false,
       })
       .catch(e => {
         console.log(e);

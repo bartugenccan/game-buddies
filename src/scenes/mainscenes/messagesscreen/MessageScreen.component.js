@@ -18,8 +18,6 @@ const MessageScreen = () => {
   const keyExtractor = (item, index) => index.toString();
 
   useEffect(() => {
-    const tempDocId = '';
-
     const subscriber = firestore()
       .collection('messages')
       .where('members', 'array-contains', auth().currentUser.uid)

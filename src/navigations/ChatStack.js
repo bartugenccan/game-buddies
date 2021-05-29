@@ -3,7 +3,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MessageScreen from '../scenes/mainscenes/messagesscreen/MessageScreen.component';
 import ChatScreen from '../scenes/mainscenes/chatscreen/ChatScreen.component';
 
+import WS from '../utils/services/Websocket';
+
 const Stack = createStackNavigator();
+
+const client = new WS();
 
 function ChatStack() {
   return (
@@ -15,7 +19,9 @@ function ChatStack() {
       <Stack.Screen
         name="Chat"
         component={ChatScreen}
-        options={({route}) => ({title: route.params.nickname})}></Stack.Screen>
+        options={({route}) => ({
+          title: route.params.nickname,
+        })}></Stack.Screen>
     </Stack.Navigator>
   );
 }
