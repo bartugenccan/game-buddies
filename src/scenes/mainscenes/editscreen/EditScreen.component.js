@@ -27,7 +27,6 @@ const EditScreen = () => {
   ] = useState(false);
 
   const _onPress = () => {
-    console.log('bio.length ==  ' + bio.length);
     if (bio.length > 60) {
       Toast.show(
         'Karakter sınırını aştın. Biyografine maksimum 60 karakter girebilirsin.',
