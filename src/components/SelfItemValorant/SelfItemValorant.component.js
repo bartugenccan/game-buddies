@@ -3,7 +3,7 @@ import {TouchableOpacity, Text, View} from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 import {Avatar, Icon} from 'react-native-elements';
 
-import style from './SelfItemValorant.component';
+import style from './SelfItemValorant.component.style';
 
 const champImageSelector = c => {
   switch (c) {

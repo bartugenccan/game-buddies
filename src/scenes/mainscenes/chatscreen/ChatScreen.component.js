@@ -29,7 +29,10 @@ const ChatScreen = ({navigation, route}) => {
   const tokenS = route.params.token;
 
   const [currentUserName, setCurrentUserName] = useState();
+  const [currentAvatar, setCurrentAvatar] = useState();
+
   const [messages, setMessages] = useState([]);
+  const [activeCtrl, setActiveCtrl] = useState(true);
 
   const db = firestore().collection('messages');
 
@@ -48,15 +51,19 @@ const ChatScreen = ({navigation, route}) => {
                 {
                   text: 'Gönder!',
                   onPress: () => {
-                    dispatch(
-                      send_request(
-                        '1',
-                        currentUserName,
-                        'League Of Legends',
-                        avatar_url,
-                        auth().currentUser.uid,
-                      ),
-                    );
+                    if (activeCtrl == false) {
+                      dispatch(
+                        send_request(
+                          tokenS,
+                          currentUserName,
+                          'League Of Legends',
+                          currentAvatar,
+                          auth().currentUser.uid,
+                        ),
+                      );
+                    } else if (activeCtrl == true) {
+                      console.log('Olmaz');
+                    }
                   },
                 },
                 {
@@ -70,6 +77,7 @@ const ChatScreen = ({navigation, route}) => {
       ),
     });
   });
+
   useEffect(() => {
     const messageListener = db
       .doc(docID)
@@ -95,6 +103,16 @@ const ChatScreen = ({navigation, route}) => {
       setCurrentUserName(resp.data()[auth().currentUser.uid][1]);
     });
 
+    firestore()
+      .collection('users')
+      .where('uid', '==', auth().currentUser.uid)
+      .get()
+      .then(resp =>
+        resp.forEach(doc => {
+          setActiveCtrl(doc.data().activeGames);
+          setCurrentAvatar(doc.data().iconUrl);
+        }),
+      );
     return () => {
       messageListener();
     };

@@ -1,6 +1,6 @@
 // Little Function For Time Difference
 export function timeDifference(date1, date2) {
-  var difference = date1.getTime() - date2.toDate();
+  var difference = date1.getTime();
 
   var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
   difference -= daysDifference * 1000 * 60 * 60 * 24;

@@ -14,6 +14,8 @@ import VerifEmailModal from '../../../components/VerifEmailModal/VerifyEmailModa
 // Toast Import
 import Toast from 'react-native-simple-toast';
 
+const keyExtractor = (item, index) => index.toString();
+
 const ProfileEditPage = () => {
   const navigation = useNavigation();
 
@@ -28,7 +30,7 @@ const ProfileEditPage = () => {
     },
     {
       title: 'E-Postamı Doğrula',
-      icon: 'mail',
+      icon: 'envelope',
       onPress: () => setVerfiyModal(true),
     },
     {
@@ -38,6 +40,13 @@ const ProfileEditPage = () => {
         Linking.openURL(
           'https://play.google.com/store/movies/details/Recep_%C4%B0vedik_6?id=sUNUwp_aas4.P',
         ),
+    },
+    {
+      title: 'Arkadaşlarını davet et!',
+      icon: 'mail-bulk',
+      onPress: () => {
+        console.log('Beratto');
+      },
     },
     {
       title: 'Kullanıcı Sözleşmemiz',
@@ -51,8 +60,8 @@ const ProfileEditPage = () => {
     },
     {
       title: 'Çıkış yap',
-      icon: 'log-out',
-      onPress: () => auth().signOut(), //
+      icon: 'sign-out-alt',
+      onPress: () => auth().signOut(),
     },
   ];
 
@@ -102,7 +111,7 @@ const ProfileEditPage = () => {
       <View style={style.secondView}>
         {list.map((item, i) => (
           <ListItem key={i} bottomDivider onPress={item.onPress}>
-            <Icon name={item.icon} type="feather" />
+            <Icon name={item.icon} type="font-awesome-5" style={{width: 30}} />
             <ListItem.Content>
               <ListItem.Title>{item.title}</ListItem.Title>
             </ListItem.Content>

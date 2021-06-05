@@ -215,6 +215,12 @@ function HomePage(props) {
                     Toast.LONG,
                     Toast.BOTTOM,
                   );
+                } else if (doc.data().activeGames != false) {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için şu anki oturumunuzu bitirip takım arkadaşınızı oylamanız gerekmektedir.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
                 } else if (doc.data().LolAccount['SoloQueueRanked'] != '') {
                   navigation.navigate('LolDuoFinder');
                 }
@@ -247,6 +253,12 @@ function HomePage(props) {
                 if (doc.data().ValorantAccount['League'] == '') {
                   Toast.showWithGravity(
                     'İlan sayfasına girmek ve ilan oluşturmak için öncelikle profil sayfasına gidip oynacağın oyundaki ligini seçmen gerek.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
+                } else if (doc.data().activeGames != false) {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için şu anki oturumunuzu bitirip takım arkadaşınızı oylamanız gerekmektedir.',
                     Toast.LONG,
                     Toast.BOTTOM,
                   );
@@ -285,6 +297,12 @@ function HomePage(props) {
                     Toast.LONG,
                     Toast.BOTTOM,
                   );
+                } else if (doc.data().activeGames != false) {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için şu anki oturumunuzu bitirip takım arkadaşınızı oylamanız gerekmektedir.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
                 } else if (doc.data().ApexAccount['League'] != '') {
                   navigation.navigate('ApexDuoFinder');
                 }
@@ -317,6 +335,12 @@ function HomePage(props) {
                 if (doc.data().PUBGMobileAccount['League'] == '') {
                   Toast.showWithGravity(
                     'İlan sayfasına girmek ve ilan oluşturmak için öncelikle profil sayfasına gidip oynacağın oyundaki ligini seçmen gerek.',
+                    Toast.LONG,
+                    Toast.BOTTOM,
+                  );
+                } else if (doc.data().activeGames != false) {
+                  Toast.showWithGravity(
+                    'İlan sayfasına girmek ve ilan oluşturmak için şu anki oturumunuzu bitirip takım arkadaşınızı oylamanız gerekmektedir.',
                     Toast.LONG,
                     Toast.BOTTOM,
                   );
@@ -372,7 +396,7 @@ function HomePage(props) {
                     requestGame,
                     currentAvatar,
                     requestAvatar,
-                    'Deneem',
+                    currentUsername,
                     requestUsername,
                   ),
                 );

@@ -35,18 +35,6 @@ const favChampSelector = c => {
   }
 };
 
-const deletePost = async () => {
-  await firestore()
-    .collection('apexposts')
-    .where('uid', '==', auth().currentUser.uid)
-    .get()
-    .then(resp => {
-      resp.forEach(doc => {
-        doc.ref.delete();
-      });
-    });
-};
-
 const SelfItemApex = ({
   username,
   avatar_url,
@@ -55,121 +43,96 @@ const SelfItemApex = ({
   voice_chat,
   favChamp,
 }) => (
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      flexDirection: 'row',
-      overflow: 'hidden',
-      alignSelf: 'center',
-    }}
-    activeOpacity={1}
-    onLongPress={() => {
-      Alert.alert(
-        'İlanınızı kaldırmak istiyor musunuz ?',
-        'İlanınızı kaldırarak daha sonra yeni bir ilan oluşturabilirsiniz.',
-        [
-          {
-            text: 'Vazgeç',
-            onPress: () => null,
-          },
-          {
-            text: 'Kaldır',
-            onPress: () => deletePost(),
-          },
-        ],
-      );
-    }}>
-    <Card style={style.container}>
-      <View style={style.avatarView}>
-        <Avatar
-          source={{
-            uri: avatar_url,
-          }}
-          rounded
-          size={70}
-        />
-      </View>
-      <View style={style.statsView}>
-        <View style={{flex: 0.45, flexDirection: 'row'}}>
-          <View
-            style={{
-              flex: 0.7,
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'segoe-ui-light-2',
-                marginLeft: 15,
-              }}>
-              {username}
-            </Text>
-            {voice_chat == true ? (
-              <Icon
-                name="microphone"
-                type="font-awesome"
-                size={17}
-                style={{marginLeft: 5}}
-              />
-            ) : (
-              <Icon
-                name="microphone-slash"
-                type="font-awesome"
-                size={17}
-                style={{marginLeft: 5}}
-              />
-            )}
-          </View>
-          <View
-            style={{
-              flex: 0.3,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Avatar
-                source={league}
-                rounded
-                size={50}
-                containerStyle={{marginRight: 10, marginTop: 25}}
-              />
-            </View>
-          </View>
-        </View>
+  <Card style={style.container}>
+    <View style={style.avatarView}>
+      <Avatar
+        source={{
+          uri: avatar_url,
+        }}
+        rounded
+        size={70}
+      />
+    </View>
+    <View style={style.statsView}>
+      <View style={{flex: 0.45, flexDirection: 'row'}}>
         <View
           style={{
-            flex: 0.45,
-            flexDirection: 'row',
+            flex: 0.7,
             alignItems: 'center',
+            flexDirection: 'row',
           }}>
           <Text
             style={{
               fontSize: 15,
               fontFamily: 'segoe-ui-light-2',
-              paddingLeft: 15,
-              height: 25,
+              marginLeft: 15,
             }}>
-            Favori Karakteri:
+            {username}
           </Text>
-          <Avatar
-            source={favChampSelector(favChamp)}
-            rounded
-            size={30}
-            containerStyle={{marginLeft: 5}}
-          />
-          <View style={{marginLeft: 15, marginTop: 25}}>
-            <Text style={{color: 'gray', fontSize: 11}}>{ago}</Text>
+          {voice_chat == true ? (
+            <Icon
+              name="microphone"
+              type="font-awesome"
+              size={17}
+              style={{marginLeft: 5}}
+            />
+          ) : (
+            <Icon
+              name="microphone-slash"
+              type="font-awesome"
+              size={17}
+              style={{marginLeft: 5}}
+            />
+          )}
+        </View>
+        <View
+          style={{
+            flex: 0.3,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Avatar
+              source={league}
+              rounded
+              size={50}
+              containerStyle={{marginRight: 10, marginTop: 25}}
+            />
           </View>
         </View>
       </View>
-    </Card>
-  </TouchableOpacity>
+      <View
+        style={{
+          flex: 0.45,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            fontSize: 15,
+            fontFamily: 'segoe-ui-light-2',
+            paddingLeft: 15,
+            height: 25,
+          }}>
+          Favori Karakteri:
+        </Text>
+        <Avatar
+          source={favChampSelector(favChamp)}
+          rounded
+          size={30}
+          containerStyle={{marginLeft: 5}}
+        />
+        <View style={{marginLeft: 15, marginTop: 25}}>
+          <Text style={{color: 'gray', fontSize: 11}}>{ago}</Text>
+        </View>
+      </View>
+    </View>
+  </Card>
 );
 
 export default SelfItemApex;

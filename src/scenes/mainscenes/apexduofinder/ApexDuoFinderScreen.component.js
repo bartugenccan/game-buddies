@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, FlatList, Modal, Text, TouchableOpacity} from 'react-native';
+import {View, FlatList, Alert, Text, TouchableOpacity} from 'react-native';
 import style from './ApexDuoFinderScreen.component.style';
 import {Avatar, Icon, ListItem, Button} from 'react-native-elements';
 import SwitchSelector from 'react-native-switch-selector';
@@ -30,7 +30,6 @@ import {set_modal_visibility} from '../../../actions';
 
 // Self Item Import
 import SelfItemApex from '../../../components/SelfItemApex/SelfItemApex.component';
-import {ScreenStackHeaderBackButtonImage} from 'react-native-screens';
 
 const ApexDuoFinderScreen = props => {
   const isMounted = useRef(false);
@@ -41,13 +40,24 @@ const ApexDuoFinderScreen = props => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterVoiceChat, setFilterVoiceChat] = useState(null);
 
-  const [loading, setLoading] = useState(false);
   const [currentUsername, setCurrentUsername] = useState();
   const [currentUserIcon, setCurrentUserIcon] = useState();
 
   // Navigation
   const navigation = useNavigation();
 
+  const deletePost = async () => {
+    await firestore()
+      .collection('apexposts')
+      .where('uid', '==', auth().currentUser.uid)
+      .get()
+      .then(resp => {
+        resp.forEach(doc => {
+          doc.ref.set({});
+          doc.ref.delete();
+        });
+      });
+  };
   // Dispatch
   const dispatch = useDispatch();
 
@@ -74,14 +84,16 @@ const ApexDuoFinderScreen = props => {
       .limit(20)
       .onSnapshot(resp => {
         resp.forEach(doc => {
-          if (isMounted.current) {
+          if (isMounted.current == true) {
             var today = new Date();
+            var date = new Date(doc.data().createdAt);
+            console.log(date);
             selfArr.push({
               uid: doc.data().uid,
               username: doc.data().UserName,
               avatar_url: doc.data().icon,
               league: selector.apexImageSelector(doc.data().rank),
-              ago: format.timeDifference(today, doc.data().createdAt),
+              ago: format.timeDifference(today, date),
               favChamp: doc.data().favoriteChamp,
             });
             setSelfCard(selfArr);
@@ -139,14 +151,39 @@ const ApexDuoFinderScreen = props => {
 
   const renderSelfItem = ({item}) => {
     return (
-      <SelfItemApex
-        username={item.username}
-        avatar_url={item.avatar_url}
-        league={item.league}
-        ago={item.ago}
-        voice_chat={item.voice_chat}
-        favChamp={item.favChamp}
-      />
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          overflow: 'hidden',
+          alignSelf: 'center',
+        }}
+        activeOpacity={1}
+        onLongPress={() => {
+          Alert.alert(
+            'İlanınızı kaldırmak istiyor musunuz ?',
+            'İlanınızı kaldırarak daha sonra yeni bir ilan oluşturabilirsiniz.',
+            [
+              {
+                text: 'Vazgeç',
+                onPress: () => null,
+              },
+              {
+                text: 'Kaldır',
+                onPress: () => deletePost(),
+              },
+            ],
+          );
+        }}>
+        <SelfItemApex
+          username={item.username}
+          avatar_url={item.avatar_url}
+          league={item.league}
+          ago={item.ago}
+          voice_chat={item.voice_chat}
+          favChamp={item.favChamp}
+        />
+      </TouchableOpacity>
     );
   };
 

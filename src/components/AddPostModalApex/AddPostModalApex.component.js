@@ -239,7 +239,6 @@ const AddPostModalApex = props => {
               <View
                 style={{
                   flex: 0.7,
-
                   justifyContent: 'center',
                 }}>
                 <Text style={{marginLeft: 15, fontFamily: 'Roboto-Medium'}}>
@@ -249,7 +248,6 @@ const AddPostModalApex = props => {
               <View
                 style={{
                   flex: 0.3,
-                  justifyContent: 'center',
                   justifyContent: 'center',
                 }}>
                 <Switch

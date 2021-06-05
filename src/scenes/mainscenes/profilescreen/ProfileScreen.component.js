@@ -481,12 +481,15 @@ const ProfileScreen = props => {
           }
         />
       </View>
-      <View
+      <Text
         style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 100,
-        }}></View>
+          marginLeft: 20,
+          marginTop: 20,
+          fontSize: 20,
+          fontFamily: 'Roboto-Bold',
+        }}>
+        Yorumlar
+      </Text>
     </View>
   );
 };

@@ -144,7 +144,7 @@ const AddPostModalValorant = props => {
 
   const renderValorantItem = ({item}) => {
     let backgroundColor = selectedAgentValorant.includes(item.id)
-      ? '#d3d3d3'
+      ? '#892cdc'
       : '#fff';
 
     return (
@@ -243,7 +243,7 @@ const AddPostModalValorant = props => {
                 extraData={selectedAgentValorant}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={{marginTop: 6, marginBottom: 5}}
+                style={{marginTop: 6}}
               />
             </View>
           </View>
@@ -252,22 +252,35 @@ const AddPostModalValorant = props => {
               flex: 0.3,
               alignItems: 'center',
             }}>
-            <View style={style.containerSwitch}>
-              <Text
+            <View style={{flexDirection: 'row', height: 50}}>
+              <View
                 style={{
-                  marginRight: 20,
-                  fontFamily: 'segoe-ui-light-2',
-                  fontWeight: 'bold',
+                  flex: 0.7,
+                  justifyContent: 'center',
                 }}>
-                Sesli sohbet kullanıyorum.
-              </Text>
-              <Switch
-                trackColor={{false: '#767577', true: '#81b0ff'}}
-                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={isEnabled}
-              />
+                <Text
+                  style={{
+                    marginLeft: 15,
+                    fontFamily: 'segoe-ui-light-2',
+                    fontWeight: 'bold',
+                  }}>
+                  Sesli sohbet kullanıyorum.
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 0.3,
+                  justifyContent: 'center',
+                }}>
+                <Switch
+                  trackColor={{false: '#767577', true: '#81b0ff'}}
+                  thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                  style={{marginRight: 10}}
+                />
+              </View>
             </View>
 
             <View style={style.buttonContainer}>{renderButton()}</View>

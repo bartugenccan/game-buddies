@@ -33,4 +33,19 @@ export default StyleSheet.create({
     flex: 0.13,
     flexDirection: 'row',
   },
+  buttonContainer: {
+    width: '50%',
+    height: 50,
+    backgroundColor: '#00cc00',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    marginTop: 30,
+    alignSelf: 'center',
+  },
+  itemView: {
+    marginHorizontal: 5,
+    borderRadius: 50,
+  },
 });

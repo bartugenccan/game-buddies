@@ -7,8 +7,6 @@ import WS from '../utils/services/Websocket';
 
 const Stack = createStackNavigator();
 
-const client = new WS();
-
 function ChatStack() {
   return (
     <Stack.Navigator initialRouteName={'Mesajlar'}>
