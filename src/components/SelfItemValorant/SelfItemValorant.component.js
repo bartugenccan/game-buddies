@@ -95,119 +95,110 @@ const SelfItemValorant = ({
   uid,
   voice_chat,
 }) => (
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      flexDirection: 'row',
-      overflow: 'hidden',
-      alignSelf: 'center',
-    }}
-    activeOpacity={1}>
-    <Card style={style.container}>
-      <View style={style.avatarView}>
-        <Avatar
-          source={{
-            uri: avatar_url,
-          }}
-          rounded
-          size={70}
-        />
-      </View>
-      <View style={style.statsView}>
-        <View style={{flex: 0.42, flexDirection: 'row'}}>
-          <View
-            style={{
-              flex: 0.7,
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}>
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'segoe-ui-light-2',
-              }}>
-              {username}
-            </Text>
-            {voice_chat == true ? (
-              <Icon
-                name="microphone"
-                type="font-awesome"
-                size={15}
-                style={{marginLeft: 5}}
-                containerStyle={{
-                  height: 23,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
-            ) : (
-              <Icon
-                name="microphone-slash"
-                type="font-awesome"
-                size={17}
-                style={{marginLeft: 5}}
-                containerStyle={{
-                  height: 23,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginLeft: 3,
-                }}
-              />
-            )}
-          </View>
-          <View
-            style={{
-              flex: 0.3,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Avatar
-                source={league}
-                rounded
-                size={27}
-                containerStyle={{marginRight: 5}}
-              />
-              <Text style={{fontSize: 20, fontFamily: 'segoe-ui-light-2'}}>
-                {tier}
-              </Text>
-            </View>
-          </View>
-        </View>
+  <Card style={style.container}>
+    <View style={style.avatarView}>
+      <Avatar
+        source={{
+          uri: avatar_url,
+        }}
+        rounded
+        size={70}
+      />
+    </View>
+    <View style={style.statsView}>
+      <View style={{flex: 0.42, flexDirection: 'row'}}>
         <View
           style={{
-            flex: 0.43,
-            flexDirection: 'row',
+            flex: 0.7,
             alignItems: 'center',
+            flexDirection: 'row',
           }}>
           <Text
             style={{
               fontSize: 15,
-              marginLeft: 0,
-              height: 25,
+              fontFamily: 'segoe-ui-light-2',
             }}>
-            Favori Ajanları :
+            {username}
           </Text>
-          {renderChamps(['Raze', 'Omen'])}
+          {voice_chat == true ? (
+            <Icon
+              name="microphone"
+              type="font-awesome"
+              size={15}
+              style={{marginLeft: 5}}
+              containerStyle={{
+                height: 23,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
+          ) : (
+            <Icon
+              name="microphone-slash"
+              type="font-awesome"
+              size={17}
+              style={{marginLeft: 5}}
+              containerStyle={{
+                height: 23,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 3,
+              }}
+            />
+          )}
         </View>
-        <View style={{flex: 0.15, alignItems: 'flex-end'}}>
-          <Text
+        <View
+          style={{
+            flex: 0.3,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
             style={{
-              marginRight: 25,
-              fontSize: 11,
-              color: 'gray',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
-            {ago}
-          </Text>
+            <Avatar
+              source={league}
+              rounded
+              size={27}
+              containerStyle={{marginRight: 5}}
+            />
+            <Text style={{fontSize: 20, fontFamily: 'segoe-ui-light-2'}}>
+              {tier}
+            </Text>
+          </View>
         </View>
       </View>
-    </Card>
-  </TouchableOpacity>
+      <View
+        style={{
+          flex: 0.43,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            fontSize: 15,
+            marginLeft: 0,
+            height: 25,
+          }}>
+          Favori Ajanları :
+        </Text>
+        {renderChamps(['Raze', 'Omen'])}
+      </View>
+      <View style={{flex: 0.15, alignItems: 'flex-end'}}>
+        <Text
+          style={{
+            marginRight: 25,
+            fontSize: 11,
+            color: 'gray',
+          }}>
+          {ago}
+        </Text>
+      </View>
+    </View>
+  </Card>
 );
 
 export default SelfItemValorant;

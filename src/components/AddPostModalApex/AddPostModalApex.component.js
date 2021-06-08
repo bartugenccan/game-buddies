@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 // Styling Import
-import {Avatar, Icon, ListItem, Button} from 'react-native-elements';
+import {Avatar} from 'react-native-elements';
 import {BallIndicator} from 'react-native-indicators';
 import Toast from 'react-native-simple-toast';
 import style from './AddPostModalApex.component.style';
@@ -70,7 +70,6 @@ const AddPostModalApex = props => {
   // Firebase createPost function
   const createPost = async () => {
     try {
-      console.log('createPost');
       await firestore().collection('apexposts').add({
         UserName: username,
         voiceChat: isVoiceChat,
@@ -95,7 +94,7 @@ const AddPostModalApex = props => {
         ]);
         return false;
       } else if (selectedLegendApex.length != 0) {
-        await createPost().then(() => {
+        createPost().then(() => {
           setSelectedLegendApex([]);
           setVoiceChat(false);
           setLoading(false);
