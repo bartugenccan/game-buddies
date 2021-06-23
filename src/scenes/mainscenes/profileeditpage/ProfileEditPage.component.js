@@ -22,6 +22,7 @@ const ProfileEditPage = () => {
   // Modal Visibility State
   const [verfiyModal, setVerfiyModal] = useState(false);
 
+  // Data For Render
   const list = [
     {
       title: 'Profilimi Düzenle',

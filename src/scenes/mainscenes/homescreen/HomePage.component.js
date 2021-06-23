@@ -40,6 +40,7 @@ import Toast from 'react-native-simple-toast';
 import ActiveGame from '../../../components/ActiveGame/ActiveGame.component';
 import {Button} from 'react-native';
 
+// Basic function to get length of a obhect
 Object.size = function (obj) {
   var size = 0,
     key;
@@ -77,9 +78,13 @@ function HomePage(props) {
   };
 
   useEffect(async () => {
+    // useEffect dispatchs
     dispatch(set_loading_home(true));
+
+    // Connect to websocket server
     dispatch(ws_init());
 
+    // Sets avatar , username and current status from firestore with subscription
     const activeGameSub = firestore()
       .collection('users')
       .where('uid', '==', auth().currentUser.uid)
@@ -109,6 +114,7 @@ function HomePage(props) {
       }
     });
 
+    // Function for show notification when notification shows up
     async function showNotification(notification) {
       // Create a channel
       const channelId = await notifee.createChannel({
@@ -126,12 +132,14 @@ function HomePage(props) {
       });
     }
 
+    // Handler for background message
     const unss = messaging().setBackgroundMessageHandler(
       async remoteMessage => {
-        console.log('xd  ' + remoteMessage.category);
+        console.log(remoteMessage.category);
       },
     );
 
+    // When first login need to set userid to AsyncStorage
     AsyncStorage.getItem('firstLogin').then(async value => {
       const token = await messaging().getToken();
 

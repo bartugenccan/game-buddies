@@ -7,6 +7,7 @@ import EditScreen from '../scenes/mainscenes/editscreen/EditScreen.component';
 
 const Stack = createStackNavigator();
 
+// Stack for profilescreen
 function ProfileScreenStack() {
   return (
     <Stack.Navigator initialRouteName={'ProfileScreen'}>

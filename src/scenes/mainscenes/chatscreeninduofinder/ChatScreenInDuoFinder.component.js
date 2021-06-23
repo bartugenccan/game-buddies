@@ -31,12 +31,14 @@ const ChatScreenInDuoFinder = ({route}) => {
 
   const db = firestore().collection('messages');
 
+  // Creates a unique docID for each chat
   const docID =
     route.params.uid > auth().currentUser.uid
       ? route.params.uid + auth().currentUser.uid
       : auth().currentUser.uid + route.params.uid;
 
   useEffect(() => {
+    // Firestore messages collection dayabase
     const chatRef = firestore().collection('messages').doc(docID);
     const doc = chatRef.get();
 
@@ -44,11 +46,13 @@ const ChatScreenInDuoFinder = ({route}) => {
       setIsExist(true);
     }
 
+    // Set user token for send notification while sends a messsage to user
     firestore()
       .collection('users')
       .where('uid', '==', auth().currentUser.uid)
       .onSnapshot(resp => resp.forEach(doc => setUserToken(doc.data().tokenS)));
 
+    // Listen messages collection
     const messageListener = db
       .doc(docID)
       .collection('MESSAGES')
@@ -74,10 +78,12 @@ const ChatScreenInDuoFinder = ({route}) => {
     };
   }, []);
 
+  // Custom Input Toolbar
   function renderInputToolbar(props) {
     return <InputToolbar {...props} containerStyle={style.input} />;
   }
 
+  // Custom Bubble
   function renderBubble(props) {
     return (
       <Bubble
@@ -112,9 +118,11 @@ const ChatScreenInDuoFinder = ({route}) => {
     );
   }
 
+  // On Send Function
   const onSend = async messages => {
     const text = messages[0].text;
 
+    // First check for existance of doc with uniqueId
     if (isExist == false) {
       db.doc(docID).set({
         members: [auth().currentUser.uid, useruid],
@@ -126,6 +134,7 @@ const ChatScreenInDuoFinder = ({route}) => {
 
     setIsExist(true);
 
+    // Then set message to firestore
     db.doc(docID)
       .collection('MESSAGES')
       .add({
@@ -139,6 +148,7 @@ const ChatScreenInDuoFinder = ({route}) => {
       .then(db.doc(docID).update({recentMessage: text}));
   };
 
+  // Custom send button
   const renderSend = props => {
     return (
       <Send {...props}>

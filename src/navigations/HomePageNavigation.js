@@ -24,6 +24,7 @@ import ChatScreenInDuoFinder from '../scenes/mainscenes/chatscreeninduofinder/Ch
 // Creating stack navigator
 const Stack = createStackNavigator();
 
+// Home Page Navigation
 const HomePageNavigation = props => {
   return (
     <Stack.Navigator

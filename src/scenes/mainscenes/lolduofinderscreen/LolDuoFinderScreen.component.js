@@ -53,6 +53,7 @@ const methodTier = str => {
 import filterFunction from '../../../utils/filterFunction';
 
 const DuoFinderScreen = props => {
+  // Create Refs
   const isMounted = useRef(false);
 
   // Initial States
@@ -75,6 +76,7 @@ const DuoFinderScreen = props => {
   useEffect(() => {
     isMounted.current = true;
 
+    // Set username and iconUrl from firestore
     firestore()
       .collection('users')
       .where('UserEmail', '==', auth().currentUser.email)
@@ -86,6 +88,7 @@ const DuoFinderScreen = props => {
         });
       });
 
+    // Listen own post
     const selfSub = firestore()
       .collection('lolposts')
       .where('uid', '==', auth().currentUser.uid)
@@ -108,6 +111,7 @@ const DuoFinderScreen = props => {
         setSelfCard(selfArr);
       });
 
+    // Listen all posts
     const bigSubs = firestore()
       .collection('lolposts')
       .where('uid', '!=', auth().currentUser.uid)
@@ -138,6 +142,7 @@ const DuoFinderScreen = props => {
     };
   }, []);
 
+  // Render Item For Posts
   const renderItem = ({item}) => {
     return (
       <ItemOfList

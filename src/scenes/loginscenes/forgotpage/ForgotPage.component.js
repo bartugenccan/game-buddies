@@ -11,14 +11,17 @@ import Spinner from '../../../components/Spinner/Spinner.component';
 // Redux Import
 import {connect} from 'react-redux';
 
+// Action Import
 import {forgot_mail, forgot_mail_changed} from '../../../actions';
 
 class ForgotPage extends React.Component {
+  // OnPress function
   onCLick() {
     const email = this.props.forgot_mail;
     this.props.forgot_mail(email);
   }
 
+  // Conditional Rendering depending on loading state
   renderSendButton() {
     if (this.props.loading) {
       return (

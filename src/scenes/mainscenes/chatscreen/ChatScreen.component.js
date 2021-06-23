@@ -21,21 +21,23 @@ const ChatScreen = ({navigation, route}) => {
   // Dispatch
   const dispatch = useDispatch();
 
+  // Route parametes
   const uid = route.params.uid;
   const avatar_url = route.params.avatar_url;
   const docID = route.params.docid;
   const nickname = route.params.nickname;
-
   const tokenS = route.params.token;
 
+  // Initial States
   const [currentUserName, setCurrentUserName] = useState();
   const [currentAvatar, setCurrentAvatar] = useState();
-
   const [messages, setMessages] = useState([]);
   const [activeCtrl, setActiveCtrl] = useState(true);
 
+  // Firestore databases
   const db = firestore().collection('messages');
 
+  // Set headerRight for invite to game
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -79,6 +81,7 @@ const ChatScreen = ({navigation, route}) => {
   });
 
   useEffect(() => {
+    // Start to listen exact doc in firestore
     const messageListener = db
       .doc(docID)
       .collection('MESSAGES')
@@ -118,6 +121,7 @@ const ChatScreen = ({navigation, route}) => {
     };
   }, [dispatch]);
 
+  // On Send Function
   const onSend = async messages => {
     const text = messages[0].text;
 

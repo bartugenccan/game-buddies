@@ -13,7 +13,9 @@ import ProfileScreenStack from './ProfileScreenStack';
 
 const Tab = createBottomTabNavigator();
 
+// Main tab navigation
 const MainNavigation = () => {
+  // Simple function for tab visibility
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
     const hideOnScreens = [

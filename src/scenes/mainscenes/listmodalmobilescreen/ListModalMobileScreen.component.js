@@ -24,6 +24,8 @@ const list = [
 
 const keyExtractor = (item, index) => index.toString();
 
+// Modal Screen For Mobile Games List
+
 const ListModalMobileScreen = ({navigation, route}) => {
   // Initial State For Modal Visibility
   const [modalVisible, setModalVisible] = useState(true);

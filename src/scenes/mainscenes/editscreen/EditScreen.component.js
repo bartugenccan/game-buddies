@@ -19,6 +19,7 @@ import ProfileUrlModal from '../../../components/ProfileUrlModal/ProfileUrlModal
 import ProfileBackgroundModal from '../../../components/ProfileBackgroundModal/ProfileBackgroundModal.component';
 
 const EditScreen = () => {
+  // Initial States
   const [bio, setBio] = useState('');
   const [profileIconModalVisib, setProfileIconModalVisib] = useState(false);
   const [
@@ -26,6 +27,7 @@ const EditScreen = () => {
     setProfileBackgroundModalVisib,
   ] = useState(false);
 
+  // OnPress function for update bio
   const _onPress = () => {
     if (bio.length > 60) {
       Toast.show(
@@ -50,6 +52,7 @@ const EditScreen = () => {
     }
   };
 
+  // Real-time relevance check for bio
   const renderView = () => {
     if (bio.length <= 60 && bio.length != 0) {
       return (

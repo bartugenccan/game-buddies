@@ -30,6 +30,7 @@ class LoginPage extends React.Component {
     this.props.loginUser({email, password});
   }
 
+  // Conditional rendering with loading state from redux
   renderLoginButton() {
     if (!this.props.loading) {
       return (
@@ -48,7 +49,6 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    console.log(this.props.email);
     return (
       <View
         style={{

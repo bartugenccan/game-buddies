@@ -13,6 +13,7 @@ import auth from '@react-native-firebase/auth';
 // Toast Import
 import Toast from 'react-native-simple-toast';
 
+// Image Selector with parameters
 const gameImageSelector = g => {
   switch (g) {
     case 'League Of Legends':
@@ -23,9 +24,10 @@ const gameImageSelector = g => {
       return require('../../assets/images/Valorant_icon.png');
   }
 };
+
+// If there is an active game in system , render active game view
 const ActiveGame = props => {
   const [visib, setVisib] = useState(false);
-
   return (
     <View style={style.firstView}>
       <Modal

@@ -22,15 +22,20 @@ import {connect, useDispatch} from 'react-redux';
 import {games_set, profile_screen_stats_delete} from '../../../actions';
 
 const DeleteScreen = props => {
+  // Navigation
   const navigation = useNavigation();
+
+  // Dispatch
   const dispatch = useDispatch();
 
+  // Initial States
   const [loading, setLoading] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(true);
   const [profileName, setProfileName] = useState('');
   const [iconId, setIconId] = useState();
 
   useEffect(() => {
+    // Basic switch-case depending on gameName which is coming from previous screen.
     switch (props.gameName) {
       case 'League Of Legends':
         setLoading(true);
@@ -86,6 +91,7 @@ const DeleteScreen = props => {
     }
   }, []);
 
+  // OnPress Function for unlink an game account with application account
   const _onPress = async g => {
     if (g == 'League Of Legends') {
       await firestore()
@@ -163,6 +169,7 @@ const DeleteScreen = props => {
     }
   };
 
+  // Basic switch-case for render depending on params
   switch (props.gameName) {
     case 'League Of Legends':
       return (

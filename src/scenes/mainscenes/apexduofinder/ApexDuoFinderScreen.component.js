@@ -26,11 +26,12 @@ import ApexCards from '../../../components/ApexCards/ApexCards.component';
 import ApexSelfCards from '../../../components/ApexSelfCards/ApexSelfCards.component';
 
 const ApexDuoFinderScreen = props => {
-  const [cards, setCards] = useState(['ş']);
+  const [cards, setCards] = useState(['0']);
 
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterVoiceChat, setFilterVoiceChat] = useState(null);
 
+  // Delete Post Function
   const deletePost = async () => {
     await firestore()
       .collection('apexposts')
@@ -45,44 +46,6 @@ const ApexDuoFinderScreen = props => {
   };
   // Dispatch
   const dispatch = useDispatch();
-
-  const renderSelfItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          overflow: 'hidden',
-          alignSelf: 'center',
-        }}
-        activeOpacity={1}
-        onLongPress={() => {
-          Alert.alert(
-            'İlanınızı kaldırmak istiyor musunuz ?',
-            'İlanınızı kaldırarak daha sonra yeni bir ilan oluşturabilirsiniz.',
-            [
-              {
-                text: 'Vazgeç',
-                onPress: () => null,
-              },
-              {
-                text: 'Kaldır',
-                onPress: () => deletePost(),
-              },
-            ],
-          );
-        }}>
-        <SelfItemApex
-          username={item.username}
-          avatar_url={item.avatar_url}
-          league={item.league}
-          ago={item.ago}
-          voice_chat={item.voice_chat}
-          favChamp={item.favChamp}
-        />
-      </TouchableOpacity>
-    );
-  };
 
   return (
     <View style={style.container}>
@@ -107,11 +70,9 @@ const ApexDuoFinderScreen = props => {
             containerStyle={{marginRight: 15}}
           />
         </View>
-
         <View>
           <ApexSelfCards />
         </View>
-
         <ApexCards />
       </View>
     </View>

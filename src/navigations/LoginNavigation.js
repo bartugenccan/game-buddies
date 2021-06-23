@@ -8,6 +8,7 @@ import ForgotPage from '../scenes/loginscenes/forgotpage/ForgotPage.component';
 
 const Stack = createStackNavigator();
 
+// Login Stack Navigation
 const LoginNavigaton = () => {
   return (
     <Stack.Navigator initialRouteName={'Login'}>

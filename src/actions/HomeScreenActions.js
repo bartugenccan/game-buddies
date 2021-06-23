@@ -1,3 +1,4 @@
+// Types Imports
 import {GAMES_SET, SET_LOADING_HOME} from './types';
 
 export const games_set = arr => {

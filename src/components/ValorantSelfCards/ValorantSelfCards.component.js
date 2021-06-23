@@ -62,6 +62,7 @@ const ValorantSelfCards = () => {
     );
   };
 
+  // Delete Post Functions
   const deletePost = async () => {
     await firestore()
       .collection('valorantposts')
@@ -76,6 +77,7 @@ const ValorantSelfCards = () => {
   };
 
   useEffect(() => {
+    // Listen users posts
     const selfSub = firestore()
       .collection('valorantposts')
       .where('uid', '==', auth().currentUser.uid)

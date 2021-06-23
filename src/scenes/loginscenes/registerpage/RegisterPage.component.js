@@ -8,6 +8,8 @@ import {Icon, CheckBox} from 'react-native-elements';
 import SwitchSelector from 'react-native-switch-selector';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Spinner from '../../../components/Spinner/Spinner.component';
+
+// Action Imports
 import {
   register_email_changed,
   register_password_changed,
@@ -22,6 +24,7 @@ import {connect} from 'react-redux';
 import fire from '../../../../firebase/fire';
 
 class RegisterPage extends React.Component {
+  // Initial States
   state = {
     username: '',
     gender: 'M',
@@ -32,6 +35,7 @@ class RegisterPage extends React.Component {
     checked: false,
   };
 
+  // OnPress function for register
   onPress = () => {
     if (!this.state.checked) {
       Alert.alert(
@@ -58,9 +62,11 @@ class RegisterPage extends React.Component {
       return null;
     }
 
+    // Props coming from redux
     const registerEmail = this.props.register_email;
     const registerPassword = this.props.register_pasword;
 
+    // Function From Redux
     this.props.register_user(registerEmail, registerPassword);
 
     if (this.state.gender == 'M' || this.state.gender == 'N') {
@@ -75,6 +81,7 @@ class RegisterPage extends React.Component {
     }
   };
 
+  // Conditional Rendering function depending of gender values.
   renderChoice = g => {
     if (g === 'M' || g === 'N') {
       return null;

@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, ScrollView, View} from 'react-native';
 import {ListItem, Avatar} from 'react-native-elements';
 
+// Basic friends screen
 const list = [
   {
     name: 'Amy Farha',

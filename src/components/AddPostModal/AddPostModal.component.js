@@ -1,6 +1,5 @@
 // React && Style Imports
 import React, {useEffect, useState} from 'react';
-
 import {
   Text,
   View,

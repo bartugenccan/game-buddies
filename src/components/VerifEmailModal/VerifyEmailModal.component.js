@@ -12,8 +12,7 @@ import {Icon, Button} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
 const VerifEmailModal = ({visible, onPressOut, onSendPress}) => {
-  // Loading State
-
+  // Initial State
   const [isVerified, setIsVerified] = useState(true);
 
   useEffect(() => {

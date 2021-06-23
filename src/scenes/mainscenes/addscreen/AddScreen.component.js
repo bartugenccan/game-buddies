@@ -9,9 +9,9 @@ import {
   Alert,
 } from 'react-native';
 import style from './AddScreen.component.style';
-
 import {Input, Button, Avatar, Icon} from 'react-native-elements';
 
+// Component Imports
 import Spinner from '../../../components/Spinner/Spinner.component';
 import DeleteScreen from '../../mainscenes/deletescreen/DeleteScreen.component';
 
@@ -49,24 +49,24 @@ const AddScreen = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [errMessage, setErrMessage] = useState('');
 
-  // League Of Legends && Valorant && Apex Legends
-  const [summonerName, setSummonerName] = useState('BerattoBB'); // ""
+  // League Of Legends && Valorant && Apex Legends State For summonerName
+  const [summonerName, setSummonerName] = useState('BerattoBB');
 
-  // League Of Legends
+  // League Of Legends State
   const [code, setCode] = useState('');
   const [canAddLol, setCanAddLol] = useState(true);
 
-  // Valorant
-  const [tag, setTag] = useState('TR1');
+  // Valorant State
+  const [tag, setTag] = useState('');
   const [canAddValorant, setCanAddValorant] = useState(true);
 
-  // Apex
+  // Apex State
   const [canAddApex, setCanAddApex] = useState(true);
 
   // Route Params
   const {type} = route.params;
 
-  // PUBG Mobile
+  // PUBG Mobile States
   const [canAddPUBGMobile, setCanAddPUBGMobile] = useState(true);
 
   // Dispath
@@ -74,13 +74,17 @@ const AddScreen = ({navigation, route}) => {
 
   // Success Callback
   const _success_callback = async () => {
-    let id = await getID('BerattoBB'); // summonername == "BerattoBB"
-    let stats = await fetchStats('BerattoBB'); // summonername == "BerattoBB"
-    let profileIconId = await getProfileIconId('BerattoBB'); // summonername == "BerattoBB"
+    let id = await getID(summonerName); // summonername == "BerattoBB"
+    let stats = await fetchStats(summonerName); // summonername == "BerattoBB"
+    let profileIconId = await getProfileIconId(summonerName); // summonername == "BerattoBB"
+
+    // Firebase current email
     let userEmail = auth().currentUser.email;
 
+    // Temp Array
     const tempDoc = [];
 
+    // Firestore funtion for adding Game to Firestore
     await firestore()
       .collection('users')
       .get()
@@ -100,9 +104,9 @@ const AddScreen = ({navigation, route}) => {
             resp.forEach(doc => {
               let tempList = doc.data().Games;
               tempList.push({id: '0', gameName: 'League Of Legends'});
-
-              dispatch(games_set(tempList));
+              dispatch(games_set(tempList)); // Redux State Update For HomeScreen
               doc.ref.update({
+                // Firestore Array Update
                 LolAccount: {
                   FlexRanked: stats[1],
                   Nickname: summonerName,
@@ -117,6 +121,7 @@ const AddScreen = ({navigation, route}) => {
           .then(() => {
             dispatch(
               profile_screen_stats_add({
+                // Redux State Add For Games and Information About Summoner
                 name: 'League Of Legends',
                 avatar_url: require('../../../assets/images/League_of_Legends_icon.png'),
                 league: selector.lolLeagueImageSelector(stats[0]),
@@ -141,7 +146,7 @@ const AddScreen = ({navigation, route}) => {
     setLoading(false);
   };
 
-  // League Of Legends failed_callback
+  // League Of Legends failed_callback function
   const _failed_callback = () => {
     setErrMessage('* Sihirdar adı veya doğrulama kodu hatalı.');
     setSummonerName('');
@@ -154,6 +159,7 @@ const AddScreen = ({navigation, route}) => {
     const tempDoc = [];
     const currentUserEmail = auth().currentUser.email;
 
+    // Firestore function for adding
     await firestore()
       .collection('users')
       .get()
@@ -340,7 +346,7 @@ const AddScreen = ({navigation, route}) => {
       });
   };
 
-  // Useeffect function for League of Legends
+  // Useeffect function for League of Legends for check there is an LoL Account that connects with this account
   const useEffectLeagueOfLegends = async () => {
     await firestore()
       .collection('users')
@@ -417,6 +423,7 @@ const AddScreen = ({navigation, route}) => {
   useEffect(() => {
     setLoading(true);
 
+    // Simple if-else statement for useEffect function
     if (type == 'League Of Legends') {
       useEffectLeagueOfLegends();
     } else if (type == 'Valorant') {
@@ -429,6 +436,7 @@ const AddScreen = ({navigation, route}) => {
     }
   }, []);
 
+  // Basis switch-case for render content
   switch (type) {
     case 'League Of Legends':
       if (canAddLol) {

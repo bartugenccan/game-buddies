@@ -6,6 +6,7 @@ import LottieView from 'lottie-react-native';
 // Style Import
 import Shimmer from 'react-native-shimmer';
 
+// Basic loading screen with lottie animations
 const LoadingScreen = () => {
   return (
     <View style={style.container}>

@@ -42,7 +42,7 @@ const App = () => {
     });
   }, []);
 
-  // Function for conditional rendering
+  // Function for conditional rendering with loggedIn state
   const renderContent = () => {
     switch (loggedIn) {
       case true:

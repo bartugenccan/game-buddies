@@ -9,6 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 
 import {useNavigation} from '@react-navigation/native';
 
+// Messages Screen
 const MessageScreen = () => {
   const navigation = useNavigation();
 

@@ -14,9 +14,9 @@ import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
+// onPress function for update current status on firestore
 const _onPress = async gamename => {
   if (gamename == 'League Of Legends') {
-    console.log('LOL');
     firestore()
       .collection('users')
       .where('UserEmail', '==', auth().currentUser.email)
@@ -58,6 +58,7 @@ const _onPress = async gamename => {
       });
   }
 };
+
 const FinishedScreen = props => {
   const navigation = useNavigation();
 

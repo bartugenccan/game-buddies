@@ -1,4 +1,4 @@
-const API_KEY = 'RGAPI-5ba39a46-f9ef-468e-a8c4-bee10a58bc65';
+const API_KEY = '<your-lol-api-key>';
 
 export async function getID(summonername) {
   try {
