@@ -8,14 +8,14 @@ In GameBuddies you can find any type of players that plays your favorite game. W
 
 ## Screenshots
 
-![Alt text](/screenshots/1.jpeg?raw=true 'Optional title')
-![Alt text](/screenshots/2.jpeg?raw=true 'Optional title')
-![Alt text](/screenshots/3.jpeg?raw=true 'Optional title')
-![Alt text](/screenshots/4.jpeg?raw=true 'Optional title')
+<img src="./screenshots/1.jpeg" width="369" height="800">
+<img src="./screenshots/2.jpeg" width="369" height="800">
+<img src="./screenshots/3.jpeg" width="369" height="800">
+<img src="./screenshots/4.jpeg" width="369" height="800">
 
 ## Authors
 
 Contributors names and contact info
 
-ex. Mehmet Berat Öztürk
-ex. [@BeratOzturk](https://twitter.com/BeratZT86345181)
+- Mehmet Berat Öztürk [@BeratOzturk](https://www.linkedin.com/in/berat-%C3%B6zt%C3%BCrk-516969197)
+- Bartu Gençcan [@BartuGenccan](https://www.linkedin.com/in/bartu-gen%C3%A7can-340539176)
