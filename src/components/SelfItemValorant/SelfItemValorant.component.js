@@ -79,7 +79,7 @@ const renderChamps = arr => {
           source={{
             uri: champImageSelector(arr[1]),
           }}
-          containerStyle={{marginLeft: 10}}
+          containerStyle={{marginLeft: 11}}
         />
       </View>
     );
